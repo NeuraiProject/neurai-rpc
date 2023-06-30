@@ -1,4 +1,4 @@
-# Ravencoin remote procedure calls/methods
+# Neurai remote procedure calls/methods
 [Home](README.md)
 &nbsp;<br> &nbsp;<br/>
 ## abandontransaction
@@ -131,7 +131,7 @@ Examples:
  
 &nbsp;<br> &nbsp;<br/>
 ## bumpfee
-&nbsp;<br/>  bumpfee has been deprecated on the RVN Wallet. 
+&nbsp;<br/>  bumpfee has been deprecated on the XNA Wallet. 
 &nbsp;<br> &nbsp;<br/>
 ## cancelsnapshotrequest
 &nbsp;<br/>  cancelsnapshotrequest "asset_name" block_height
@@ -158,7 +158,7 @@ Examples:
 Checks to see if an address has been frozen by the given restricted asset
 
 Arguments:
-1. "address"          (string, required) the RVN address to search
+1. "address"          (string, required) the XNA address to search
 1. "restricted_name"   (string, required) the restricted asset to search
 
 Result:
@@ -175,7 +175,7 @@ Examples:
 Checks to see if an address has the given tag
 
 Arguments:
-1. "address"          (string, required) the RVN address to search
+1. "address"          (string, required) the XNA address to search
 1. "tag_name"         (string, required) the tag to search
 
 Result:
@@ -290,13 +290,13 @@ As a json rpc call
                      ( locktime ) ( replaceable )
 
 Create a transaction spending the given inputs and creating new outputs.
-Outputs are addresses (paired with a RVN amount, data or object specifying an asset operation) or data.
+Outputs are addresses (paired with a XNA amount, data or object specifying an asset operation) or data.
 Returns hex-encoded raw transaction.
 Note that the transaction's inputs are not signed, and
 it is not stored in the wallet or transmitted to the network.
 
 Paying for Asset Operations:
-  Some operations require an amount of RVN to be sent to a burn address:
+  Some operations require an amount of XNA to be sent to a burn address:
 
     Operation          Amount + Burn Address
     transfer                 0
@@ -354,7 +354,7 @@ Arguments:
      {
        "address":                          (string, required) The destination raven address.
                                                Each output must have a different address.
-         x.xxx                             (number or string, required) The RVN amount
+         x.xxx                             (number or string, required) The XNA amount
            or
          {                                 (object) A json object of assets to send
            "transfer":
@@ -593,7 +593,7 @@ Result:
   ],
   "vout" : [             (array of json objects)
      {
-       "value" : x.xxx,            (numeric) The value in RVN
+       "value" : x.xxx,            (numeric) The value in XNA
        "n" : n,                    (numeric) index
        "scriptPubKey" : {          (json object)
          "asm" : "asm",          (string) the asm
@@ -687,7 +687,7 @@ Splits the specified amount of the distribution asset to all owners of asset_nam
 Arguments:
 1. "asset_name"                 (string, required) The reward will be distributed all owners of this asset
 2. "snapshot_height"            (number, required) The block height of the ownership snapshot
-3. "distribution_asset_name"    (string, required) The name of the asset that will be distributed, or RVN
+3. "distribution_asset_name"    (string, required) The name of the asset that will be distributed, or XNA
 4. "gross_distribution_amount"  (number, required) The amount of the distribution asset that will be split amongst all owners
 5. "exception_addresses"        (string, optional) Ownership addresses that should be excluded
 6. "change_address"             (string, optional) If the rewards can't be fully distributed. The change will be sent to this address
@@ -711,10 +711,10 @@ Result:
 }
 
 Examples:
-> raven-cli distributereward "TRONCO" 12345 "RVN" 1000
+> raven-cli distributereward "TRONCO" 12345 "XNA" 1000
 > raven-cli distributereward "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "RVN" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
  
 &nbsp;<br> &nbsp;<br/>
 ## dumpprivkey
@@ -829,7 +829,7 @@ Arguments:
 
 Result:
 {
-  "feerate" : x.x,     (numeric, optional) estimate fee rate in RVN/kB
+  "feerate" : x.x,     (numeric, optional) estimate fee rate in XNA/kB
   "errors": [ str... ] (json array of strings, optional) Errors encountered during processing
   "blocks" : n         (numeric) block number where estimate was found
 }
@@ -906,7 +906,7 @@ Arguments:
      "changePosition"         (numeric, optional, default random) The index of the change output
      "includeWatching"        (boolean, optional, default false) Also select inputs which are watch only
      "lockUnspents"           (boolean, optional, default false) Lock selected unspent outputs
-     "feeRate"                (numeric, optional, default not set: makes wallet determine the fee) Set a specific fee rate in RVN/kB
+     "feeRate"                (numeric, optional, default not set: makes wallet determine the fee) Set a specific fee rate in XNA/kB
      "subtractFeeFromOutputs" (array, optional) A json array of integers.
                               The fee will be equally deducted from the amount of each specified output.
                               The outputs are specified by their zero-based index, before any change output is added.
@@ -925,7 +925,7 @@ Arguments:
 Result:
 {
   "hex":       "value", (string)  The resulting raw transaction (hex-encoded string)
-  "fee":       n,         (numeric) Fee in RVN the resulting transaction pays
+  "fee":       n,         (numeric) Fee in XNA the resulting transaction pays
   "changepos": n          (numeric) The position of the added change output, or -1
 }
 
@@ -1068,7 +1068,7 @@ Result:
 OR
 [
   {
-    "assetName"  (string) The asset associated with the balance (RVN for Ravencoin)
+    "assetName"  (string) The asset associated with the balance (XNA for Neurai)
     "balance"  (string) The current balance in satoshis
     "received"  (string) The total number of satoshis received (including change)
   },...
@@ -1096,13 +1096,13 @@ Arguments:
   "start" (number) The start block height
   "end" (number) The end block height
   "chainInfo" (boolean) Include chain info in results, only applies if start and end specified
-  "assetName"   (string, optional) Get deltas for a particular asset instead of RVN.
+  "assetName"   (string, optional) Get deltas for a particular asset instead of XNA.
 }
 
 Result:
 [
   {
-    "assetName"  (string) The asset associated with the deltas (RVN for Ravencoin)
+    "assetName"  (string) The asset associated with the deltas (XNA for Neurai)
     "satoshis"  (number) The difference of satoshis
     "txid"  (string) The related txid
     "index"  (number) The related input or output index
@@ -1156,7 +1156,7 @@ Result:
 [
   {
     "address"  (string) The base58check encoded address
-    "assetName"  (string) The name of the associated asset (RVN for Ravencoin)
+    "assetName"  (string) The name of the associated asset (XNA for Neurai)
     "txid"  (string) The related txid
     "index"  (number) The related input or output index
     "satoshis"  (number) The difference of satoshis
@@ -1216,14 +1216,14 @@ Arguments:
       ,...
     ],
   "chainInfo",  (boolean, optional, default false) Include chain info with results
-  "assetName"   (string, optional) Get UTXOs for a particular asset instead of RVN ('*' for all assets).
+  "assetName"   (string, optional) Get UTXOs for a particular asset instead of XNA ('*' for all assets).
 }
 
 Result
 [
   {
     "address"  (string) The address base58check encoded
-    "assetName" (string) The asset associated with the UTXOs (RVN for Ravencoin)
+    "assetName" (string) The asset associated with the UTXOs (XNA for Neurai)
     "txid"  (string) The output txid
     "height"  (number) The block height
     "outputIndex"  (number) The output index
@@ -1289,7 +1289,7 @@ Arguments:
 3. include_watchonly (bool, optional, default=false) Also include balance in watch-only addresses (see 'importaddress')
 
 Result:
-amount              (numeric) The total amount in RVN received for this account.
+amount              (numeric) The total amount in XNA received for this account.
 
 Examples:
 
@@ -1704,15 +1704,15 @@ Give information about the status of the distribution
 Arguments:
 1. "asset_name"                 (string, required) The reward will be distributed all owners of this asset
 2. "snapshot_height"            (number, required) The block height of the ownership snapshot
-3. "distribution_asset_name"    (string, required) The name of the asset that will be distributed, or RVN
+3. "distribution_asset_name"    (string, required) The name of the asset that will be distributed, or XNA
 4. "gross_distribution_amount"  (number, required) The amount of the distribution asset that will be split amongst all owners
 5. "exception_addresses"        (string, optional) Ownership addresses that should be excluded
 
 Examples:
-> raven-cli getdistributestatus "TRONCO" 12345 "RVN" 1000
+> raven-cli getdistributestatus "TRONCO" 12345 "XNA" 1000
 > raven-cli getdistributestatus "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["PHATSTACKS" 34987 "RVN" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
  
 &nbsp;<br> &nbsp;<br/>
 ## getgenerate
@@ -1741,7 +1741,7 @@ Result:
   "version": xxxxx,           (numeric) the server version
   "protocolversion": xxxxx,   (numeric) the protocol version
   "walletversion": xxxxx,     (numeric) the wallet version
-  "balance": xxxxxxx,         (numeric) the total Ravencoin balance of the wallet
+  "balance": xxxxxxx,         (numeric) the total Neurai balance of the wallet
   "blocks": xxxxxx,           (numeric) the current number of blocks processed in the server
   "timeoffset": xxxxx,        (numeric) the time offset
   "connections": xxxxx,       (numeric) the number of connections
@@ -1751,8 +1751,8 @@ Result:
   "keypoololdest": xxxxxx,    (numeric) the timestamp (seconds since Unix epoch) of the oldest pre-generated key in the key pool
   "keypoolsize": xxxx,        (numeric) how many new keys are pre-generated
   "unlocked_until": ttt,      (numeric) the timestamp in seconds since epoch (midnight Jan 1 1970 GMT) that the wallet is unlocked for transfers, or 0 if the wallet is locked
-  "paytxfee": x.xxxx,         (numeric) the transaction fee set in RVN/kB
-  "relayfee": x.xxxx,         (numeric) minimum relay fee for transactions in RVN/kB
+  "paytxfee": x.xxxx,         (numeric) the transaction fee set in XNA/kB
+  "relayfee": x.xxxx,         (numeric) minimum relay fee for transactions in XNA/kB
   "errors": "..."             (string) any error messages
 }
 
@@ -1846,7 +1846,7 @@ Result (for verbose=true):
 {                           (json object)
   "transactionid" : {       (json object)
     "size" : n,             (numeric) virtual transaction size as defined in BIP 141. This is different from actual serialized size for witness transactions as witness data is discounted.
-    "fee" : n,              (numeric) transaction fee in RVN
+    "fee" : n,              (numeric) transaction fee in XNA
     "modifiedfee" : n,      (numeric) transaction fee with fee deltas used for mining priority
     "time" : n,             (numeric) local time transaction entered pool in seconds since 1 Jan 1970 GMT
     "height" : n,           (numeric) block height when transaction entered pool
@@ -1887,7 +1887,7 @@ Result (for verbose=true):
 {                           (json object)
   "transactionid" : {       (json object)
     "size" : n,             (numeric) virtual transaction size as defined in BIP 141. This is different from actual serialized size for witness transactions as witness data is discounted.
-    "fee" : n,              (numeric) transaction fee in RVN
+    "fee" : n,              (numeric) transaction fee in XNA
     "modifiedfee" : n,      (numeric) transaction fee with fee deltas used for mining priority
     "time" : n,             (numeric) local time transaction entered pool in seconds since 1 Jan 1970 GMT
     "height" : n,           (numeric) block height when transaction entered pool
@@ -1920,7 +1920,7 @@ Arguments:
 Result:
 {                           (json object)
     "size" : n,             (numeric) virtual transaction size as defined in BIP 141. This is different from actual serialized size for witness transactions as witness data is discounted.
-    "fee" : n,              (numeric) transaction fee in RVN
+    "fee" : n,              (numeric) transaction fee in XNA
     "modifiedfee" : n,      (numeric) transaction fee with fee deltas used for mining priority
     "time" : n,             (numeric) local time transaction entered pool in seconds since 1 Jan 1970 GMT
     "height" : n,           (numeric) block height when transaction entered pool
@@ -1952,7 +1952,7 @@ Result:
   "bytes": xxxxx,              (numeric) Sum of all virtual transaction sizes as defined in BIP 141. Differs from actual serialized size because witness data is discounted
   "usage": xxxxx,              (numeric) Total memory usage for the mempool
   "maxmempool": xxxxx,         (numeric) Maximum memory usage for the mempool
-  "mempoolminfee": xxxxx       (numeric) Minimum fee rate in RVN/kB for tx to be accepted
+  "mempoolminfee": xxxxx       (numeric) Minimum fee rate in XNA/kB for tx to be accepted
 }
 
 Examples:
@@ -2068,8 +2068,8 @@ Result:
   }
   ,...
   ],
-  "relayfee": x.xxxxxxxx,                (numeric) minimum relay fee for transactions in RVN/kB
-  "incrementalfee": x.xxxxxxxx,          (numeric) minimum fee increment for mempool limiting or BIP 125 replacement in RVN/kB
+  "relayfee": x.xxxxxxxx,                (numeric) minimum relay fee for transactions in XNA/kB
+  "incrementalfee": x.xxxxxxxx,          (numeric) minimum fee increment for mempool limiting or BIP 125 replacement in XNA/kB
   "localaddresses": [                    (array) list of local addresses
   {
     "address": "xxxx",                 (string) network address
@@ -2191,7 +2191,7 @@ Result: (for verbose = true):
 {                           (json object)
   "transactionid" : {       (json object)
     "size" : n,             (numeric) virtual transaction size as defined in BIP 141. This is different from actual serialized size for witness transactions as witness data is discounted.
-    "fee" : n,              (numeric) transaction fee in RVN
+    "fee" : n,              (numeric) transaction fee in XNA
     "modifiedfee" : n,      (numeric) transaction fee with fee deltas used for mining priority
     "time" : n,             (numeric) local time transaction entered pool in seconds since 1 Jan 1970 GMT
     "height" : n,           (numeric) block height when transaction entered pool
@@ -2256,7 +2256,7 @@ Result (if verbose is set to true):
   ],
   "vout" : [              (array of json objects)
      {
-       "value" : x.xxx,            (numeric) The value in RVN
+       "value" : x.xxx,            (numeric) The value in XNA
        "n" : n,                    (numeric) index
        "scriptPubKey" : {          (json object)
          "asm" : "asm",          (string) the asm
@@ -2293,7 +2293,7 @@ Arguments:
 2. minconf          (numeric, optional, default=1) Only include transactions confirmed at least this many times.
 
 Result:
-amount              (numeric) The total amount in RVN received for this account.
+amount              (numeric) The total amount in XNA received for this account.
 
 Examples:
 
@@ -2320,7 +2320,7 @@ Arguments:
 2. minconf             (numeric, optional, default=1) Only include transactions confirmed at least this many times.
 
 Result:
-amount   (numeric) The total amount in RVN received at this address.
+amount   (numeric) The total amount in XNA received at this address.
 
 Examples:
 
@@ -2433,8 +2433,8 @@ Arguments:
 
 Result:
 {
-  "amount" : x.xxx,        (numeric) The transaction amount in RVN
-  "fee": x.xxx,            (numeric) The amount of the fee in RVN. This is negative and only available for the 
+  "amount" : x.xxx,        (numeric) The transaction amount in XNA
+  "fee": x.xxx,            (numeric) The amount of the fee in XNA. This is negative and only available for the 
                               'send' category of transactions.
   "confirmations" : n,     (numeric) The number of confirmations
   "blockhash" : "hash",  (string) The block hash
@@ -2450,10 +2450,10 @@ Result:
       "account" : "accountname",      (string) DEPRECATED. The account name involved in the transaction, can be "" for the default account.
       "address" : "address",          (string) The raven address involved in the transaction
       "category" : "send|receive",    (string) The category, either 'send' or 'receive'
-      "amount" : x.xxx,                 (numeric) The amount in RVN
+      "amount" : x.xxx,                 (numeric) The amount in XNA
       "label" : "label",              (string) A comment for the address/transaction, if any
       "vout" : n,                       (numeric) the vout value
-      "fee": x.xxx,                     (numeric) The amount of the fee in RVN. This is negative and only available for the 
+      "fee": x.xxx,                     (numeric) The amount of the fee in XNA. This is negative and only available for the 
                                            'send' category of transactions.
       "abandoned": xxx                  (bool) 'true' if the transaction has been abandoned (inputs are respendable). Only available for the 
                                            'send' category of transactions.
@@ -2464,7 +2464,7 @@ Result:
     {
       "asset_type" : "new_asset|transfer_asset|reissue_asset", (string) The type of asset transaction
       "asset_name" : "asset_name",          (string) The name of the asset
-      "amount" : x.xxx,                 (numeric) The amount in RVN
+      "amount" : x.xxx,                 (numeric) The amount in XNA
       "address" : "address",          (string) The raven address involved in the transaction
       "vout" : n,                       (numeric) the vout value
       "category" : "send|receive",    (string) The category, either 'send' or 'receive'
@@ -2494,7 +2494,7 @@ Result:
 {
   "bestblock" : "hash",    (string) the block hash
   "confirmations" : n,       (numeric) The number of confirmations
-  "value" : x.xxx,           (numeric) The transaction value in RVN
+  "value" : x.xxx,           (numeric) The transaction value in XNA
   "scriptPubKey" : {         (json object)
      "asm" : "code",       (string) 
      "hex" : "hex",        (string) 
@@ -2594,15 +2594,15 @@ Result:
 {
   "walletname": xxxxx,             (string) the wallet name
   "walletversion": xxxxx,          (numeric) the wallet version
-  "balance": xxxxxxx,              (numeric) the total confirmed balance of the wallet in RVN
-  "unconfirmed_balance": xxx,      (numeric) the total unconfirmed balance of the wallet in RVN
-  "immature_balance": xxxxxx,      (numeric) the total immature balance of the wallet in RVN
+  "balance": xxxxxxx,              (numeric) the total confirmed balance of the wallet in XNA
+  "unconfirmed_balance": xxx,      (numeric) the total unconfirmed balance of the wallet in XNA
+  "immature_balance": xxxxxx,      (numeric) the total immature balance of the wallet in XNA
   "txcount": xxxxxxx,              (numeric) the total number of transactions in the wallet
   "keypoololdest": xxxxxx,         (numeric) the timestamp (seconds since Unix epoch) of the oldest pre-generated key in the key pool
   "keypoolsize": xxxx,             (numeric) how many new keys are pre-generated (only counts external keys)
   "keypoolsize_hd_internal": xxxx, (numeric) how many new keys are pre-generated for internal use (used for change outputs, only appears if the wallet is using this feature, otherwise external keys are used)
   "unlocked_until": ttt,           (numeric) the timestamp in seconds since epoch (midnight Jan 1 1970 GMT) that the wallet is unlocked for transfers, or 0 if the wallet is locked
-  "paytxfee": x.xxxx,              (numeric) the transaction fee configuration, set in RVN/kB
+  "paytxfee": x.xxxx,              (numeric) the transaction fee configuration, set in XNA/kB
   "hdseedid": "<hash160>"          (string, optional) the Hash160 of the HD seed (only present when HD is enabled)
   "hdmasterkeyid": "<hash160>"     (string, optional) alias for hdseedid retained for backwards-compatibility. Will be removed in V0.18.
 }
@@ -2788,7 +2788,7 @@ Arguments:
 1. "asset_name"            (string, required) a unique name
 2. "qty"                   (numeric, optional, default=1) the number of units to be issued
 3. "to_address"            (string), optional, default=""), address asset will be sent to, if it is empty, address will be generated for you
-4. "change_address"        (string), optional, default=""), address the the rvn change will be sent to, if it is empty, change address will be generated for you
+4. "change_address"        (string), optional, default=""), address the the xna change will be sent to, if it is empty, change address will be generated for you
 5. "units"                 (integer, optional, default=0, min=0, max=8), the number of decimals precision for the asset (0 for whole units ("1"), 8 for max precision ("1.00000000")
 6. "reissuable"            (boolean, optional, default=true (false for unique assets)), whether future reissuance is allowed
 7. "has_ipfs"              (boolean, optional, default=false), whether ipfs hash is going to be added to the asset
@@ -2821,7 +2821,7 @@ Arguments:
 1. "asset_name"            (string, required) a unique name
 2. "qty"                   (numeric, optional, default=1) the number of units to be issued
 3. "to_address"            (string), optional, default=""), address asset will be sent to, if it is empty, address will be generated for you
-4. "change_address"        (string), optional, default=""), address the the rvn change will be sent to, if it is empty, change address will be generated for you
+4. "change_address"        (string), optional, default=""), address the the xna change will be sent to, if it is empty, change address will be generated for you
 5. "has_ipfs"              (boolean, optional, default=false), whether ipfs hash is going to be added to the asset
 6. "ipfs_hash"             (string, optional but required if has_ipfs = 1), an ipfs hash or a txid hash once RIP5 is activated
 
@@ -2851,7 +2851,7 @@ Arguments:
 2. "qty"                   (numeric, required) the quantity of the asset to be issued
 3. "verifier"              (string, required) the verifier string that will be evaluated when restricted asset transfers are made
 4. "to_address"            (string, required) address asset will be sent to, this address must meet the verifier string requirements
-5. "change_address"        (string, optional, default="") address that the rvn change will be sent to, if it is empty, change address will be generated for you
+5. "change_address"        (string, optional, default="") address that the xna change will be sent to, if it is empty, change address will be generated for you
 6. "units"                 (integer, optional, default=0, min=0, max=8) the number of decimals precision for the asset (0 for whole units ("1"), 8 for max precision ("1.00000000")
 7. "reissuable"            (boolean, optional, default=true (false for unique assets)) whether future reissuance is allowed
 8. "has_ipfs"              (boolean, optional, default=false) whether an ipfs hash or txid hash is going to be added to the asset
@@ -2875,14 +2875,14 @@ Issue unique asset(s).
 root_name must be an asset you own.
 An asset will be created for each element of asset_tags.
 If provided ipfs_hashes must be the same length as asset_tags.
-Five (5) RVN will be burned for each asset created.
+Five (5) XNA will be burned for each asset created.
 
 Arguments:
 1. "root_name"             (string, required) name of the asset the unique asset(s) are being issued under
 2. "asset_tags"            (array, required) the unique tag for each asset which is to be issued
 3. "ipfs_hashes"           (array, optional) ipfs hashes or txid hashes corresponding to each supplied tag (should be same size as "asset_tags")
 4. "to_address"            (string, optional, default=""), address assets will be sent to, if it is empty, address will be generated for you
-5. "change_address"        (string, optional, default=""), address the the rvn change will be sent to, if it is empty, change address will be generated for you
+5. "change_address"        (string, optional, default=""), address the the xna change will be sent to, if it is empty, change address will be generated for you
 
 Result:
 "txid"                     (string) The transaction id
@@ -3003,7 +3003,7 @@ Result:
   [
     [
       "address",            (string) The raven address
-      amount,                 (numeric) The amount in RVN
+      amount,                 (numeric) The amount in XNA
       "account"             (string, optional) DEPRECATED. The account
     ]
     ,...
@@ -3241,7 +3241,7 @@ Result:
     "involvesWatchonly" : true,        (bool) Only returned if imported addresses were involved in transaction
     "address" : "receivingaddress",  (string) The receiving address
     "account" : "accountname",       (string) DEPRECATED. The account of the receiving address. The default account is "".
-    "amount" : x.xxx,                  (numeric) The total amount in RVN received by the address
+    "amount" : x.xxx,                  (numeric) The total amount in XNA received by the address
     "confirmations" : n,               (numeric) The number of confirmations of the most recent transaction included
     "label" : "label",               (string) A comment for the address/transaction, if any
     "txids": [
@@ -3278,10 +3278,10 @@ Result:
     "account":"accountname",       (string) DEPRECATED. The account name associated with the transaction. Will be "" for the default account.
     "address":"address",    (string) The raven address of the transaction. Not present for move transactions (category = move).
     "category":"send|receive",     (string) The transaction category. 'send' has negative amounts, 'receive' has positive amounts.
-    "amount": x.xxx,          (numeric) The amount in RVN. This is negative for the 'send' category, and for the 'move' category for moves 
+    "amount": x.xxx,          (numeric) The amount in XNA. This is negative for the 'send' category, and for the 'move' category for moves 
                                           outbound. It is positive for the 'receive' category, and for the 'move' category for inbound funds.
     "vout" : n,               (numeric) the vout value
-    "fee": x.xxx,             (numeric) The amount of the fee in RVN. This is negative and only available for the 'send' category of transactions.
+    "fee": x.xxx,             (numeric) The amount of the fee in XNA. This is negative and only available for the 'send' category of transactions.
     "confirmations": n,       (numeric) The number of confirmations for the transaction. Available for 'send' and 'receive' category of transactions.
                                           When it's < 0, it means the transaction conflicted that many blocks ago.
     "blockhash": "hashvalue",     (string) The block hash containing the transaction. Available for 'send' and 'receive' category of transactions.
@@ -3372,12 +3372,12 @@ Result:
                                                 transaction between accounts, and not associated with an address,
                                                 transaction id or block. 'send' and 'receive' transactions are 
                                                 associated with an address, transaction id and block details
-    "amount": x.xxx,          (numeric) The amount in RVN. This is negative for the 'send' category, and for the
+    "amount": x.xxx,          (numeric) The amount in XNA. This is negative for the 'send' category, and for the
                                          'move' category for moves outbound. It is positive for the 'receive' category,
                                          and for the 'move' category for inbound funds.
     "label": "label",       (string) A comment for the address/transaction, if any
     "vout": n,                (numeric) the vout value
-    "fee": x.xxx,             (numeric) The amount of the fee in RVN. This is negative and only available for the 
+    "fee": x.xxx,             (numeric) The amount of the fee in XNA. This is negative and only available for the 
                                          'send' category of transactions.
     "confirmations": n,       (numeric) The number of confirmations for the transaction. Available for 'send' and 
                                          'receive' category of transactions. Negative confirmations indicate the
@@ -3434,10 +3434,10 @@ Arguments:
                   See description of "safe" attribute below.
 5. query_options    (json, optional) JSON with query options
     {
-      "minimumAmount"    (numeric or string, default=0) Minimum value of each UTXO in RVN
-      "maximumAmount"    (numeric or string, default=unlimited) Maximum value of each UTXO in RVN
+      "minimumAmount"    (numeric or string, default=0) Minimum value of each UTXO in XNA
+      "maximumAmount"    (numeric or string, default=unlimited) Maximum value of each UTXO in XNA
       "maximumCount"     (numeric or string, default=unlimited) Maximum number of UTXOs
-      "minimumSumAmount" (numeric or string, default=unlimited) Minimum sum value of all UTXOs in RVN
+      "minimumSumAmount" (numeric or string, default=unlimited) Minimum sum value of all UTXOs in XNA
     }
 
 Result
@@ -3448,7 +3448,7 @@ Result
     "address" : "address",    (string) the raven address
     "account" : "account",    (string) DEPRECATED. The associated account, or "" for the default account
     "scriptPubKey" : "key",   (string) the script key
-    "amount" : x.xxx,         (numeric) the transaction output amount in RVN
+    "amount" : x.xxx,         (numeric) the transaction output amount in XNA
     "confirmations" : n,      (numeric) The number of confirmations
     "redeemScript" : n        (string) The redeemScript if scriptPubKey is P2SH
     "spendable" : xxx,        (bool) Whether we have the private keys to spend this output
@@ -3535,7 +3535,7 @@ DEPRECATED. Move a specified amount from one account in your wallet to another.
 Arguments:
 1. "fromaccount"   (string, required) The name of the account to move funds from. May be the default account using "".
 2. "toaccount"     (string, required) The name of the account to move funds to. May be the default account using "".
-3. amount            (numeric) Quantity of RVN to move between accounts.
+3. amount            (numeric) Quantity of XNA to move between accounts.
 4. (dummy)           (numeric, optional) Ignored. Remains for backward compatibility.
 5. "comment"       (string, optional) An optional comment, stored in the wallet only.
 
@@ -3544,10 +3544,10 @@ true|false           (boolean) true if successful.
 
 Examples:
 
-Move 0.01 RVN from the default account to the account named tabby
+Move 0.01 XNA from the default account to the account named tabby
 > raven-cli move "" "tabby" 0.01
 
-Move 0.01 RVN timotei to akiko with a comment and funds have 6 confirmations
+Move 0.01 XNA timotei to akiko with a comment and funds have 6 confirmations
 > raven-cli move "timotei" "akiko" 0.01 6 "happy birthday!"
 
 As a json rpc call
@@ -3692,7 +3692,7 @@ Arguments:
 3. "to_address"            (string, required) address asset will be sent to, this address must meet the verifier string requirements
 4. "change_verifier"       (boolean, optional, default=false) if the verifier string will get changed
 5. "new_verifier"          (string, optional, default="") the new verifier string that will be evaluated when restricted asset transfers are made
-6. "change_address"        (string, optional, default="") address that the rvn change will be sent to, if it is empty, change address will be generated for you
+6. "change_address"        (string, optional, default="") address that the xna change will be sent to, if it is empty, change address will be generated for you
 7. "new_units"             (numeric, optional, default=-1) the new units that will be associated with the asset
 8. "reissuable"            (boolean, optional, default=true (false for unique assets)) whether future reissuance is allowed
 9. "new_ipfs"              (string, optional, default="") whether to update the current ipfs hash or txid once RIP5 is active
@@ -3804,7 +3804,7 @@ Arguments:
                        transaction with the account, so the account's balance computation and transaction history can reflect
                        the spend.
 2. "toaddress"         (string, required) The raven address to send funds to.
-3. amount                (numeric or string, required) The amount in RVN (transaction fee is added on top).
+3. amount                (numeric or string, required) The amount in XNA (transaction fee is added on top).
 4. minconf               (numeric, optional, default=1) Only use funds with at least this many confirmations.
 5. "comment"           (string, optional) A comment used to store what the transaction is for. 
                                      This is not part of the transaction, just kept in your wallet.
@@ -3817,7 +3817,7 @@ Result:
 
 Examples:
 
-Send 0.01 RVN from the default account to the address, must have at least 1 confirmation
+Send 0.01 XNA from the default account to the address, must have at least 1 confirmation
 > raven-cli sendfrom "" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.01
 
 Send 0.01 from the tabby account to the given address, funds must have at least 6 confirmations
@@ -3830,12 +3830,12 @@ As a json rpc call
 ## sendfromaddress
 &nbsp;<br/>  sendfromaddress "from_address" "to_address" amount ( "comment" "comment_to" subtractfeefromamount replaceable conf_target "estimate_mode")
 
-Send an amount from a specific address to a given address. All rvn change will get sent back to the from_address
+Send an amount from a specific address to a given address. All xna change will get sent back to the from_address
 
 Arguments:
 1. "from_address"       (string, required) The raven address to send from.
 2. "to_address"            (string, required) The raven address to send to.
-3. "amount"             (numeric or string, required) The amount in RVN to send. eg 0.1
+3. "amount"             (numeric or string, required) The amount in XNA to send. eg 0.1
 4. "comment"            (string, optional) A comment used to store what the transaction is for. 
                              This is not part of the transaction, just kept in your wallet.
 5. "comment_to"         (string, optional) A comment to store the name of the person or organization 
@@ -3868,7 +3868,7 @@ Arguments:
 1. "fromaccount"         (string, required) DEPRECATED. The account to send the funds from. Should be "" for the default account
 2. "amounts"             (string, required) A json object with addresses and amounts
     {
-      "address":amount   (numeric or string) The raven address is the key, the numeric amount (can be string) in RVN is the value
+      "address":amount   (numeric or string) The raven address is the key, the numeric amount (can be string) in XNA is the value
       ,...
     }
 3. minconf                 (numeric, optional, default=1) Only use the balance confirmed at least this many times.
@@ -3959,7 +3959,7 @@ Send an amount to a given address.
 
 Arguments:
 1. "address"            (string, required) The raven address to send to.
-2. "amount"             (numeric or string, required) The amount in RVN to send. eg 0.1
+2. "amount"             (numeric or string, required) The amount in XNA to send. eg 0.1
 3. "comment"            (string, optional) A comment used to store what the transaction is for. 
                              This is not part of the transaction, just kept in your wallet.
 4. "comment_to"         (string, optional) A comment to store the name of the person or organization 
@@ -4055,7 +4055,7 @@ Arguments:
 Set the transaction fee per kB. Overwrites the paytxfee parameter.
 
 Arguments:
-1. amount         (numeric or string, required) The transaction fee in RVN/kB
+1. amount         (numeric or string, required) The transaction fee in XNA/kB
 
 Result
 true|false        (boolean) Returns true if successful
@@ -4260,7 +4260,7 @@ Arguments:
 3. "to_address"               (string, required) address to send the asset to
 4. "message"                  (string, optional) Once RIP5 is voted in ipfs hash or txid hash to send along with the transfer
 5. "expire_time"              (numeric, optional) UTC timestamp of when the message expires
-6. "change_address"       (string, optional, default = "") the transactions RVN change will be sent to this address
+6. "change_address"       (string, optional, default = "") the transactions XNA change will be sent to this address
 7. "asset_change_address"     (string, optional, default = "") the transactions Asset change will be sent to this address
 
 Result:
@@ -4274,7 +4274,7 @@ Examples:
  
 &nbsp;<br> &nbsp;<br/>
 ## transferfromaddress
-&nbsp;<br/>  transferfromaddress "asset_name" "from_address" qty "to_address" "message" expire_time "rvn_change_address" "asset_change_address"
+&nbsp;<br/>  transferfromaddress "asset_name" "from_address" qty "to_address" "message" expire_time "xna_change_address" "asset_change_address"
 
 Transfer a quantity of an owned asset in a specific address to a given address
 Arguments:
@@ -4284,7 +4284,7 @@ Arguments:
 4. "to_address"               (string, required) address to send the asset to
 5. "message"                  (string, optional) Once RIP5 is voted in ipfs hash or txid hash to send along with the transfer
 6. "expire_time"              (numeric, optional) UTC timestamp of when the message expires
-7. "rvn_change_address"       (string, optional, default = "") the transaction RVN change will be sent to this address
+7. "xna_change_address"       (string, optional, default = "") the transaction XNA change will be sent to this address
 8. "asset_change_address"     (string, optional, default = "") the transaction Asset change will be sent to this address
 
 Result:
@@ -4298,7 +4298,7 @@ Examples:
  
 &nbsp;<br> &nbsp;<br/>
 ## transferfromaddresses
-&nbsp;<br/>  transferfromaddresses "asset_name" ["from_addresses"] qty "to_address" "message" expire_time "rvn_change_address" "asset_change_address"
+&nbsp;<br/>  transferfromaddresses "asset_name" ["from_addresses"] qty "to_address" "message" expire_time "xna_change_address" "asset_change_address"
 
 Transfer a quantity of an owned asset in specific address(es) to a given address
 Arguments:
@@ -4308,7 +4308,7 @@ Arguments:
 4. "to_address"               (string, required) address to send the asset to
 5. "message"                  (string, optional) Once RIP5 is voted in ipfs hash or txid hash to send along with the transfer
 6. "expire_time"              (numeric, optional) UTC timestamp of when the message expires
-7. "rvn_change_address"       (string, optional, default = "") the transactions RVN change will be sent to this address
+7. "xna_change_address"       (string, optional, default = "") the transactions XNA change will be sent to this address
 8. "asset_change_address"     (string, optional, default = "") the transactions Asset change will be sent to this address
 
 Result:

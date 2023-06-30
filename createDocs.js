@@ -24,10 +24,10 @@ export const methods ={
   require("fs").writeFileSync("./docs.ts", result.join(""));
 }
 
-//Create ravencoin_method.md
+//Create neurai_method.md
 {
   const result = [];
-  result.push("# Ravencoin remote procedure calls/methods");
+  result.push("# Neurai remote procedure calls/methods");
   result.push("\r\n[Home](README.md)");
   for (let key of keys) {
     if (!key) {
@@ -38,5 +38,5 @@ export const methods ={
     result.push("\r\n## " + key);
     result.push(`\r\n&nbsp;<br/>  ${doc} `);
   }
-  require("fs").writeFileSync("./ravencoin_methods.md", result.join(""));
+  require("fs").writeFileSync("./neurai_methods.md", result.join(""));
 }

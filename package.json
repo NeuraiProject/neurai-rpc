@@ -1,7 +1,7 @@
 {
-  "name": "@ravenrebels/ravencoin-rpc",
+  "name": "@neuraiproject/neurai-rpc",
   "version": "0.2.7",
-  "description": "Helps you access your Ravencoin full node using RPC from JavaScript",
+  "description": "Helps you access your Neurai full node using RPC from JavaScript",
   "types": "dist/types.d.ts",
   "type": "module",
   "source": "index.ts",
@@ -18,15 +18,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ravenrebels/ravencoin-rpc.git"
+    "url": "git+https://github.com/neuraiproject/neurai-rpc.git"
   },
   "keywords": [],
   "author": "Dick Henrik Larsson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ravenrebels/ravencoin-rpc/issues"
+    "url": "https://github.com/neuraiproject/neurai-rpc/issues"
   },
-  "homepage": "https://github.com/ravenrebels/ravencoin-rpc#readme",
+  "homepage": "https://github.com/neuraiproject/neurai-rpc#readme",
   "dependencies": {
     "axios": "^0.27.2"
   },
