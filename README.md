@@ -1,6 +1,6 @@
 # neurai-rpc
 
-A package that will help you do RPC calls from Node.js to your Raven core node, that is your full Neurai node.
+A package that will help you do RPC calls from Node.js to your Neurai core node, that is your full Neurai node.
 
 # Install
 ```
@@ -13,7 +13,7 @@ npm install @neuraiproject/neurai-rpc
 const { getRPC, methods } = require("@neuraiproject/neurai-rpc");
 //methods is a list of all available methods/functions/commands/procedures
 
-const rpc = getRPC("UsernameSecret", "PasswordSecret", "http://localhost:8766");
+const rpc = getRPC("UsernameSecret", "PasswordSecret", "http://localhost:19001");
 
 const promise = rpc(methods.getassetdata, ["ELVIS"]);
 promise.catch((e) => {
@@ -32,7 +32,7 @@ will print out
 ```
 { name: 'ELVIS', amount: 1, units: 8, reissuable: 1, has_ipfs: 0 }
 ```
-## Example list all generated addresses in a Wallet (Raven core)
+## Example list all generated addresses in a Wallet (Neurai core)
 Use method `listreceivedbyaddress` to receive a list of all generated addresses.
 Write the result to a .json file
 ```
@@ -45,7 +45,7 @@ const includeEmpty = true;
 
 const params = [minConfirmations, includeEmpty];
 
-const rpc = getRPC("UsernameSecret", "PasswordSecret", "http://localhost:8766");
+const rpc = getRPC("UsernameSecret", "PasswordSecret", "http://localhost:19001");
 
 const promise = rpc(method, params);
 promise.catch((e) => {
@@ -71,7 +71,7 @@ function writeToFile(list){
 # Methods / commands / Procedure calls
 Here is a list of all method/commands [All methods](neurai_methods.md)
 
-In your local Raven core wallet, you can go to
+In your local Neurai core wallet, you can go to
 
 help > debug window > console
 

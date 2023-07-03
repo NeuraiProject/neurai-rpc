@@ -51,16 +51,16 @@ export function getRPC(username: string, password: string, URL: string) {
                 status: e.response.status,
                 statusText: e.response.statusText,
                 error: errorObject.data.error,
-                description: `Could connect to Raven core node but got an error. Method "${method}"`,
+                description: `Could connect to Neurai core node but got an error. Method "${method}"`,
               });
             } else if (e.request) {
               //Could NOT connect to wallet
 
               rejectionFunc({
                 type:"ServerUnreachable",
-                error: "Could not communicate with Raven core node",
+                error: "Could not communicate with Neurai core node",
                 description:
-                  "Are you sure that the URL is correct? The URL is usually something like http://localhost:8766",
+                  "Are you sure that the URL is correct? The URL is usually something like http://localhost:19001",
               });
             }
           });
