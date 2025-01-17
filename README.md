@@ -1,12 +1,43 @@
 # neurai-rpc
 
-A package that will help you do RPC calls from Node.js to your Neurai core node, that is your full Neurai node.
+A package that will help you do RPC calls from Node.js to your Raven core node, that is your full Ravencoin node.
+
+URLs for locally installed Ravencoin nodes.
+
+- http://127.0.0.1:19001 for mainnet
+- http://127.0.0.1:19101 for testnet
+
+Ravencoin as a service, you don't need your own node
+
+- https://rpc-main.neurai.org/rpc for mainnet
+- https://rpc-testnet.neurai.org/rpc for testnet
 
 # Install
+
 ```
 npm install @neuraiproject/neurai-rpc
 ```
-# Example 
+
+# Example using ES modules
+
+This example uses Ravencoin as a service from https://rpc-main.neurai.org.
+
+In node.js you need to give the file the ending .mjs for modular JavaScript.
+Like `example.mjs`
+
+```
+import { getRPC, methods } from "@neuraiproject/neurai-rpc";
+
+const username = "anonymous";
+const password = "anonymous";
+const URL = "https://rpc-main.neurai.org/rpc";
+const rpc = getRPC(username, password, URL);
+
+const params = [];
+rpc(methods.getblockcount, params).then(console.log);
+```
+
+# Example using CommonJS
 
 ```
 
@@ -32,9 +63,12 @@ will print out
 ```
 { name: 'ELVIS', amount: 1, units: 8, reissuable: 1, has_ipfs: 0 }
 ```
-## Example list all generated addresses in a Wallet (Neurai core)
+
+## Example list all generated addresses in a Wallet (Raven core)
+
 Use method `listreceivedbyaddress` to receive a list of all generated addresses.
 Write the result to a .json file
+
 ```
 const { getRPC, methods } = require("@neuraiproject/neurai-rpc");
 //methods is a list of all available methods/functions/commands/procedures
@@ -68,10 +102,12 @@ function writeToFile(list){
 }
 
 ```
+
 # Methods / commands / Procedure calls
+
 Here is a list of all method/commands [All methods](neurai_methods.md)
 
-In your local Neurai core wallet, you can go to
+In your local Raven core wallet, you can go to
 
 help > debug window > console
 
@@ -279,4 +315,4 @@ setaccount "address" "account"
 settxfee amount
 signmessage "address" "message"
 
-``` 
+```

@@ -1,11 +1,10 @@
-import axios from "axios";
 import { methods } from "./docs";
 
 export { methods };
 function throwSyntaxError() {
   throw new Error("Syntax error, call getRPC with (username, password, URL)");
 }
- 
+
 export function getRPC(username: string, password: string, URL: string) {
   if (!username) {
     throwSyntaxError();
@@ -19,12 +18,6 @@ export function getRPC(username: string, password: string, URL: string) {
 
   return async function rpc(method: string, params: any[]) {
     const promise = new Promise((resolutionFunc, rejectionFunc) => {
-      const options = {
-        auth: {
-          username,
-          password,
-        },
-      };
       const data = {
         jsonrpc: "2.0",
         id: Math.random(),
@@ -33,36 +26,47 @@ export function getRPC(username: string, password: string, URL: string) {
       };
 
       try {
-        const rpcResponse = axios.post(URL, data, options);
+        const rpcResponse = postData(URL, data, username, password);
 
         rpcResponse
-          .then((re) => {
-            const result = re.data.result;
-            resolutionFunc(result);
+          .then(async (response) => {
+            /*
+              This means that we got a response.
+              The response can still be an error/problem but the server responded
+
+            */
+
+            if (response.ok) {
+              //Happy flow
+              const obj = await response.json(); //Convert to JSON
+              resolutionFunc(obj.result);
+            } else if (response.status !== 200) {
+              //OK something is wrong
+              let obj = {
+                error: null,
+                description: null,
+              };
+              try {
+                obj = await response.json();
+              } catch (e) {}
+              const myError = {
+                statusText: response.statusText,
+                status: response.status,
+                description: obj.description,
+                error: obj.error,
+              };
+
+              rejectionFunc(myError);
+            }
           })
           .catch((e) => {
-            if (e.response) {
-              //We were able to connect to the wallet but something was wrong with our request
-
-              const { response } = e;
-              const { request, ...errorObject } = response;
-
-              rejectionFunc({
-                status: e.response.status,
-                statusText: e.response.statusText,
-                error: errorObject.data.error,
-                description: `Could connect to Neurai core node but got an error. Method "${method}"`,
-              });
-            } else if (e.request) {
-              //Could NOT connect to wallet
-
-              rejectionFunc({
-                type:"ServerUnreachable",
-                error: "Could not communicate with Neurai core node",
-                description:
-                  "Are you sure that the URL is correct? The URL is usually something like http://localhost:19001",
-              });
-            }
+            rejectionFunc({
+              originalError: e,
+              type: "ServerUnreachable",
+              error: "Could not communicate with Raven core node",
+              description:
+                "Are you sure that the URL is correct? The URL is usually mainnet = http://127.0.0.1:19001 and testnet =  http://127.0.0.1:119001",
+            });
           });
       } catch (e) {
         rejectionFunc(e.response);
@@ -75,6 +79,41 @@ function getValidMethods() {
   const keys = Object.keys(methods).sort();
   return keys.join(" ");
 }
+// Example POST method implementation:
+async function postData(
+  url = "",
+  data = {},
+  username: string,
+  password: string
+) {
+  let base64Credentials = "";
+
+  //btoa or Buffer, depends if we are in Node.js or in the browser
+  if (typeof btoa === "function") {
+    base64Credentials = btoa(`${username}:${password}`);
+  } else if (Buffer) {
+    base64Credentials = Buffer.from(`${username}:${password}`).toString(
+      "base64"
+    );
+  }
+
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    headers: {
+      Authorization: "Basic " + base64Credentials,
+      "Content-Type": "application/json",
+
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response;
+}
+
 /*
 export const methods = {
   "getaddressbalance": "getaddressbalance",
