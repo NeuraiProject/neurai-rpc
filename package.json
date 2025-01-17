@@ -1,6 +1,6 @@
 {
   "name": "@neuraiproject/neurai-rpc",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Helps you access your Ravencoin full node using RPC from JavaScript",
   "types": "dist/types.d.ts",
   "type": "module",
