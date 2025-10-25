@@ -187,8 +187,8 @@ Arguments:
 Result:
 
 Examples:
-> raven-cli abandontransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abandontransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli abandontransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abandontransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   abandontransaction: "abandontransaction",
 
@@ -199,41 +199,41 @@ Stops current wallet rescan triggered e.g. by an importprivkey call.
 Examples:
 
 Import a private key
-> raven-cli importprivkey "mykey"
+> neurai-cli importprivkey "mykey"
 
 Abort the running wallet rescan
-> raven-cli abortrescan 
+> neurai-cli abortrescan 
 
 As a JSON-RPC call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abortrescan", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abortrescan", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   abortrescan: "abortrescan",
 
   /** addmultisigaddress nrequired ["key",...] ( "account" )
 
 Add a nrequired-to-sign multisignature address to the wallet.
-Each key is a Raven address or hex-encoded public key.
+Each key is a Neurai address or hex-encoded public key.
 If 'account' is specified (DEPRECATED), assign address to that account.
 
 Arguments:
 1. nrequired        (numeric, required) The number of required signatures out of the n keys or addresses.
-2. "keys"         (string, required) A json array of raven addresses or hex-encoded public keys
+2. "keys"         (string, required) A json array of neurai addresses or hex-encoded public keys
      [
-       "address"  (string) raven address or hex-encoded public key
+       "address"  (string) neurai address or hex-encoded public key
        ...,
      ]
 3. "account"      (string, optional) DEPRECATED. An account to assign the addresses to.
 
 Result:
-"address"         (string) A raven address associated with the keys.
+"address"         (string) A neurai address associated with the keys.
 
 Examples:
 
 Add a multisig address from 2 addresses
-> raven-cli addmultisigaddress 2 "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"
+> neurai-cli addmultisigaddress 2 "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"
 
 As json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addmultisigaddress", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addmultisigaddress", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   addmultisigaddress: "addmultisigaddress",
 
@@ -249,8 +249,8 @@ Arguments:
 2. "command"  (string, required) 'add' to add a node to the list, 'remove' to remove a node from the list, 'onetry' to try a connection to the node once
 
 Examples:
-> raven-cli addnode "192.168.0.6:8767" "onetry"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addnode", "params": ["192.168.0.6:8767", "onetry"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli addnode "192.168.0.6:8767" "onetry"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addnode", "params": ["192.168.0.6:8767", "onetry"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   addnode: "addnode",
 
@@ -268,10 +268,10 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli addtagtoaddress "#TAG" "to_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli addtagtoaddress "#TAG" "to_address" "change_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli addtagtoaddress "#TAG" "to_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli addtagtoaddress "#TAG" "to_address" "change_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   addtagtoaddress: "addtagtoaddress",
 
@@ -297,8 +297,8 @@ Arguments:
 1. "destination"   (string) The destination directory or file
 
 Examples:
-> raven-cli backupwallet "backup.dat"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "backupwallet", "params": ["backup.dat"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli backupwallet "backup.dat"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "backupwallet", "params": ["backup.dat"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   backupwallet: "backupwallet",
 
@@ -319,8 +319,8 @@ Result:
 }
 
 Examples:
-> raven-cli cancelsnapshotrequest "TRONCO" 12345
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "cancelsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli cancelsnapshotrequest "TRONCO" 12345
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "cancelsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   cancelsnapshotrequest: "cancelsnapshotrequest",
 
@@ -336,8 +336,8 @@ Result:
 "true/false", (boolean) If the address is frozen
 
 Examples:
-> raven-cli checkaddressrestriction "address" "restricted_name"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddressrestriction", "params": ["address" "restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli checkaddressrestriction "address" "restricted_name"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddressrestriction", "params": ["address" "restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   checkaddressrestriction: "checkaddressrestriction",
 
@@ -353,8 +353,8 @@ Result:
 "true/false", (boolean) If the address has the tag
 
 Examples:
-> raven-cli checkaddresstag "address" "tag_name"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddresstag", "params": ["address" "tag_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli checkaddresstag "address" "tag_name"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddresstag", "params": ["address" "tag_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   checkaddresstag: "checkaddresstag",
 
@@ -369,8 +369,8 @@ Result:
 "true/false", (boolean) If the restricted asset is frozen globally
 
 Examples:
-> raven-cli checkglobalrestriction "restricted_name"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkglobalrestriction", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli checkglobalrestriction "restricted_name"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkglobalrestriction", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   checkglobalrestriction: "checkglobalrestriction",
 
@@ -379,8 +379,8 @@ Examples:
 Clear all banned IPs.
 
 Examples:
-> raven-cli clearbanned 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli clearbanned 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   clearbanned: "clearbanned",
 
@@ -389,8 +389,8 @@ Examples:
 Removes all transaction from the mempool
 
 Examples:
-> raven-cli clearmempool 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli clearmempool 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   clearmempool: "clearmempool",
 
@@ -403,8 +403,8 @@ Result:[
 ]
 
 Examples:
-> raven-cli clearmessages 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli clearmessages 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   clearmessages: "clearmessages",
 
@@ -424,7 +424,7 @@ Result:
 "hex"            (string) The hex-encoded raw transaction with signature(s)
 
 Examples:
-> raven-cli combinerawtransaction ["myhex1", "myhex2", "myhex3"]
+> neurai-cli combinerawtransaction ["myhex1", "myhex2", "myhex3"]
 **/
   combinerawtransaction: "combinerawtransaction",
 
@@ -435,9 +435,9 @@ It returns a json object with the address and redeemScript.
 
 Arguments:
 1. nrequired      (numeric, required) The number of required signatures out of the n keys or addresses.
-2. "keys"       (string, required) A json array of keys which are raven addresses or hex-encoded public keys
+2. "keys"       (string, required) A json array of keys which are neurai addresses or hex-encoded public keys
      [
-       "key"    (string) raven address or hex-encoded public key
+       "key"    (string) neurai address or hex-encoded public key
        ,...
      ]
 
@@ -450,10 +450,10 @@ Result:
 Examples:
 
 Create a multisig address from 2 addresses
-> raven-cli createmultisig 2 "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"
+> neurai-cli createmultisig 2 "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createmultisig", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createmultisig", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   createmultisig: "createmultisig",
 
@@ -523,7 +523,7 @@ Arguments:
      ]
 2. "outputs"                               (object, required) a json object with outputs
      {
-       "address":                          (string, required) The destination raven address.
+       "address":                          (string, required) The destination neurai address.
                                                Each output must have a different address.
          x.xxx                             (number or string, required) The XNA amount
            or
@@ -692,15 +692,15 @@ Result:
 "transaction"              (string) hex string of the transaction
 
 Examples:
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"address\":0.01}"
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"data\":\"00010203\"}"
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"RXissueAssetXXXXXXXXXXXXXXXXXhhZGt\":500,\"change_address\":change_amount,\"issuer_address\":{\"issue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":1000000,\"units\":1,\"reissuable\":0,\"has_ipfs\":1,\"ipfs_hash\":\"43f81c6f2c0593bde5a85e09ae662816eca80797\"}}}"
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"RXissueRestrictedXXXXXXXXXXXXzJZ1q\":1500,\"change_address\":change_amount,\"issuer_address\":{\"issue_restricted\":{\"asset_name\":\"$MYASSET\",\"asset_quantity\":1000000,\"verifier_string\":\"#TAG & !KYC\",\"units\":1,\"reissuable\":0,\"has_ipfs\":1,\"ipfs_hash\":\"43f81c6f2c0593bde5a85e09ae662816eca80797\"}}}"
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"RXissueUniqueAssetXXXXXXXXXXWEAe58\":20,\"change_address\":change_amount,\"issuer_address\":{\"issue_unique\":{\"root_name\":\"MYASSET\",\"asset_tags\":[\"ALPHA\",\"BETA\"],\"ipfs_hashes\":[\"43f81c6f2c0593bde5a85e09ae662816eca80797\",\"43f81c6f2c0593bde5a85e09ae662816eca80797\"]}}}"
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myasset\",\"vout\":0}]" "{\"address\":{\"transfer\":{\"MYASSET\":50}}}"
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myasset\",\"vout\":0}]" "{\"address\":{\"transferwithmessage\":{\"MYASSET\":50,\"message\":\"hash\",\"expire_time\": utc_time}}}"
-> raven-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myownership\",\"vout\":0}]" "{\"issuer_address\":{\"reissue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":2000000}}}"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createrawtransaction", "params": ["[{\"txid\":\"mycoin\",\"vout\":0}]", "{\"data\":\"00010203\"}"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"address\":0.01}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"data\":\"00010203\"}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"RXissueAssetXXXXXXXXXXXXXXXXXhhZGt\":500,\"change_address\":change_amount,\"issuer_address\":{\"issue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":1000000,\"units\":1,\"reissuable\":0,\"has_ipfs\":1,\"ipfs_hash\":\"43f81c6f2c0593bde5a85e09ae662816eca80797\"}}}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"RXissueRestrictedXXXXXXXXXXXXzJZ1q\":1500,\"change_address\":change_amount,\"issuer_address\":{\"issue_restricted\":{\"asset_name\":\"$MYASSET\",\"asset_quantity\":1000000,\"verifier_string\":\"#TAG & !KYC\",\"units\":1,\"reissuable\":0,\"has_ipfs\":1,\"ipfs_hash\":\"43f81c6f2c0593bde5a85e09ae662816eca80797\"}}}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "{\"RXissueUniqueAssetXXXXXXXXXXWEAe58\":20,\"change_address\":change_amount,\"issuer_address\":{\"issue_unique\":{\"root_name\":\"MYASSET\",\"asset_tags\":[\"ALPHA\",\"BETA\"],\"ipfs_hashes\":[\"43f81c6f2c0593bde5a85e09ae662816eca80797\",\"43f81c6f2c0593bde5a85e09ae662816eca80797\"]}}}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myasset\",\"vout\":0}]" "{\"address\":{\"transfer\":{\"MYASSET\":50}}}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myasset\",\"vout\":0}]" "{\"address\":{\"transferwithmessage\":{\"MYASSET\":50,\"message\":\"hash\",\"expire_time\": utc_time}}}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myownership\",\"vout\":0}]" "{\"issuer_address\":{\"reissue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":2000000}}}"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createrawtransaction", "params": ["[{\"txid\":\"mycoin\",\"vout\":0}]", "{\"data\":\"00010203\"}"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   createrawtransaction: "createrawtransaction",
 
@@ -729,8 +729,8 @@ Result:
 }
 
 Examples:
-> raven-cli decodeblock "xxxx"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodeblock", "params": ["xxxx"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli decodeblock "xxxx"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodeblock", "params": ["xxxx"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   decodeblock: "decodeblock",
 
@@ -777,7 +777,7 @@ Result:
            "message" : "message", (string optional) the message if one was sent
            "expire_time" : n,      (numeric optional) the message epoch expiration time if one was set
          "addresses" : [           (json array of string)
-           "12tvKAXCxZjSmdNbao16dKXC8tRWfcF5oc"   (string) raven address
+           "12tvKAXCxZjSmdNbao16dKXC8tRWfcF5oc"   (string) neurai address
            ,...
          ]
        }
@@ -787,8 +787,8 @@ Result:
 }
 
 Examples:
-> raven-cli decoderawtransaction "hexstring"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decoderawtransaction", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli decoderawtransaction "hexstring"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decoderawtransaction", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   decoderawtransaction: "decoderawtransaction",
 
@@ -811,7 +811,7 @@ Result:
      "expire_time" : n,      (numeric optional ) the message epoch expiration time if one was set
   "reqSigs": n,    (numeric) The required signatures
   "addresses": [   (json array of string)
-     "address"     (string) raven address
+     "address"     (string) neurai address
      ,...
   ],
   "p2sh":"address",       (string) address of P2SH script wrapping this redeem script (not returned if the script is already a P2SH).
@@ -826,8 +826,8 @@ Result:
 }
 
 Examples:
-> raven-cli decodescript "hexstring"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodescript", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli decodescript "hexstring"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodescript", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   decodescript: "decodescript",
 
@@ -844,10 +844,10 @@ Arguments:
 2. "nodeid"      (number, optional) The node ID (see getpeerinfo for node IDs)
 
 Examples:
-> raven-cli disconnectnode "192.168.0.6:8767"
-> raven-cli disconnectnode "" 1
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["192.168.0.6:8767"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli disconnectnode "192.168.0.6:8767"
+> neurai-cli disconnectnode "" 1
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["192.168.0.6:8767"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   disconnectnode: "disconnectnode",
 
@@ -882,10 +882,10 @@ Result:
 }
 
 Examples:
-> raven-cli distributereward "TRONCO" 12345 "XNA" 1000
-> raven-cli distributereward "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli distributereward "TRONCO" 12345 "XNA" 1000
+> neurai-cli distributereward "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   distributereward: "distributereward",
 
@@ -895,15 +895,15 @@ Reveals the private key corresponding to 'address'.
 Then the importprivkey can be used with this output
 
 Arguments:
-1. "address"   (string, required) The raven address for the private key
+1. "address"   (string, required) The neurai address for the private key
 
 Result:
 "key"                (string) The private key
 
 Examples:
-> raven-cli dumpprivkey "myaddress"
-> raven-cli importprivkey "mykey"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpprivkey", "params": ["myaddress"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli dumpprivkey "myaddress"
+> neurai-cli importprivkey "mykey"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpprivkey", "params": ["myaddress"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   dumpprivkey: "dumpprivkey",
 
@@ -912,7 +912,7 @@ Examples:
 Dumps all wallet keys in a human-readable format to a server-side file. This does not allow overwriting existing files.
 
 Arguments:
-1. "filename"    (string, required) The filename with path (either absolute or relative to ravend)
+1. "filename"    (string, required) The filename with path (either absolute or relative to neuraid)
 
 Result:
 {                           (json object)
@@ -920,8 +920,8 @@ Result:
 }
 
 Examples:
-> raven-cli dumpwallet "test"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli dumpwallet "test"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   dumpwallet: "dumpwallet",
 
@@ -940,19 +940,19 @@ Arguments:
 Examples:
 
 Encrypt your wallet
-> raven-cli encryptwallet "my pass phrase"
+> neurai-cli encryptwallet "my pass phrase"
 
-Now set the passphrase to use the wallet, such as for signing or sending raven
-> raven-cli walletpassphrase "my pass phrase"
+Now set the passphrase to use the wallet, such as for signing or sending neurai
+> neurai-cli walletpassphrase "my pass phrase"
 
 Now we can do something like sign
-> raven-cli signmessage "address" "test message"
+> neurai-cli signmessage "address" "test message"
 
 Now lock the wallet again by removing the passphrase
-> raven-cli walletlock 
+> neurai-cli walletlock 
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "encryptwallet", "params": ["my pass phrase"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "encryptwallet", "params": ["my pass phrase"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   encryptwallet: "encryptwallet",
 
@@ -975,7 +975,7 @@ have been observed to make an estimate.
 a fee that is high enough to get reliably included in the next block.
 
 Example:
-> raven-cli estimatefee 6
+> neurai-cli estimatefee 6
 **/
   estimatefee: "estimatefee",
 
@@ -1011,7 +1011,7 @@ An error is returned if not enough transactions and blocks
 have been observed to make an estimate for any number of blocks.
 
 Example:
-> raven-cli estimatesmartfee 6
+> neurai-cli estimatesmartfee 6
 **/
   estimatesmartfee: "estimatesmartfee",
 
@@ -1029,10 +1029,10 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli freezeaddress "$RESTRICTED_ASSET" "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli freezeaddress "$RESTRICTED_ASSET" "address" "change_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli freezeaddress "$RESTRICTED_ASSET" "address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli freezeaddress "$RESTRICTED_ASSET" "address" "change_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   freezeaddress: "freezeaddress",
 
@@ -1049,10 +1049,10 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli freezerestrictedasset "$RESTRICTED_ASSET"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli freezerestrictedasset "$RESTRICTED_ASSET" "change_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli freezerestrictedasset "$RESTRICTED_ASSET"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli freezerestrictedasset "$RESTRICTED_ASSET" "change_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   freezerestrictedasset: "freezerestrictedasset",
 
@@ -1073,7 +1073,7 @@ Arguments:
 1. "hexstring"           (string, required) The hex string of the raw transaction
 2. options                 (object, optional)
    {
-     "changeAddress"          (string, optional, default pool address) The raven address to receive the change
+     "changeAddress"          (string, optional, default pool address) The neurai address to receive the change
      "changePosition"         (numeric, optional, default random) The index of the change output
      "includeWatching"        (boolean, optional, default false) Also select inputs which are watch only
      "lockUnspents"           (boolean, optional, default false) Lock selected unspent outputs
@@ -1081,7 +1081,7 @@ Arguments:
      "subtractFeeFromOutputs" (array, optional) A json array of integers.
                               The fee will be equally deducted from the amount of each specified output.
                               The outputs are specified by their zero-based index, before any change output is added.
-                              Those recipients will receive less ravens than you enter in their corresponding amount field.
+                              Those recipients will receive less neurais than you enter in their corresponding amount field.
                               If no outputs are specified here, the sender pays the fee.
                                   [vout_index,...]
                               Allows this transaction to be replaced by a transaction with higher fees
@@ -1103,16 +1103,16 @@ Result:
 Examples:
 
 Create a transaction with no inputs
-> raven-cli createrawtransaction "[]" "{\"myaddress\":0.01}"
+> neurai-cli createrawtransaction "[]" "{\"myaddress\":0.01}"
 
 Add sufficient unsigned inputs to meet the output value
-> raven-cli fundrawtransaction "rawtransactionhex"
+> neurai-cli fundrawtransaction "rawtransactionhex"
 
 Sign the transaction
-> raven-cli signrawtransaction "fundedtransactionhex"
+> neurai-cli signrawtransaction "fundedtransactionhex"
 
 Send the transaction
-> raven-cli sendrawtransaction "signedtransactionhex"
+> neurai-cli sendrawtransaction "signedtransactionhex"
 **/
   fundrawtransaction: "fundrawtransaction",
 
@@ -1130,7 +1130,7 @@ Result:
 Examples:
 
 Generate 11 blocks
-> raven-cli generate 11
+> neurai-cli generate 11
 **/
   generate: "generate",
 
@@ -1140,7 +1140,7 @@ Mine blocks immediately to a specified address (before the RPC call returns)
 
 Arguments:
 1. nblocks      (numeric, required) How many blocks are generated immediately.
-2. address      (string, required) The address to send the newly generated raven to.
+2. address      (string, required) The address to send the newly generated neurai to.
 3. maxtries     (numeric, optional) How many iterations to try (default = 1000000).
 
 Result:
@@ -1149,7 +1149,7 @@ Result:
 Examples:
 
 Generate 11 blocks to myaddress
-> raven-cli generatetoaddress 11 "myaddress"
+> neurai-cli generatetoaddress 11 "myaddress"
 **/
   generatetoaddress: "generatetoaddress",
 
@@ -1158,32 +1158,32 @@ Generate 11 blocks to myaddress
 DEPRECATED. Returns the account associated with the given address.
 
 Arguments:
-1. "address"         (string, required) The raven address for account lookup.
+1. "address"         (string, required) The neurai address for account lookup.
 
 Result:
 "accountname"        (string) the account address
 
 Examples:
-> raven-cli getaccount "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaccount "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaccount: "getaccount",
 
   /** getaccountaddress "account"
 
-DEPRECATED. Returns the current Raven address for receiving payments to this account.
+DEPRECATED. Returns the current Neurai address for receiving payments to this account.
 
 Arguments:
 1. "account"       (string, required) The account name for the address. It can also be set to the empty string "" to represent the default account. The account does not need to exist, it will be created and a new address created  if there is no account by the given name.
 
 Result:
-"address"          (string) The account raven address
+"address"          (string) The account neurai address
 
 Examples:
-> raven-cli getaccountaddress 
-> raven-cli getaccountaddress ""
-> raven-cli getaccountaddress "myaccount"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccountaddress", "params": ["myaccount"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaccountaddress 
+> neurai-cli getaccountaddress ""
+> neurai-cli getaccountaddress "myaccount"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccountaddress", "params": ["myaccount"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaccountaddress: "getaccountaddress",
 
@@ -1202,7 +1202,7 @@ Result:
     "connected" : true|false,          (boolean) If connected
     "addresses" : [                    (list of objects) Only when connected = true
        {
-         "address" : "192.168.0.201:8767",  (string) The raven server IP and port we're connected to
+         "address" : "192.168.0.201:8767",  (string) The neurai server IP and port we're connected to
          "connected" : "outbound"           (string) connection, inbound or outbound
        }
      ]
@@ -1211,8 +1211,8 @@ Result:
 ]
 
 Examples:
-> raven-cli getaddednodeinfo "192.168.0.201"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddednodeinfo", "params": ["192.168.0.201"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaddednodeinfo "192.168.0.201"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddednodeinfo", "params": ["192.168.0.201"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaddednodeinfo: "getaddednodeinfo",
 
@@ -1239,17 +1239,17 @@ Result:
 OR
 [
   {
-    "assetName"  (string) The asset associated with the balance (XNA for Ravencoin)
+    "assetName"  (string) The asset associated with the balance (XNA for Neurai)
     "balance"  (string) The current balance in satoshis
     "received"  (string) The total number of satoshis received (including change)
   },...
 
 ]
 Examples:
-> raven-cli getaddressbalance '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-> raven-cli getaddressbalance '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaddressbalance '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
+> neurai-cli getaddressbalance '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaddressbalance: "getaddressbalance",
 
@@ -1273,7 +1273,7 @@ Arguments:
 Result:
 [
   {
-    "assetName"  (string) The asset associated with the deltas (XNA for Ravencoin)
+    "assetName"  (string) The asset associated with the deltas (XNA for Neurai)
     "satoshis"  (number) The difference of satoshis
     "txid"  (string) The related txid
     "index"  (number) The related input or output index
@@ -1283,10 +1283,10 @@ Result:
 ]
 
 Examples:
-> raven-cli getaddressdeltas '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli getaddressdeltas '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaddressdeltas '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli getaddressdeltas '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaddressdeltas: "getaddressdeltas",
 
@@ -1299,13 +1299,13 @@ Arguments:
 
 Result:
 [                     (json array of string)
-  "address"         (string) a raven address associated with the given account
+  "address"         (string) a neurai address associated with the given account
   ,...
 ]
 
 Examples:
-> raven-cli getaddressesbyaccount "tabby"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressesbyaccount", "params": ["tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaddressesbyaccount "tabby"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressesbyaccount", "params": ["tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaddressesbyaccount: "getaddressesbyaccount",
 
@@ -1327,7 +1327,7 @@ Result:
 [
   {
     "address"  (string) The base58check encoded address
-    "assetName"  (string) The name of the associated asset (XNA for Ravencoin)
+    "assetName"  (string) The name of the associated asset (XNA for Neurai)
     "txid"  (string) The related txid
     "index"  (number) The related input or output index
     "satoshis"  (number) The difference of satoshis
@@ -1338,10 +1338,10 @@ Result:
 ]
 
 Examples:
-> raven-cli getaddressmempool '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli getaddressmempool '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaddressmempool '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli getaddressmempool '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaddressmempool: "getaddressmempool",
 
@@ -1368,10 +1368,10 @@ Result:
 ]
 
 Examples:
-> raven-cli getaddresstxids '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli getaddresstxids '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaddresstxids '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli getaddresstxids '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaddresstxids: "getaddresstxids",
 
@@ -1394,7 +1394,7 @@ Result
 [
   {
     "address"  (string) The address base58check encoded
-    "assetName" (string) The asset associated with the UTXOs (XNA for Ravencoin)
+    "assetName" (string) The asset associated with the UTXOs (XNA for Neurai)
     "txid"  (string) The output txid
     "height"  (number) The block height
     "outputIndex"  (number) The output index
@@ -1404,10 +1404,10 @@ Result
 ]
 
 Examples:
-> raven-cli getaddressutxos '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli getaddressutxos '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getaddressutxos '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli getaddressutxos '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getaddressutxos: "getaddressutxos",
 
@@ -1431,8 +1431,8 @@ Result:
 }
 
 Examples:
-> raven-cli getassetdata "ASSET_NAME"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getassetdata", "params": ["ASSET_NAME"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getassetdata "ASSET_NAME"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getassetdata", "params": ["ASSET_NAME"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getassetdata: "getassetdata",
 
@@ -1465,13 +1465,13 @@ amount              (numeric) The total amount in XNA received for this account.
 Examples:
 
 The total amount in the wallet with 1 or more confirmations
-> raven-cli getbalance 
+> neurai-cli getbalance 
 
 The total amount in the wallet at least 6 blocks confirmed
-> raven-cli getbalance "*" 6
+> neurai-cli getbalance "*" 6
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbalance", "params": ["*", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbalance", "params": ["*", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getbalance: "getbalance",
 
@@ -1483,8 +1483,8 @@ Result:
 "hex"      (string) the block hash hex encoded
 
 Examples:
-> raven-cli getbestblockhash 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbestblockhash", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getbestblockhash 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbestblockhash", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getbestblockhash: "getbestblockhash",
 
@@ -1536,8 +1536,8 @@ Result (for verbosity = 2):
 }
 
 Examples:
-> raven-cli getblock "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblock", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getblock "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblock", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getblock: "getblock",
 
@@ -1588,8 +1588,8 @@ Result:
 }
 
 Examples:
-> raven-cli getblockchaininfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getblockchaininfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getblockchaininfo: "getblockchaininfo",
 
@@ -1601,8 +1601,8 @@ Result:
 n    (numeric) The current block count
 
 Examples:
-> raven-cli getblockcount 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockcount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getblockcount 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockcount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getblockcount: "getblockcount",
 
@@ -1617,8 +1617,8 @@ Result:
 "hash"         (string) The block hash
 
 Examples:
-> raven-cli getblockhash 1000
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhash", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getblockhash 1000
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhash", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getblockhash: "getblockhash",
 
@@ -1647,9 +1647,9 @@ Result:
 ]
 
 Examples:
-> raven-cli getblockhashes 1231614698 1231024505
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhashes", "params": [1231614698, 1231024505] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli getblockhashes 1231614698 1231024505 '{"noOrphans":false, "logicalTimes":true}'
+> neurai-cli getblockhashes 1231614698 1231024505
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhashes", "params": [1231614698, 1231024505] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli getblockhashes 1231614698 1231024505 '{"noOrphans":false, "logicalTimes":true}'
 **/
   getblockhashes: "getblockhashes",
 
@@ -1684,8 +1684,8 @@ Result (for verbose=false):
 "data"             (string) A string that is serialized, hex-encoded data for block 'hash'.
 
 Examples:
-> raven-cli getblockheader "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockheader", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getblockheader "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockheader", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getblockheader: "getblockheader",
 
@@ -1694,10 +1694,10 @@ Examples:
 If the request parameters include a 'mode' key, that is used to explicitly select between the default 'template' request or a 'proposal'.
 It returns data needed to construct a block to work on.
 For full specification, see BIPs 22, 23, 9, and 145:
-    https://github.com/raven/bips/blob/master/bip-0022.mediawiki
-    https://github.com/raven/bips/blob/master/bip-0023.mediawiki
-    https://github.com/raven/bips/blob/master/bip-0009.mediawiki#getblocktemplate_changes
-    https://github.com/raven/bips/blob/master/bip-0145.mediawiki
+    https://github.com/neurai/bips/blob/master/bip-0022.mediawiki
+    https://github.com/neurai/bips/blob/master/bip-0023.mediawiki
+    https://github.com/neurai/bips/blob/master/bip-0009.mediawiki#getblocktemplate_changes
+    https://github.com/neurai/bips/blob/master/bip-0145.mediawiki
 
 Arguments:
 1. template_request         (json object, optional) A json object in the following spec
@@ -1761,8 +1761,8 @@ Result:
 }
 
 Examples:
-> raven-cli getblocktemplate 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblocktemplate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getblocktemplate 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblocktemplate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getblocktemplate: "getblocktemplate",
 
@@ -1782,8 +1782,8 @@ Result:
 ]
 
 Examples:
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getcacheinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli getcacheinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getcacheinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli getcacheinfo 
 **/
   getcacheinfo: "getcacheinfo",
 
@@ -1813,8 +1813,8 @@ Possible values for status:
 5.  "active"                This is the tip of the active main chain, which is certainly valid
 
 Examples:
-> raven-cli getchaintips 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintips", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getchaintips 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintips", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getchaintips: "getchaintips",
 
@@ -1837,8 +1837,8 @@ Result:
 }
 
 Examples:
-> raven-cli getchaintxstats 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintxstats", "params": [2016] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getchaintxstats 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintxstats", "params": [2016] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getchaintxstats: "getchaintxstats",
 
@@ -1850,8 +1850,8 @@ Result:
 n          (numeric) The connection count
 
 Examples:
-> raven-cli getconnectioncount 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getconnectioncount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getconnectioncount 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getconnectioncount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getconnectioncount: "getconnectioncount",
 
@@ -1863,8 +1863,8 @@ Result:
 n.nnn       (numeric) the proof-of-work difficulty as a multiple of the minimum difficulty.
 
 Examples:
-> raven-cli getdifficulty 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdifficulty", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getdifficulty 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdifficulty", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getdifficulty: "getdifficulty",
 
@@ -1880,25 +1880,25 @@ Arguments:
 5. "exception_addresses"        (string, optional) Ownership addresses that should be excluded
 
 Examples:
-> raven-cli getdistributestatus "TRONCO" 12345 "XNA" 1000
-> raven-cli getdistributestatus "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getdistributestatus "TRONCO" 12345 "XNA" 1000
+> neurai-cli getdistributestatus "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getdistributestatus: "getdistributestatus",
 
   /** getgenerate
 
 Return if the server is set to generate coins or not. The default is false.
-It is set with the command line argument -gen (or raven.conf setting gen)
+It is set with the command line argument -gen (or neurai.conf setting gen)
 It can also be set with the setgenerate call.
 
 Result
 true|false      (boolean) If the server is set to generate coins or not
 
 Examples:
-> raven-cli getgenerate 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getgenerate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getgenerate 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getgenerate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getgenerate: "getgenerate",
 
@@ -1912,7 +1912,7 @@ Result:
   "version": xxxxx,           (numeric) the server version
   "protocolversion": xxxxx,   (numeric) the protocol version
   "walletversion": xxxxx,     (numeric) the wallet version
-  "balance": xxxxxxx,         (numeric) the total Ravencoin balance of the wallet
+  "balance": xxxxxxx,         (numeric) the total Neurai balance of the wallet
   "blocks": xxxxxx,           (numeric) the current number of blocks processed in the server
   "timeoffset": xxxxx,        (numeric) the time offset
   "connections": xxxxx,       (numeric) the number of connections
@@ -1928,8 +1928,8 @@ Result:
 }
 
 Examples:
-> raven-cli getinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getinfo: "getinfo",
 
@@ -1947,8 +1947,8 @@ Arguments
 Result:
 
 Examples:
-> raven-cli getkawpowhash "header_hash" "mix_hash" "0x100000" 2456
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getkawpowhash", "params": ["header_hash" "mix_hash" "0x100000" 2456] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getkawpowhash "header_hash" "mix_hash" "0x100000" 2456
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getkawpowhash", "params": ["header_hash" "mix_hash" "0x100000" 2456] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getkawpowhash: "getkawpowhash",
 
@@ -1966,8 +1966,8 @@ Result:
 }
 
 Examples:
-> raven-cli getmasterkeyinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmasterkeyinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmasterkeyinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmasterkeyinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmasterkeyinfo: "getmasterkeyinfo",
 
@@ -1994,8 +1994,8 @@ Result (mode "mallocinfo"):
 "<malloc version="1">..."
 
 Examples:
-> raven-cli getmemoryinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmemoryinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmemoryinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmemoryinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmemoryinfo: "getmemoryinfo",
 
@@ -2035,8 +2035,8 @@ Result (for verbose=true):
 }
 
 Examples:
-> raven-cli getmempoolancestors "mytxid"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolancestors", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmempoolancestors "mytxid"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolancestors", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmempoolancestors: "getmempoolancestors",
 
@@ -2076,8 +2076,8 @@ Result (for verbose=true):
 }
 
 Examples:
-> raven-cli getmempooldescendants "mytxid"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempooldescendants", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmempooldescendants "mytxid"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempooldescendants", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmempooldescendants: "getmempooldescendants",
 
@@ -2108,8 +2108,8 @@ Result:
 }
 
 Examples:
-> raven-cli getmempoolentry "mytxid"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolentry", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmempoolentry "mytxid"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolentry", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmempoolentry: "getmempoolentry",
 
@@ -2127,8 +2127,8 @@ Result:
 }
 
 Examples:
-> raven-cli getmempoolinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmempoolinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmempoolinfo: "getmempoolinfo",
 
@@ -2146,12 +2146,12 @@ Result:
   "pooledtx": n              (numeric) The size of the mempool
   "chain": "xxxx",           (string) current network name as defined in BIP70 (main, test, regtest)
   "warnings": "..."          (string) any network and blockchain warnings
-  "errors": "..."            (string) DEPRECATED. Same as warnings. Only shown when ravend is started with -deprecatedrpc=getmininginfo
+  "errors": "..."            (string) DEPRECATED. Same as warnings. Only shown when neuraid is started with -deprecatedrpc=getmininginfo
 }
 
 Examples:
-> raven-cli getmininginfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmininginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmininginfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmininginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmininginfo: "getmininginfo",
 
@@ -2165,8 +2165,8 @@ Result:
 "passphrase:"    (optional) Only show if passphrase was used when creating the wallet
 
 Examples:
-> raven-cli getmywords 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmywords", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getmywords 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmywords", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getmywords: "getmywords",
 
@@ -2192,8 +2192,8 @@ Result:
 }
 
 Examples:
-> raven-cli getnettotals 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnettotals", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getnettotals 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnettotals", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getnettotals: "getnettotals",
 
@@ -2211,8 +2211,8 @@ Result:
 x             (numeric) Hashes per second estimated
 
 Examples:
-> raven-cli getnetworkhashps 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkhashps", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getnetworkhashps 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkhashps", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getnetworkhashps: "getnetworkhashps",
 
@@ -2253,14 +2253,14 @@ Result:
 }
 
 Examples:
-> raven-cli getnetworkinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getnetworkinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getnetworkinfo: "getnetworkinfo",
 
   /** getnewaddress ( "account" )
 
-Returns a new Raven address for receiving payments.
+Returns a new Neurai address for receiving payments.
 If 'account' is specified (DEPRECATED), it is added to the address book 
 so payments received with the address will be credited to 'account'.
 
@@ -2268,11 +2268,11 @@ Arguments:
 1. "account"        (string, optional) DEPRECATED. The account name for the address to be linked to. If not provided, the default account "" is used. It can also be set to the empty string "" to represent the default account. The account does not need to exist, it will be created if there is no account by the given name.
 
 Result:
-"address"    (string) The new raven address
+"address"    (string) The new neurai address
 
 Examples:
-> raven-cli getnewaddress 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getnewaddress 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getnewaddress: "getnewaddress",
 
@@ -2324,22 +2324,22 @@ Result:
 ]
 
 Examples:
-> raven-cli getpeerinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpeerinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getpeerinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpeerinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getpeerinfo: "getpeerinfo",
 
   /** getrawchangeaddress
 
-Returns a new Raven address, for receiving change.
+Returns a new Neurai address, for receiving change.
 This is for use with raw transactions, NOT normal use.
 
 Result:
 "address"    (string) The address
 
 Examples:
-> raven-cli getrawchangeaddress 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawchangeaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getrawchangeaddress 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawchangeaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getrawchangeaddress: "getrawchangeaddress",
 
@@ -2380,8 +2380,8 @@ Result: (for verbose = true):
 }
 
 Examples:
-> raven-cli getrawmempool true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawmempool", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getrawmempool true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawmempool", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getrawmempool: "getrawmempool",
 
@@ -2435,7 +2435,7 @@ Result (if verbose is set to true):
          "reqSigs" : n,            (numeric) The required sigs
          "type" : "pubkeyhash",  (string) The type, eg 'pubkeyhash'
          "addresses" : [           (json array of string)
-           "address"        (string) raven address
+           "address"        (string) neurai address
            ,...
          ]
        }
@@ -2449,9 +2449,9 @@ Result (if verbose is set to true):
 }
 
 Examples:
-> raven-cli getrawtransaction "mytxid"
-> raven-cli getrawtransaction "mytxid" true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawtransaction", "params": ["mytxid", true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getrawtransaction "mytxid"
+> neurai-cli getrawtransaction "mytxid" true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawtransaction", "params": ["mytxid", true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getrawtransaction: "getrawtransaction",
 
@@ -2469,16 +2469,16 @@ amount              (numeric) The total amount in XNA received for this account.
 Examples:
 
 Amount received by the default account with at least 1 confirmation
-> raven-cli getreceivedbyaccount ""
+> neurai-cli getreceivedbyaccount ""
 
 Amount received at the tabby account including unconfirmed amounts with zero confirmations
-> raven-cli getreceivedbyaccount "tabby" 0
+> neurai-cli getreceivedbyaccount "tabby" 0
 
 The amount with at least 6 confirmations
-> raven-cli getreceivedbyaccount "tabby" 6
+> neurai-cli getreceivedbyaccount "tabby" 6
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaccount", "params": ["tabby", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaccount", "params": ["tabby", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getreceivedbyaccount: "getreceivedbyaccount",
 
@@ -2487,7 +2487,7 @@ As a json rpc call
 Returns the total amount received by the given address in transactions with at least minconf confirmations.
 
 Arguments:
-1. "address"         (string, required) The raven address for transactions.
+1. "address"         (string, required) The neurai address for transactions.
 2. minconf             (numeric, optional, default=1) Only include transactions confirmed at least this many times.
 
 Result:
@@ -2496,16 +2496,16 @@ amount   (numeric) The total amount in XNA received at this address.
 Examples:
 
 The amount from transactions with at least 1 confirmation
-> raven-cli getreceivedbyaddress "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"
+> neurai-cli getreceivedbyaddress "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"
 
 The amount including unconfirmed transactions, zero confirmations
-> raven-cli getreceivedbyaddress "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" 0
+> neurai-cli getreceivedbyaddress "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" 0
 
 The amount with at least 6 confirmations
-> raven-cli getreceivedbyaddress "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" 6
+> neurai-cli getreceivedbyaddress "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" 6
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaddress", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaddress", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getreceivedbyaddress: "getreceivedbyaddress",
 
@@ -2522,8 +2522,8 @@ Result:
    },...
   ],
 }
-> raven-cli getrpcinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrpcinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getrpcinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrpcinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getrpcinfo: "getrpcinfo",
 
@@ -2547,7 +2547,7 @@ Result:
 }
 
 Examples:
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getsnapshot: "getsnapshot",
 
@@ -2566,8 +2566,8 @@ Result:
 }
 
 Examples:
-> raven-cli getsnapshotrequest "TRONCO" 12345
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getsnapshotrequest "TRONCO" 12345
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getsnapshotrequest: "getsnapshotrequest",
 
@@ -2589,8 +2589,8 @@ Result:
 }
 
 Examples:
-> raven-cli getspentinfo '{"txid": "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9", "index": 0}'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getspentinfo", "params": [{"txid": "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9", "index": 0}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getspentinfo '{"txid": "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9", "index": 0}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getspentinfo", "params": [{"txid": "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9", "index": 0}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getspentinfo: "getspentinfo",
 
@@ -2619,7 +2619,7 @@ Result:
   "details" : [
     {
       "account" : "accountname",      (string) DEPRECATED. The account name involved in the transaction, can be "" for the default account.
-      "address" : "address",          (string) The raven address involved in the transaction
+      "address" : "address",          (string) The neurai address involved in the transaction
       "category" : "send|receive",    (string) The category, either 'send' or 'receive'
       "amount" : x.xxx,                 (numeric) The amount in XNA
       "label" : "label",              (string) A comment for the address/transaction, if any
@@ -2636,7 +2636,7 @@ Result:
       "asset_type" : "new_asset|transfer_asset|reissue_asset", (string) The type of asset transaction
       "asset_name" : "asset_name",          (string) The name of the asset
       "amount" : x.xxx,                 (numeric) The amount in XNA
-      "address" : "address",          (string) The raven address involved in the transaction
+      "address" : "address",          (string) The neurai address involved in the transaction
       "vout" : n,                       (numeric) the vout value
       "category" : "send|receive",    (string) The category, either 'send' or 'receive'
     }
@@ -2646,9 +2646,9 @@ Result:
 }
 
 Examples:
-> raven-cli gettransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
-> raven-cli gettransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d" true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli gettransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
+> neurai-cli gettransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d" true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   gettransaction: "gettransaction",
 
@@ -2671,8 +2671,8 @@ Result:
      "hex" : "hex",        (string) 
      "reqSigs" : n,          (numeric) Number of required signatures
      "type" : "pubkeyhash", (string) The type, eg pubkeyhash
-     "addresses" : [          (array of string) array of raven addresses
-        "address"     (string) raven address
+     "addresses" : [          (array of string) array of neurai addresses
+        "address"     (string) neurai address
         ,...
      ]
   },
@@ -2682,13 +2682,13 @@ Result:
 Examples:
 
 Get unspent transactions
-> raven-cli listunspent 
+> neurai-cli listunspent 
 
 View the details
-> raven-cli gettxout "txid" 1
+> neurai-cli gettxout "txid" 1
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxout", "params": ["txid", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxout", "params": ["txid", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   gettxout: "gettxout",
 
@@ -2732,8 +2732,8 @@ Result:
 }
 
 Examples:
-> raven-cli gettxoutsetinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxoutsetinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli gettxoutsetinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxoutsetinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   gettxoutsetinfo: "gettxoutsetinfo",
 
@@ -2753,8 +2753,8 @@ Result:
 "verifier_string", (string) The verifier for the asset
 
 Examples:
-> raven-cli getverifierstring "restricted_name"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getverifierstring", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getverifierstring "restricted_name"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getverifierstring", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getverifierstring: "getverifierstring",
 
@@ -2779,8 +2779,8 @@ Result:
 }
 
 Examples:
-> raven-cli getwalletinfo 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getwalletinfo 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   getwalletinfo: "getwalletinfo",
 
@@ -2815,13 +2815,13 @@ as change, and not show up in many RPCs.
 Examples:
 
 Import a script with rescan
-> raven-cli importaddress "myscript"
+> neurai-cli importaddress "myscript"
 
 Import using a label without rescan
-> raven-cli importaddress "myscript" "testing" false
+> neurai-cli importaddress "myscript" "testing" false
 
 As a JSON-RPC call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importaddress", "params": ["myscript", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importaddress", "params": ["myscript", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   importaddress: "importaddress",
 
@@ -2855,8 +2855,8 @@ Arguments:
   }
 
 Examples:
-> raven-cli importmulti '[{ "scriptPubKey": { "address": "<my address>" }, "timestamp":1455191478 }, { "scriptPubKey": { "address": "<my 2nd address>" }, "label": "example 2", "timestamp": 1455191480 }]'
-> raven-cli importmulti '[{ "scriptPubKey": { "address": "<my address>" }, "timestamp":1455191478 }]' '{ "rescan": false}'
+> neurai-cli importmulti '[{ "scriptPubKey": { "address": "<my address>" }, "timestamp":1455191478 }, { "scriptPubKey": { "address": "<my 2nd address>" }, "label": "example 2", "timestamp": 1455191480 }]'
+> neurai-cli importmulti '[{ "scriptPubKey": { "address": "<my address>" }, "timestamp":1455191478 }]' '{ "rescan": false}'
 
 Response is an array with the same size as the input that has the execution result :
   [{ "success": true } , { "success": false, "error": { "code": -1, "message": "Internal Server Error"} }, ... ]
@@ -2877,19 +2877,19 @@ Note: This call can take minutes to complete if rescan is true.
 Examples:
 
 Dump a private key
-> raven-cli dumpprivkey "myaddress"
+> neurai-cli dumpprivkey "myaddress"
 
 Import the private key with rescan
-> raven-cli importprivkey "mykey"
+> neurai-cli importprivkey "mykey"
 
 Import using a label and without rescan
-> raven-cli importprivkey "mykey" "testing" false
+> neurai-cli importprivkey "mykey" "testing" false
 
 Import using default blank label and without rescan
-> raven-cli importprivkey "mykey" "" false
+> neurai-cli importprivkey "mykey" "" false
 
 As a JSON-RPC call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importprivkey", "params": ["mykey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importprivkey", "params": ["mykey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   importprivkey: "importprivkey",
 
@@ -2917,13 +2917,13 @@ Note: This call can take minutes to complete if rescan is true.
 Examples:
 
 Import a public key with rescan
-> raven-cli importpubkey "mypubkey"
+> neurai-cli importpubkey "mypubkey"
 
 Import using a label without rescan
-> raven-cli importpubkey "mypubkey" "testing" false
+> neurai-cli importpubkey "mypubkey" "testing" false
 
 As a JSON-RPC call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importpubkey", "params": ["mypubkey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importpubkey", "params": ["mypubkey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   importpubkey: "importpubkey",
 
@@ -2937,13 +2937,13 @@ Arguments:
 Examples:
 
 Dump the wallet
-> raven-cli dumpwallet "test"
+> neurai-cli dumpwallet "test"
 
 Import the wallet
-> raven-cli importwallet "test"
+> neurai-cli importwallet "test"
 
 Import using the json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   importwallet: "importwallet",
 
@@ -2969,13 +2969,13 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli issue "ASSET_NAME" 1000
-> raven-cli issue "ASSET_NAME" 1000 "myaddress"
-> raven-cli issue "ASSET_NAME" 1000 "myaddress" "changeaddress" 4
-> raven-cli issue "ASSET_NAME" 1000 "myaddress" "changeaddress" 2 true
-> raven-cli issue "ASSET_NAME" 1000 "myaddress" "changeaddress" 8 false true QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
-> raven-cli issue "ASSET_NAME/SUB_ASSET" 1000 "myaddress" "changeaddress" 2 true
-> raven-cli issue "ASSET_NAME#uniquetag"
+> neurai-cli issue "ASSET_NAME" 1000
+> neurai-cli issue "ASSET_NAME" 1000 "myaddress"
+> neurai-cli issue "ASSET_NAME" 1000 "myaddress" "changeaddress" 4
+> neurai-cli issue "ASSET_NAME" 1000 "myaddress" "changeaddress" 2 true
+> neurai-cli issue "ASSET_NAME" 1000 "myaddress" "changeaddress" 8 false true QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
+> neurai-cli issue "ASSET_NAME/SUB_ASSET" 1000 "myaddress" "changeaddress" 2 true
+> neurai-cli issue "ASSET_NAME#uniquetag"
 **/
   issue: "issue",
 
@@ -3000,13 +3000,13 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli issuequalifierasset "#ASSET_NAME" 1000
-> raven-cli issuequalifierasset "ASSET_NAME" 1000 "myaddress"
-> raven-cli issuequalifierasset "#ASSET_NAME" 1000 "myaddress" "changeaddress"
-> raven-cli issuequalifierasset "ASSET_NAME" 1000 "myaddress" "changeaddress"
-> raven-cli issuequalifierasset "#ASSET_NAME" 1000 "myaddress" "changeaddress" true QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
-> raven-cli issuequalifierasset "ASSET_NAME/SUB_QUALIFIER" 1000 "myaddress" "changeaddress"
-> raven-cli issuequalifierasset "#ASSET_NAME"
+> neurai-cli issuequalifierasset "#ASSET_NAME" 1000
+> neurai-cli issuequalifierasset "ASSET_NAME" 1000 "myaddress"
+> neurai-cli issuequalifierasset "#ASSET_NAME" 1000 "myaddress" "changeaddress"
+> neurai-cli issuequalifierasset "ASSET_NAME" 1000 "myaddress" "changeaddress"
+> neurai-cli issuequalifierasset "#ASSET_NAME" 1000 "myaddress" "changeaddress" true QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
+> neurai-cli issuequalifierasset "ASSET_NAME/SUB_QUALIFIER" 1000 "myaddress" "changeaddress"
+> neurai-cli issuequalifierasset "#ASSET_NAME"
 **/
   issuequalifierasset: "issuequalifierasset",
 
@@ -3032,11 +3032,11 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress"
-> raven-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress"
-> raven-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress" "changeaddress" 5
-> raven-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress" "changeaddress" 8 true
-> raven-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress" "changeaddress" 0 false true QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
+> neurai-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress"
+> neurai-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress"
+> neurai-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress" "changeaddress" 5
+> neurai-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress" "changeaddress" 8 true
+> neurai-cli issuerestrictedasset "$ASSET_NAME" 1000 "#KYC & !#AML" "myaddress" "changeaddress" 0 false true QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
 **/
   issuerestrictedasset: "issuerestrictedasset",
 
@@ -3059,8 +3059,8 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli issueunique "MY_ASSET" '["primo","secundo"]'
-> raven-cli issueunique "MY_ASSET" '["primo","secundo"]' '["first_hash","second_hash"]'
+> neurai-cli issueunique "MY_ASSET" '["primo","secundo"]'
+> neurai-cli issueunique "MY_ASSET" '["primo","secundo"]' '["first_hash","second_hash"]'
 **/
   issueunique: "issueunique",
 
@@ -3075,8 +3075,8 @@ Result:
 "xxxxxxx", (string) If the verifier string is valid, and the reason
 
 Examples:
-> raven-cli isvalidverifierstring "verifier_string"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "isvalidverifierstring", "params": ["verifier_string"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli isvalidverifierstring "verifier_string"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "isvalidverifierstring", "params": ["verifier_string"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   isvalidverifierstring: "isvalidverifierstring",
 
@@ -3088,8 +3088,8 @@ Arguments
 1. newsize     (numeric, optional, default=100) The new keypool size
 
 Examples:
-> raven-cli keypoolrefill 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "keypoolrefill", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli keypoolrefill 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "keypoolrefill", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   keypoolrefill: "keypoolrefill",
 
@@ -3110,16 +3110,16 @@ Result:
 Examples:
 
 List account balances where there at least 1 confirmation
-> raven-cli listaccounts 
+> neurai-cli listaccounts 
 
 List account balances including zero confirmation transactions
-> raven-cli listaccounts 0
+> neurai-cli listaccounts 0
 
 List account balances for 6 or more confirmations
-> raven-cli listaccounts 6
+> neurai-cli listaccounts 6
 
 As json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaccounts", "params": [6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaccounts", "params": [6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listaccounts: "listaccounts",
 
@@ -3139,9 +3139,9 @@ Result:
 ]
 
 Examples:
-> raven-cli listaddressesbyasset "ASSET_NAME" false 2 0
-> raven-cli listaddressesbyasset "ASSET_NAME" true
-> raven-cli listaddressesbyasset "ASSET_NAME"
+> neurai-cli listaddressesbyasset "ASSET_NAME" false 2 0
+> neurai-cli listaddressesbyasset "ASSET_NAME" true
+> neurai-cli listaddressesbyasset "ASSET_NAME"
 **/
   listaddressesbyasset: "listaddressesbyasset",
 
@@ -3158,8 +3158,8 @@ Result:
 ]
 
 Examples:
-> raven-cli listaddressesfortag "#TAG"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressesfortag", "params": ["#TAG"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listaddressesfortag "#TAG"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressesfortag", "params": ["#TAG"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listaddressesfortag: "listaddressesfortag",
 
@@ -3173,7 +3173,7 @@ Result:
 [
   [
     [
-      "address",            (string) The raven address
+      "address",            (string) The neurai address
       amount,                 (numeric) The amount in XNA
       "account"             (string, optional) DEPRECATED. The account
     ]
@@ -3183,8 +3183,8 @@ Result:
 ]
 
 Examples:
-> raven-cli listaddressgroupings 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressgroupings", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listaddressgroupings 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressgroupings", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listaddressgroupings: "listaddressgroupings",
 
@@ -3201,8 +3201,8 @@ Result:
 ]
 
 Examples:
-> raven-cli listaddressrestrictions "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressrestrictions", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listaddressrestrictions "address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressrestrictions", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listaddressrestrictions: "listaddressrestrictions",
 
@@ -3211,7 +3211,7 @@ Examples:
 Returns a list of all asset balances for an address.
 
 Arguments:
-1. "address"                  (string, required) a raven address
+1. "address"                  (string, required) a neurai address
 2. "onlytotal"                (boolean, optional, default=false) when false result is just a list of assets balances -- when true the result is just a single number representing the number of assets
 3. "count"                    (integer, optional, default=50000, MAX=50000) truncates results to include only the first _count_ assets found
 4. "start"                    (integer, optional, default=0) results skip over the first _start_ assets found (if negative it skips back from the end)
@@ -3223,9 +3223,9 @@ Result:
 }
 
 Examples:
-> raven-cli listassetbalancesbyaddress "myaddress" false 2 0
-> raven-cli listassetbalancesbyaddress "myaddress" true
-> raven-cli listassetbalancesbyaddress "myaddress"
+> neurai-cli listassetbalancesbyaddress "myaddress" false 2 0
+> neurai-cli listassetbalancesbyaddress "myaddress" true
+> neurai-cli listassetbalancesbyaddress "myaddress"
 **/
   listassetbalancesbyaddress: "listassetbalancesbyaddress",
 
@@ -3262,9 +3262,9 @@ Result (verbose=true):
 }
 
 Examples:
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli listassets ASSET
-> raven-cli listassets "ASSET*" true 10 20
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli listassets ASSET
+> neurai-cli listassets "ASSET*" true 10 20
 **/
   listassets: "listassets",
 
@@ -3273,8 +3273,8 @@ Examples:
 List all banned IPs/Subnets.
 
 Examples:
-> raven-cli listbanned 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listbanned 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listbanned: "listbanned",
 
@@ -3288,8 +3288,8 @@ Result:
 ]
 
 Examples:
-> raven-cli listglobalrestrictions 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listglobalrestrictions", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listglobalrestrictions 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listglobalrestrictions", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listglobalrestrictions: "listglobalrestrictions",
 
@@ -3310,19 +3310,19 @@ Result:
 Examples:
 
 List the unspent transactions
-> raven-cli listunspent 
+> neurai-cli listunspent 
 
 Lock an unspent transaction
-> raven-cli lockunspent false "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
+> neurai-cli lockunspent false "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
 
 List the locked transactions
-> raven-cli listlockunspent 
+> neurai-cli listlockunspent 
 
 Unlock the transaction again
-> raven-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
+> neurai-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listlockunspent", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listlockunspent", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listlockunspent: "listlockunspent",
 
@@ -3362,10 +3362,10 @@ Result (verbose=true):
 {...}, {...}
 
 Examples:
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listmyassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli listmyassets ASSET
-> raven-cli listmyassets "ASSET*" true 10 20
-> raven-cli listmyassets "ASSET*" true 10 20 1
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listmyassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli listmyassets ASSET
+> neurai-cli listmyassets "ASSET*" true 10 20
+> neurai-cli listmyassets "ASSET*" true 10 20 1
 **/
   listmyassets: "listmyassets",
 
@@ -3391,9 +3391,9 @@ Result:
 ]
 
 Examples:
-> raven-cli listreceivedbyaccount 
-> raven-cli listreceivedbyaccount 6 true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaccount", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listreceivedbyaccount 
+> neurai-cli listreceivedbyaccount 6 true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaccount", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listreceivedbyaccount: "listreceivedbyaccount",
 
@@ -3424,9 +3424,9 @@ Result:
 ]
 
 Examples:
-> raven-cli listreceivedbyaddress 
-> raven-cli listreceivedbyaddress 6 true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaddress", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listreceivedbyaddress 
+> neurai-cli listreceivedbyaddress 6 true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaddress", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listreceivedbyaddress: "listreceivedbyaddress",
 
@@ -3447,7 +3447,7 @@ Result:
 {
   "transactions": [
     "account":"accountname",       (string) DEPRECATED. The account name associated with the transaction. Will be "" for the default account.
-    "address":"address",    (string) The raven address of the transaction. Not present for move transactions (category = move).
+    "address":"address",    (string) The neurai address of the transaction. Not present for move transactions (category = move).
     "category":"send|receive",     (string) The transaction category. 'send' has negative amounts, 'receive' has positive amounts.
     "amount": x.xxx,          (numeric) The amount in XNA. This is negative for the 'send' category, and for the 'move' category for moves 
                                           outbound. It is positive for the 'receive' category, and for the 'move' category for inbound funds.
@@ -3476,9 +3476,9 @@ Result:
 }
 
 Examples:
-> raven-cli listsinceblock 
-> raven-cli listsinceblock "000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad" 6
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsinceblock", "params": ["000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listsinceblock 
+> neurai-cli listsinceblock "000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad" 6
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsinceblock", "params": ["000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listsinceblock: "listsinceblock",
 
@@ -3499,8 +3499,8 @@ Result:
 ]
 
 Examples:
-> raven-cli listsnapshotrequests 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsnapshotrequests", "params": ["TRONCO" 345333] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listsnapshotrequests 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsnapshotrequests", "params": ["TRONCO" 345333] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listsnapshotrequests: "listsnapshotrequests",
 
@@ -3517,8 +3517,8 @@ Result:
 ]
 
 Examples:
-> raven-cli listtagsforaddress "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtagsforaddress", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listtagsforaddress "address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtagsforaddress", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listtagsforaddress: "listtagsforaddress",
 
@@ -3537,7 +3537,7 @@ Result:
   {
     "account":"accountname",       (string) DEPRECATED. The account name associated with the transaction. 
                                                 It will be "" for the default account.
-    "address":"address",    (string) The raven address of the transaction. Not present for 
+    "address":"address",    (string) The neurai address of the transaction. Not present for 
                                                 move transactions (category = move).
     "category":"send|receive|move", (string) The transaction category. 'move' is a local (off blockchain)
                                                 transaction between accounts, and not associated with an address,
@@ -3577,13 +3577,13 @@ Result:
 Examples:
 
 List the most recent 10 transactions in the systems
-> raven-cli listtransactions 
+> neurai-cli listtransactions 
 
 List transactions 100 to 120
-> raven-cli listtransactions "*" 20 100
+> neurai-cli listtransactions "*" 20 100
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtransactions", "params": ["*", 20, 100] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtransactions", "params": ["*", 20, 100] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listtransactions: "listtransactions",
 
@@ -3596,9 +3596,9 @@ Optionally filter to only include txouts paid to specified addresses.
 Arguments:
 1. minconf          (numeric, optional, default=1) The minimum confirmations to filter
 2. maxconf          (numeric, optional, default=9999999) The maximum confirmations to filter
-3. "addresses"      (string) A json array of raven addresses to filter
+3. "addresses"      (string) A json array of neurai addresses to filter
     [
-      "address"     (string) raven address
+      "address"     (string) neurai address
       ,...
     ]
 4. include_unsafe (bool, optional, default=true) Include outputs that are not safe to spend
@@ -3616,7 +3616,7 @@ Result
   {
     "txid" : "txid",          (string) the transaction id 
     "vout" : n,               (numeric) the vout value
-    "address" : "address",    (string) the raven address
+    "address" : "address",    (string) the neurai address
     "account" : "account",    (string) DEPRECATED. The associated account, or "" for the default account
     "scriptPubKey" : "key",   (string) the script key
     "amount" : x.xxx,         (numeric) the transaction output amount in XNA
@@ -3632,11 +3632,11 @@ Result
 ]
 
 Examples
-> raven-cli listunspent 
-> raven-cli listunspent 6 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli listunspent 6 9999999 '[]' true '{ "minimumAmount": 0.005 }'
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999, [] , true, { "minimumAmount": 0.005 } ] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listunspent 
+> neurai-cli listunspent 6 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli listunspent 6 9999999 '[]' true '{ "minimumAmount": 0.005 }'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999, [] , true, { "minimumAmount": 0.005 } ] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listunspent: "listunspent",
 
@@ -3651,8 +3651,8 @@ Result:
 ]
 
 Examples:
-> raven-cli listwallets 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listwallets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli listwallets 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listwallets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   listwallets: "listwallets",
 
@@ -3661,7 +3661,7 @@ Examples:
 Updates list of temporarily unspendable outputs.
 Temporarily lock (unlock=false) or unlock (unlock=true) specified transaction outputs.
 If no transaction outputs are specified when unlocking then all current locked transaction outputs are unlocked.
-A locked transaction output will not be chosen by automatic coin selection, when spending ravens.
+A locked transaction output will not be chosen by automatic coin selection, when spending neurais.
 Locks are stored in memory only. Nodes start with zero locked outputs, and the locked output list
 is always cleared (by virtue of process exit) when a node stops or fails.
 Also see the listunspent call
@@ -3683,19 +3683,19 @@ true|false    (boolean) Whether the command was successful or not
 Examples:
 
 List the unspent transactions
-> raven-cli listunspent 
+> neurai-cli listunspent 
 
 Lock an unspent transaction
-> raven-cli lockunspent false "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
+> neurai-cli lockunspent false "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
 
 List the locked transactions
-> raven-cli listlockunspent 
+> neurai-cli listlockunspent 
 
 Unlock the transaction again
-> raven-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
+> neurai-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "lockunspent", "params": [false, "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "lockunspent", "params": [false, "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   lockunspent: "lockunspent",
 
@@ -3716,13 +3716,13 @@ true|false           (boolean) true if successful.
 Examples:
 
 Move 0.01 XNA from the default account to the account named tabby
-> raven-cli move "" "tabby" 0.01
+> neurai-cli move "" "tabby" 0.01
 
 Move 0.01 XNA timotei to akiko with a comment and funds have 6 confirmations
-> raven-cli move "timotei" "akiko" 0.01 6 "happy birthday!"
+> neurai-cli move "timotei" "akiko" 0.01 6 "happy birthday!"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "move", "params": ["timotei", "akiko", 0.01, 6, "happy birthday!"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "move", "params": ["timotei", "akiko", 0.01, 6, "happy birthday!"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   move: "move",
 
@@ -3733,8 +3733,8 @@ Results provided in getpeerinfo, pingtime and pingwait fields are decimal second
 Ping command is handled in queue with all other commands, so it measures processing backlog, not just network ping.
 
 Examples:
-> raven-cli ping 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "ping", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli ping 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "ping", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   ping: "ping",
 
@@ -3750,8 +3750,8 @@ Arguments
 Result:
 
 Examples:
-> raven-cli pprpcsb "header_hash" "mix_hash" 100000
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pprpcsb", "params": ["header_hash" "mix_hash" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli pprpcsb "header_hash" "mix_hash" 100000
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pprpcsb", "params": ["header_hash" "mix_hash" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   pprpcsb: "pprpcsb",
 
@@ -3769,8 +3769,8 @@ Arguments:
 Result:
 
 Examples:
-> raven-cli preciousblock "blockhash"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "preciousblock", "params": ["blockhash"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli preciousblock "blockhash"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "preciousblock", "params": ["blockhash"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   preciousblock: "preciousblock",
 
@@ -3789,8 +3789,8 @@ Result:
 true              (boolean) Returns true
 
 Examples:
-> raven-cli prioritisetransaction "txid" 0.0 10000
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "prioritisetransaction", "params": ["txid", 0.0, 10000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli prioritisetransaction "txid" 0.0 10000
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "prioritisetransaction", "params": ["txid", 0.0, 10000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   prioritisetransaction: "prioritisetransaction",
 
@@ -3804,8 +3804,8 @@ Result:
 n    (numeric) Height of the last block pruned.
 
 Examples:
-> raven-cli pruneblockchain 1000
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pruneblockchain", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli pruneblockchain 1000
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pruneblockchain", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   pruneblockchain: "pruneblockchain",
 
@@ -3824,8 +3824,8 @@ Result:
 }
 
 Examples:
-> raven-cli purgesnapshot "ASSET_NAME" 28546
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "purgesnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli purgesnapshot "ASSET_NAME" 28546
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "purgesnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   purgesnapshot: "purgesnapshot",
 
@@ -3847,8 +3847,8 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli reissue "ASSET_NAME" 20 "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "reissue", "params": ["ASSET_NAME" 20 "address" "change_address" "true" 8 "Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli reissue "ASSET_NAME" 20 "address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "reissue", "params": ["ASSET_NAME" 20 "address" "change_address" "true" 8 "Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   reissue: "reissue",
 
@@ -3872,11 +3872,11 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML"
-> raven-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" 
-> raven-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" "changeaddress"
-> raven-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" "changeaddress" -1 true
-> raven-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" false "" "changeaddress" -1 false QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
+> neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML"
+> neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" 
+> neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" "changeaddress"
+> neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" "changeaddress" -1 true
+> neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" false "" "changeaddress" -1 false QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
 **/
   reissuerestrictedasset: "reissuerestrictedasset",
 
@@ -3888,10 +3888,10 @@ Arguments:
 1. "txid"           (string, required) The hex-encoded id of the transaction you are deleting
 
 Examples:
-> raven-cli removeprunedfunds "a8d0c0184dde994a09ec054286f1ce581bebf46446a512166eae7628734ea0a5"
+> neurai-cli removeprunedfunds "a8d0c0184dde994a09ec054286f1ce581bebf46446a512166eae7628734ea0a5"
 
 As a JSON-RPC call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removeprunedfunds", "params": ["a8d0c0184dde994a09ec054286f1ce581bebf46446a512166eae7628734ea0a5"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removeprunedfunds", "params": ["a8d0c0184dde994a09ec054286f1ce581bebf46446a512166eae7628734ea0a5"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   removeprunedfunds: "removeprunedfunds",
 
@@ -3909,10 +3909,10 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli removetagfromaddress "#TAG" "to_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli removetagfromaddress "#TAG" "to_address" "change_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli removetagfromaddress "#TAG" "to_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli removetagfromaddress "#TAG" "to_address" "change_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   removetagfromaddress: "removetagfromaddress",
 
@@ -3930,8 +3930,8 @@ Result:
 }
 
 Examples:
-> raven-cli requestsnapshot "TRONCO" 12345
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "requestsnapshot", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli requestsnapshot "TRONCO" 12345
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "requestsnapshot", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   requestsnapshot: "requestsnapshot",
 
@@ -3950,8 +3950,8 @@ Result:
 }
 
 Examples:
-> raven-cli rescanblockchain 100000 120000
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "rescanblockchain", "params": [100000, 120000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli rescanblockchain 100000 120000
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "rescanblockchain", "params": [100000, 120000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   rescanblockchain: "rescanblockchain",
 
@@ -3960,21 +3960,21 @@ Examples:
 Dumps the mempool to disk.
 
 Examples:
-> raven-cli savemempool 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "savemempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli savemempool 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "savemempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   savemempool: "savemempool",
 
   /** sendfrom "fromaccount" "toaddress" amount ( minconf "comment" "comment_to" )
 
-DEPRECATED (use sendtoaddress). Sent an amount from an account to a raven address.
+DEPRECATED (use sendtoaddress). Sent an amount from an account to a neurai address.
 
 Arguments:
 1. "fromaccount"       (string, required) The name of the account to send funds from. May be the default account using "".
                        Specifying an account does not influence coin selection, but it does associate the newly created
                        transaction with the account, so the account's balance computation and transaction history can reflect
                        the spend.
-2. "toaddress"         (string, required) The raven address to send funds to.
+2. "toaddress"         (string, required) The neurai address to send funds to.
 3. amount                (numeric or string, required) The amount in XNA (transaction fee is added on top).
 4. minconf               (numeric, optional, default=1) Only use funds with at least this many confirmations.
 5. "comment"           (string, optional) A comment used to store what the transaction is for. 
@@ -3989,13 +3989,13 @@ Result:
 Examples:
 
 Send 0.01 XNA from the default account to the address, must have at least 1 confirmation
-> raven-cli sendfrom "" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.01
+> neurai-cli sendfrom "" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.01
 
 Send 0.01 from the tabby account to the given address, funds must have at least 6 confirmations
-> raven-cli sendfrom "tabby" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.01 6 "donation" "seans outpost"
+> neurai-cli sendfrom "tabby" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.01 6 "donation" "seans outpost"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfrom", "params": ["tabby", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.01, 6, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfrom", "params": ["tabby", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.01, 6, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   sendfrom: "sendfrom",
 
@@ -4004,8 +4004,8 @@ As a json rpc call
 Send an amount from a specific address to a given address. All xna change will get sent back to the from_address
 
 Arguments:
-1. "from_address"       (string, required) The raven address to send from.
-2. "to_address"            (string, required) The raven address to send to.
+1. "from_address"       (string, required) The neurai address to send from.
+2. "to_address"            (string, required) The neurai address to send to.
 3. "amount"             (numeric or string, required) The amount in XNA to send. eg 0.1
 4. "comment"            (string, optional) A comment used to store what the transaction is for. 
                              This is not part of the transaction, just kept in your wallet.
@@ -4013,7 +4013,7 @@ Arguments:
                              to which you're sending the transaction. This is not part of the 
                              transaction, just kept in your wallet.
 6. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.
-                             The recipient will receive less ravens than you enter in the amount field.
+                             The recipient will receive less neurais than you enter in the amount field.
 7. conf_target            (numeric, optional) Confirmation target (in blocks)
 8. "estimate_mode"      (string, optional, default=UNSET) The fee estimate mode, must be one of:
        "UNSET"
@@ -4024,10 +4024,10 @@ Result:
 "txid"                  (string) The transaction id.
 
 Examples:
-> raven-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1
-> raven-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "donation" "seans outpost"
-> raven-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "" "" true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfromaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1
+> neurai-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "donation" "seans outpost"
+> neurai-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "" "" true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfromaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   sendfromaddress: "sendfromaddress",
 
@@ -4039,14 +4039,14 @@ Arguments:
 1. "fromaccount"         (string, required) DEPRECATED. The account to send the funds from. Should be "" for the default account
 2. "amounts"             (string, required) A json object with addresses and amounts
     {
-      "address":amount   (numeric or string) The raven address is the key, the numeric amount (can be string) in XNA is the value
+      "address":amount   (numeric or string) The neurai address is the key, the numeric amount (can be string) in XNA is the value
       ,...
     }
 3. minconf                 (numeric, optional, default=1) Only use the balance confirmed at least this many times.
 4. "comment"             (string, optional) A comment
 5. subtractfeefrom         (array, optional) A json array with addresses.
                            The fee will be equally deducted from the amount of each selected address.
-                           Those recipients will receive less ravens than you enter in their corresponding amount field.
+                           Those recipients will receive less neurais than you enter in their corresponding amount field.
                            If no addresses are specified here, the sender pays the fee.
     [
       "address"          (string) Subtract fee from this address
@@ -4065,16 +4065,16 @@ Result:
 Examples:
 
 Send two amounts to two different addresses:
-> raven-cli sendmany "" "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}"
+> neurai-cli sendmany "" "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}"
 
 Send two amounts to two different addresses setting the confirmation and comment:
-> raven-cli sendmany "" "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}" 6 "testing"
+> neurai-cli sendmany "" "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}" 6 "testing"
 
 Send two amounts to two different addresses, subtract fee from amount:
-> raven-cli sendmany "" "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}" 1 "" "[\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\",\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\"]"
+> neurai-cli sendmany "" "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}" 1 "" "[\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\",\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\"]"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendmany", "params": ["", "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}", 6, "testing"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendmany", "params": ["", "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}", 6, "testing"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   sendmany: "sendmany",
 
@@ -4091,8 +4091,8 @@ txid
 ]
 
 Examples:
-> raven-cli sendmessage "ASSET_NAME!" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
-> raven-cli sendmessage "ASSET_NAME!" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
+> neurai-cli sendmessage "ASSET_NAME!" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
+> neurai-cli sendmessage "ASSET_NAME!" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
 **/
   sendmessage: "sendmessage",
 
@@ -4112,15 +4112,15 @@ Result:
 Examples:
 
 Create a transaction
-> raven-cli createrawtransaction "[{\"txid\" : \"mytxid\",\"vout\":0}]" "{\"myaddress\":0.01}"
+> neurai-cli createrawtransaction "[{\"txid\" : \"mytxid\",\"vout\":0}]" "{\"myaddress\":0.01}"
 Sign the transaction, and get back the hex
-> raven-cli signrawtransaction "myhex"
+> neurai-cli signrawtransaction "myhex"
 
 Send the transaction (signed hex)
-> raven-cli sendrawtransaction "signedhex"
+> neurai-cli sendrawtransaction "signedhex"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendrawtransaction", "params": ["signedhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendrawtransaction", "params": ["signedhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   sendrawtransaction: "sendrawtransaction",
 
@@ -4129,7 +4129,7 @@ As a json rpc call
 Send an amount to a given address.
 
 Arguments:
-1. "address"            (string, required) The raven address to send to.
+1. "address"            (string, required) The neurai address to send to.
 2. "amount"             (numeric or string, required) The amount in XNA to send. eg 0.1
 3. "comment"            (string, optional) A comment used to store what the transaction is for. 
                              This is not part of the transaction, just kept in your wallet.
@@ -4137,7 +4137,7 @@ Arguments:
                              to which you're sending the transaction. This is not part of the 
                              transaction, just kept in your wallet.
 5. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.
-                             The recipient will receive less ravens than you enter in the amount field.
+                             The recipient will receive less neurais than you enter in the amount field.
 6. conf_target            (numeric, optional) Confirmation target (in blocks)
 7. "estimate_mode"      (string, optional, default=UNSET) The fee estimate mode, must be one of:
        "UNSET"
@@ -4148,10 +4148,10 @@ Result:
 "txid"                  (string) The transaction id.
 
 Examples:
-> raven-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1
-> raven-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "donation" "seans outpost"
-> raven-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "" "" true
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendtoaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1
+> neurai-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "donation" "seans outpost"
+> neurai-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "" "" true
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendtoaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   sendtoaddress: "sendtoaddress",
 
@@ -4160,12 +4160,12 @@ Examples:
 DEPRECATED. Sets the account associated with the given address.
 
 Arguments:
-1. "address"         (string, required) The raven address to be associated with an account.
+1. "address"         (string, required) The neurai address to be associated with an account.
 2. "account"         (string, required) The account to assign the address to.
 
 Examples:
-> raven-cli setaccount "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "tabby"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli setaccount "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "tabby"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   setaccount: "setaccount",
 
@@ -4180,9 +4180,9 @@ Arguments:
 4. "absolute"     (boolean, optional) If set, the bantime must be an absolute timestamp in seconds since epoch (Jan 1 1970 GMT)
 
 Examples:
-> raven-cli setban "192.168.0.6" "add" 86400
-> raven-cli setban "192.168.0.0/24" "add"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setban", "params": ["192.168.0.6", "add", 86400] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli setban "192.168.0.6" "add" 86400
+> neurai-cli setban "192.168.0.0/24" "add"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setban", "params": ["192.168.0.6", "add", 86400] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   setban: "setban",
 
@@ -4199,16 +4199,16 @@ Arguments:
 Examples:
 
 Set the generation on with a limit of one processor
-> raven-cli setgenerate true 1
+> neurai-cli setgenerate true 1
 
 Check the setting
-> raven-cli getgenerate 
+> neurai-cli getgenerate 
 
 Turn off generation
-> raven-cli setgenerate false
+> neurai-cli setgenerate false
 
 Using json rpc
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setgenerate", "params": [true, 1] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setgenerate", "params": [true, 1] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   setgenerate: "setgenerate",
 
@@ -4232,8 +4232,8 @@ Result
 true|false        (boolean) Returns true if successful
 
 Examples:
-> raven-cli settxfee 0.00001
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "settxfee", "params": [0.00001] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli settxfee 0.00001
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "settxfee", "params": [0.00001] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   settxfee: "settxfee",
 
@@ -4242,7 +4242,7 @@ Examples:
 Sign a message with the private key of an address
 
 Arguments:
-1. "address"         (string, required) The raven address to use for the private key.
+1. "address"         (string, required) The neurai address to use for the private key.
 2. "message"         (string, required) The message to create a signature of.
 
 Result:
@@ -4251,16 +4251,16 @@ Result:
 Examples:
 
 Unlock the wallet for 30 seconds
-> raven-cli walletpassphrase "mypassphrase" 30
+> neurai-cli walletpassphrase "mypassphrase" 30
 
 Create the signature
-> raven-cli signmessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "my message"
+> neurai-cli signmessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "my message"
 
 Verify the signature
-> raven-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
+> neurai-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
 
 As json rpc
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   signmessage: "signmessage",
 
@@ -4278,13 +4278,13 @@ Result:
 Examples:
 
 Create the signature
-> raven-cli signmessagewithprivkey "privkey" "my message"
+> neurai-cli signmessagewithprivkey "privkey" "my message"
 
 Verify the signature
-> raven-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
+> neurai-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
 
 As json rpc
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessagewithprivkey", "params": ["privkey", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessagewithprivkey", "params": ["privkey", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   signmessagewithprivkey: "signmessagewithprivkey",
 
@@ -4340,20 +4340,20 @@ Result:
 }
 
 Examples:
-> raven-cli signrawtransaction "myhex"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signrawtransaction", "params": ["myhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli signrawtransaction "myhex"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signrawtransaction", "params": ["myhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   signrawtransaction: "signrawtransaction",
 
   /** stop
 
-Stop Raven server.**/
+Stop Neurai server.**/
   stop: "stop",
 
   /** submitblock "hexdata"  ( "dummy" )
 
 Attempts to submit new block to network.
-See https://en.raven.it/wiki/BIP_0022 for full specification.
+See https://en.neurai.it/wiki/BIP_0022 for full specification.
 
 Arguments
 1. "hexdata"        (string, required) the hex-encoded block data to submit
@@ -4362,8 +4362,8 @@ Arguments
 Result:
 
 Examples:
-> raven-cli submitblock "mydata"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "submitblock", "params": ["mydata"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli submitblock "mydata"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "submitblock", "params": ["mydata"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   submitblock: "submitblock",
 
@@ -4379,8 +4379,8 @@ Result:[
 ]
 
 Examples:
-> raven-cli subscribetochannel "ASSET_NAME!"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "subscribetochannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli subscribetochannel "ASSET_NAME!"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "subscribetochannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   subscribetochannel: "subscribetochannel",
 
@@ -4410,15 +4410,15 @@ Result:
 Examples:
 
 Create a transaction
-> raven-cli createrawtransaction "[{\"txid\" : \"mytxid\",\"vout\":0}]" "{\"myaddress\":0.01}"
+> neurai-cli createrawtransaction "[{\"txid\" : \"mytxid\",\"vout\":0}]" "{\"myaddress\":0.01}"
 Sign the transaction, and get back the hex
-> raven-cli signrawtransaction "myhex"
+> neurai-cli signrawtransaction "myhex"
 
 Test acceptance of the transaction (signed hex)
-> raven-cli testmempoolaccept "signedhex"
+> neurai-cli testmempoolaccept "signedhex"
 
 As a json rpc call
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "testmempoolaccept", "params": [["signedhex"]] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "testmempoolaccept", "params": [["signedhex"]] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   testmempoolaccept: "testmempoolaccept",
 
@@ -4440,8 +4440,8 @@ txid
 ]
 
 Examples:
-> raven-cli transfer "ASSET_NAME" 20 "address" "" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
-> raven-cli transfer "ASSET_NAME" 20 "address" "" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
+> neurai-cli transfer "ASSET_NAME" 20 "address" "" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
+> neurai-cli transfer "ASSET_NAME" 20 "address" "" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
 **/
   transfer: "transfer",
 
@@ -4464,8 +4464,8 @@ txid
 ]
 
 Examples:
-> raven-cli transferfromaddress "ASSET_NAME" "fromaddress" 20 "address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E", 156545652
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddress", "params": ["ASSET_NAME" "fromaddress" 20 "address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E", 156545652] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli transferfromaddress "ASSET_NAME" "fromaddress" 20 "address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E", 156545652
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddress", "params": ["ASSET_NAME" "fromaddress" 20 "address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E", 156545652] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   transferfromaddress: "transferfromaddress",
 
@@ -4488,8 +4488,8 @@ txid
 ]
 
 Examples:
-> raven-cli transferfromaddresses "ASSET_NAME" '["fromaddress1", "fromaddress2"]' 20 "to_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 154652365
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddresses", "params": ["ASSET_NAME" '["fromaddress1", "fromaddress2"]' 20 "to_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 154652365] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli transferfromaddresses "ASSET_NAME" '["fromaddress1", "fromaddress2"]' 20 "to_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 154652365
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddresses", "params": ["ASSET_NAME" '["fromaddress1", "fromaddress2"]' 20 "to_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 154652365] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   transferfromaddresses: "transferfromaddresses",
 
@@ -4510,8 +4510,8 @@ txid
 ]
 
 Examples:
-> raven-cli transferqualifier "#QUALIFIER" 20 "to_address" "" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
-> raven-cli transferqualifier "#QUALIFIER" 20 "to_address" "change_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
+> neurai-cli transferqualifier "#QUALIFIER" 20 "to_address" "" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
+> neurai-cli transferqualifier "#QUALIFIER" 20 "to_address" "change_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 15863654
 **/
   transferqualifier: "transferqualifier",
 
@@ -4529,10 +4529,10 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli unfreezeaddress "$RESTRICTED_ASSET" "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli unfreezeaddress "$RESTRICTED_ASSET" "address" "change_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli unfreezeaddress "$RESTRICTED_ASSET" "address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli unfreezeaddress "$RESTRICTED_ASSET" "address" "change_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   unfreezeaddress: "unfreezeaddress",
 
@@ -4549,10 +4549,10 @@ Result:
 "txid"                     (string) The transaction id
 
 Examples:
-> raven-cli unfreezerestrictedasset "$RESTRICTED_ASSET"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> raven-cli unfreezerestrictedasset "$RESTRICTED_ASSET" "change_address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli unfreezerestrictedasset "$RESTRICTED_ASSET"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli unfreezerestrictedasset "$RESTRICTED_ASSET" "change_address"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   unfreezerestrictedasset: "unfreezerestrictedasset",
 
@@ -4568,8 +4568,8 @@ Result:[
 ]
 
 Examples:
-> raven-cli unsubscribefromchannel "ASSET_NAME!"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unsubscribefromchannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli unsubscribefromchannel "ASSET_NAME!"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unsubscribefromchannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   unsubscribefromchannel: "unsubscribefromchannel",
 
@@ -4581,22 +4581,22 @@ Result:
 ttt        (numeric) The number of seconds that the server has been running
 
 Examples:
-> raven-cli uptime 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "uptime", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli uptime 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "uptime", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   uptime: "uptime",
 
   /** validateaddress "address"
 
-Return information about the given raven address.
+Return information about the given neurai address.
 
 Arguments:
-1. "address"     (string, required) The raven address to validate
+1. "address"     (string, required) The neurai address to validate
 
 Result:
 {
   "isvalid" : true|false,       (boolean) If the address is valid or not. If not, this is the only property returned.
-  "address" : "address", (string) The raven address validated
+  "address" : "address", (string) The neurai address validated
   "scriptPubKey" : "hex",       (string) The hex encoded scriptPubKey generated by the address
   "ismine" : true|false,        (boolean) If the address is yours or not
   "iswatchonly" : true|false,   (boolean) If the address is watchonly
@@ -4618,8 +4618,8 @@ Result:
 }
 
 Examples:
-> raven-cli validateaddress "1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "validateaddress", "params": ["1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli validateaddress "1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "validateaddress", "params": ["1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   validateaddress: "validateaddress",
 
@@ -4635,8 +4635,8 @@ Result:
 true|false       (boolean) Verified or not
 
 Examples:
-> raven-cli verifychain 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifychain", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli verifychain 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifychain", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   verifychain: "verifychain",
 
@@ -4645,7 +4645,7 @@ Examples:
 Verify a signed message
 
 Arguments:
-1. "address"         (string, required) The raven address to use for the signature.
+1. "address"         (string, required) The neurai address to use for the signature.
 2. "signature"       (string, required) The signature provided by the signer in base 64 encoding (see signmessage).
 3. "message"         (string, required) The message that was signed.
 
@@ -4655,16 +4655,16 @@ true|false   (boolean) If the signature is verified or not.
 Examples:
 
 Unlock the wallet for 30 seconds
-> raven-cli walletpassphrase "mypassphrase" 30
+> neurai-cli walletpassphrase "mypassphrase" 30
 
 Create the signature
-> raven-cli signmessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "my message"
+> neurai-cli signmessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "my message"
 
 Verify the signature
-> raven-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
+> neurai-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
 
 As json rpc
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "signature", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "signature", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   verifymessage: "verifymessage",
 
@@ -4691,8 +4691,8 @@ Result:[
 ]
 
 Examples:
-> raven-cli viewallmessagechannels 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessagechannels", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli viewallmessagechannels 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessagechannels", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   viewallmessagechannels: "viewallmessagechannels",
 
@@ -4710,8 +4710,8 @@ Result:
 "Expire UTC Time:"                (Date, optional) If the message contains an expire date that is too large, the UTC number will be displayed
 
 Examples:
-> raven-cli viewallmessages 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli viewallmessages 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   viewallmessages: "viewallmessages",
 
@@ -4728,8 +4728,8 @@ Result:
 }...
 
 Examples:
-> raven-cli viewmyrestrictedaddresses 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmyrestrictedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli viewmyrestrictedaddresses 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmyrestrictedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   viewmyrestrictedaddresses: "viewmyrestrictedaddresses",
 
@@ -4746,8 +4746,8 @@ Result:
 }...
 
 Examples:
-> raven-cli viewmytaggedaddresses 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmytaggedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli viewmytaggedaddresses 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmytaggedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
   viewmytaggedaddresses: "viewmytaggedaddresses",
 };

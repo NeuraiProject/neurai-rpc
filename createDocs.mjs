@@ -46,7 +46,7 @@ export const methods:IMethods ={
 //Create neurai_method.md
 {
   const result = [];
-  result.push("# Ravencoin remote procedure calls/methods");
+  result.push("# Neurai remote procedure calls/methods");
   result.push("\r\n[Home](README.md)");
   for (let key of keys) {
     if (!key) {

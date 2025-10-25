@@ -1,13 +1,13 @@
 # neurai-rpc
 
-A package that will help you do RPC calls from Node.js to your Raven core node, that is your full Ravencoin node.
+A package that will help you do RPC calls from Node.js to your Neurai node, that is your full Neurai node.
 
-URLs for locally installed Ravencoin nodes.
+URLs for locally installed Neurai nodes.
 
 - http://127.0.0.1:19001 for mainnet
 - http://127.0.0.1:19101 for testnet
 
-Ravencoin as a service, you don't need your own node
+Neurai as a service, you don't need your own node
 
 - https://rpc-main.neurai.org/rpc for mainnet
 - https://rpc-testnet.neurai.org/rpc for testnet
@@ -20,7 +20,7 @@ npm install @neuraiproject/neurai-rpc
 
 # Example using ES modules
 
-This example uses Ravencoin as a service from https://rpc-main.neurai.org.
+This example uses Neurai as a service from https://rpc-main.neurai.org.
 
 In node.js you need to give the file the ending .mjs for modular JavaScript.
 Like `example.mjs`
@@ -107,7 +107,7 @@ function writeToFile(list){
 
 Here is a list of all method/commands [All methods](neurai_methods.md)
 
-In your local Raven core wallet, you can go to
+In your local Neurai wallet, you can go to
 
 help > debug window > console
 
