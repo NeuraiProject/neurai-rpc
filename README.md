@@ -207,6 +207,7 @@ getconnectioncount
 getnettotals
 getnetworkinfo
 getpeerinfo
+getpubkey "address"
 listbanned
 ping
 setban "subnet" "add|remove" (bantime) (absolute)
