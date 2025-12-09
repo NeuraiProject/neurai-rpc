@@ -1,6 +1,6 @@
 {
   "name": "@neuraiproject/neurai-rpc",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Helps you access your Neurai full node using RPC from JavaScript",
   "types": "dist/types.d.ts",
   "type": "module",
@@ -28,12 +28,12 @@
   },
   "homepage": "https://github.com/neuraiproject/neurai-rpc#readme",
   "devDependencies": {
-    "@parcel/packager-ts": "^2.12.0",
-    "@parcel/transformer-typescript-types": "^2.12.0",
+    "@parcel/packager-ts": "2.16.3",
+    "@parcel/transformer-typescript-types": "2.16.3",
     "@types/node": "^18.19.130",
     "buffer": "^6.0.3",
     "jest": "^29.7.0",
-    "parcel": "^2.12.0",
+    "parcel": "2.16.3",
     "typescript": "^5.5.3"
   }
 }
