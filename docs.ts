@@ -428,7 +428,7 @@ checkaddresstag:'checkaddresstag',
 Check if a DEPIN asset is valid/active for a specific address
 
 Arguments:
-1. "asset_name"      (string, required) The DEPIN asset name (must start with &)
+1. "asset_name"      (string, required) The DEPIN asset name
 2. "address"         (string, required) The address to check
 
 Result:
@@ -1460,10 +1460,10 @@ Freeze a DEPIN asset for a specific address (owner only)
 
 The address will still hold the asset but it will be marked as invalid
 
-Requires the owner token (&ASSET!) in the wallet
+Requires the owner token (ASSET!) in the wallet
 
 Arguments:
-1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
+1. "asset_name"       (string, required) The DEPIN asset name
 2. "address"          (string, required) The address to freeze
 3. "change_address"   (string, optional) The change address for the owner token
 
@@ -4083,7 +4083,7 @@ Returns all addresses holding a DEPIN asset with validity status
 DEPIN assets are soulbound (non-transferable except by owner) and can be frozen/revoked
 
 Arguments:
-1. "asset_name"      (string, required) The DEPIN asset name (must start with &)
+1. "asset_name"      (string, required) The DEPIN asset name
 
 Result:
 [
@@ -4905,7 +4905,7 @@ The asset will be marked as invalid but will remain in the address
 This action can only be undone by the asset owner
 
 Arguments:
-1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
+1. "asset_name"       (string, required) The DEPIN asset name
 
 Result:
 "txid"                (string) The transaction id
@@ -5589,10 +5589,10 @@ Unfreeze a DEPIN asset for a specific address (owner only)
 
 The asset will be marked as valid again
 
-Requires the owner token (&ASSET!) in the wallet
+Requires the owner token (ASSET!) in the wallet
 
 Arguments:
-1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
+1. "asset_name"       (string, required) The DEPIN asset name
 2. "address"          (string, required) The address to unfreeze
 3. "change_address"   (string, optional) The change address for the owner token
 
