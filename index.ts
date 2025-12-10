@@ -1,6 +1,15 @@
 import { methods } from "./docs";
 
 export { methods };
+
+// Export DePIN RPC functionality
+export {
+  getDePinRPC,
+  requestDePinChallenge,
+  type DePinAuthOptions,
+  type DePinChallenge,
+} from "./depin";
+
 function throwSyntaxError() {
   throw new Error("Syntax error, call getRPC with (username, password, URL)");
 }

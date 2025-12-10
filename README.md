@@ -4,8 +4,10 @@ A package that will help you do RPC calls from Node.js to your Neurai node, that
 
 URLs for locally installed Neurai nodes.
 
-- http://127.0.0.1:19001 for mainnet
-- http://127.0.0.1:19101 for testnet
+- http://127.0.0.1:19001 for mainnet (Standard RPC)
+- http://127.0.0.1:19002 for mainnet (DePIN Messaging)
+- http://127.0.0.1:19101 for testnet (Standard RPC)
+- http://127.0.0.1:19102 for testnet (DePIN Messaging)
 
 Neurai as a service, you don't need your own node
 
@@ -18,7 +20,9 @@ Neurai as a service, you don't need your own node
 npm install @neuraiproject/neurai-rpc
 ```
 
-# Example using ES modules
+# Standard RPC Usage
+
+## Example using ES modules
 
 This example uses Neurai as a service from https://rpc-main.neurai.org.
 
@@ -37,7 +41,7 @@ const params = [];
 rpc(methods.getblockcount, params).then(console.log);
 ```
 
-# Example using CommonJS
+## Example using CommonJS
 
 ```
 
@@ -63,6 +67,47 @@ will print out
 ```
 { name: 'ELVIS', amount: 1, units: 8, reissuable: 1, has_ipfs: 0 }
 ```
+
+# DePIN Messaging Usage
+
+DePIN (Decentralized Physical Infrastructure Network) messaging uses port 19002 and requires cryptographic signature authentication instead of username/password.
+
+## Basic DePIN Example
+
+```javascript
+import { getDePinRPC } from "@neuraiproject/neurai-rpc";
+
+// Function to sign messages with your private key
+async function signMessage(message) {
+  // Implement your signing logic here
+  // Return base64-encoded signature
+  return "signature_base64";
+}
+
+const depinRPC = await getDePinRPC({
+  depinUrl: "http://localhost:19002",
+  address: "NYourAddressHere",
+  signMessage: signMessage
+});
+
+// Send a DePIN message
+const result = await depinRPC("depinsendmsg", ["SEND", "ipfs_hash", 3600]);
+console.log(result);
+```
+
+For complete DePIN examples including browser wallet integration, error handling, and advanced usage, see [DEPIN_EXAMPLES.md](./DEPIN_EXAMPLES.md).
+
+## DePIN Authentication
+
+Port 19002 uses a challenge-response authentication protocol:
+
+1. Client requests a challenge from the server
+2. Server returns a random challenge string with expiration time (60 seconds)
+3. Client signs the challenge with their private key
+4. Client sends RPC request with address and signature
+5. Server verifies the signature against the address
+
+The `getDePinRPC` function handles this authentication flow automatically, including challenge caching and automatic retry on expiration.
 
 ## Example list all generated addresses in a Wallet (Raven core)
 
