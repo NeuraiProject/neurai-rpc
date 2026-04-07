@@ -21,11 +21,10 @@ The DePIN system uses two distinct ports for different operations:
 
 ### 1.2 DePIN Asset Types
 
-DePIN assets are special tokens that:
-- **Can be any asset on the Neurai blockchain** (no specific prefix required)
-- Are **soulbound** (non-transferable except by the owner)
-- Can be frozen/revoked by the owner or self-revoked by the holder
-- Require the owner token `ASSET!` for administration operations
+There are two related but different concepts in the current DePIN stack:
+
+- **DePIN messaging token:** the asset configured in `depintoken` for gateway messaging. This can be any asset.
+- **Dedicated DePIN asset type:** a newer asset class used by the asset-management RPCs (`checkdepinvalidity`, `listdepinholders`, `freezedepin`, `unfreezedepin`, `selfrevokedepin`). These assets use the `&` prefix, are soulbound, are documented here as enabled for mainnet and testnet, require the owner token `&ASSET!`, and must be issued and reissued with `units=0`.
 
 ---
 
@@ -49,7 +48,7 @@ checkdepinvalidity(asset_name: string, address: string): Promise<{
 **Example:**
 ```javascript
 const rpc = getRPC('http://127.0.0.1:8766', 'username', 'password');
-const result = await rpc('checkdepinvalidity', ['FRANCE', 'NXabcd...']);
+const result = await rpc('checkdepinvalidity', ['&FRANCE', 'NXabcd...']);
 // Returns: { has_asset: true, amount: 1, valid: 1, blocked: false }
 ```
 
@@ -72,7 +71,7 @@ listdepinholders(asset_name: string): Promise<Array<{
 
 **Example:**
 ```javascript
-const holders = await rpc('listdepinholders', ['FRANCE']);
+const holders = await rpc('listdepinholders', ['&FRANCE']);
 // Returns: [
 //   { address: 'NXabc...', amount: 1, valid: 1 },
 //   { address: 'NXdef...', amount: 1, valid: 0 }
@@ -81,6 +80,32 @@ const holders = await rpc('listdepinholders', ['FRANCE']);
 
 **Port:** 8766  
 **Requires:** `-assetindex` enabled on the node
+
+---
+
+#### **listdepinaddresses**
+Lists addresses that own an asset and have already revealed a public key on-chain.
+This is useful when discovering recipients for DePIN messaging.
+
+**Signature:**
+```typescript
+listdepinaddresses(asset_name: string, count?: number, start?: number): Promise<Array<{
+  address: string;
+  pubkey: string;
+}>>
+```
+
+**Example:**
+```javascript
+const recipients = await rpc('listdepinaddresses', ['&FRANCE']);
+// Returns: [
+//   { address: 'NXabc...', pubkey: '02ab...' },
+//   { address: 'NXdef...', pubkey: '03cd...' }
+// ]
+```
+
+**Port:** 8766  
+**Requires:** `-assetindex` and `-pubkeyindex` enabled on the node
 
 ---
 
@@ -98,12 +123,12 @@ freezedepin(
 
 **Example:**
 ```javascript
-const txid = await rpc('freezedepin', ['FRANCE', 'NXmalicious...']);
+const txid = await rpc('freezedepin', ['&FRANCE', 'NXmalicious...']);
 // Returns: "a1b2c3d4e5f6..." (transaction ID)
 ```
 
 **Port:** 8766  
-**Requires:** Owner token `FRANCE!` in the wallet
+**Requires:** Owner token `&FRANCE!` in the wallet
 
 ---
 
@@ -134,7 +159,7 @@ selfrevokedepin(asset_name: string): Promise<string> // txid
 
 **Example:**
 ```javascript
-const txid = await rpc('selfrevokedepin', ['FRANCE']);
+const txid = await rpc('selfrevokedepin', ['&FRANCE']);
 ```
 
 **Port:** 8766  
@@ -729,7 +754,7 @@ async function verifyTokenOwnership(address: string, token: string) {
 }
 ```
 
-**Note:** The token can be any asset on the Neurai blockchain; no special prefix is required.
+**Note:** For DePIN messaging, the token can be any asset. For the dedicated DePIN asset-management RPCs, use the `&ASSET` asset type.
 
 ### 5.2 Key Management
 
@@ -786,8 +811,12 @@ depinmaxmessagesize=1024
 depinmessageexpiry=168  # 7 days in hours
 depinmaxpoolsize=100    # MB
 
-# Asset Index (required for listdepinholders)
+# Asset indexes (required for DePIN holder and pubkey discovery)
 assetindex=1
+pubkeyindex=1
+
+# Dedicated DePIN assets are issued separately via the standard asset RPCs
+# Example on testnet: issue "&FRANCE" 1 "to_address" "change_address" 0 true
 
 # MCP/AI Worker (optional)
 depinmcp=1
@@ -838,7 +867,7 @@ async function testMessaging() {
   });
 
   // Verify token
-  const validity = await client.checkValidity('FRANCE', 'NXyouraddr...');
+  const validity = await client.checkValidity('&FRANCE', 'NXyouraddr...');
   console.log('Token validity:', validity);
 
   // Send message

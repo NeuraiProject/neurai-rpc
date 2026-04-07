@@ -173,10 +173,10 @@ Examples:
 **/ checkaddresstag: 'checkaddresstag',
     /** checkdepinvalidity "asset_name" "address"
 
-Check if a DEPIN asset is valid/active for a specific address
+Check if a dedicated DePIN asset is valid/active for a specific address. Dedicated DePIN assets currently use the '&' prefix.
 
 Arguments:
-1. "asset_name"      (string, required) The DEPIN asset name
+1. "asset_name"      (string, required) The DePIN asset name
 2. "address"         (string, required) The address to check
 
 Result:
@@ -1042,14 +1042,14 @@ Examples:
 **/ freezeaddress: 'freezeaddress',
     /** freezedepin "asset_name" "address" ("change_address")
 
-Freeze a DEPIN asset for a specific address (owner only)
+Freeze a dedicated DePIN asset for a specific address (owner only)
 
 The address will still hold the asset but it will be marked as invalid
 
-Requires the owner token (ASSET!) in the wallet
+Requires the owner token for the DePIN asset (for example, '&FRANCE!' for '&FRANCE') in the wallet
 
 Arguments:
-1. "asset_name"       (string, required) The DEPIN asset name
+1. "asset_name"       (string, required) The DePIN asset name
 2. "address"          (string, required) The address to freeze
 3. "change_address"   (string, optional) The change address for the owner token
 
@@ -2862,6 +2862,7 @@ Asset name must not conflict with any existing asset.
 Unit as the number of decimals precision for the asset (0 for whole units ("1"), 8 for max precision ("1.00000000")
 Reissuable is true/false for whether additional units can be issued by the original issuer.
 If issuing a unique asset these values are required (and will be defaulted to): qty=1, units=0, reissuable=false.
+Dedicated DePIN assets (name starts with '&') are documented here as enabled for mainnet and testnet, with qty > 0 and units=0.
 
 Arguments:
 1. "asset_name"            (string, required) a unique name
@@ -3158,20 +3159,43 @@ Examples:
 > neurai-cli listbanned 
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/ listbanned: 'listbanned',
-    /** listdepinholders "asset_name"
+    /** listdepinaddresses "asset_name" (count) (start)
 
-Returns all addresses holding a DEPIN asset with validity status
-
-DEPIN assets are soulbound (non-transferable except by owner) and can be frozen/revoked
+Returns a list of addresses that own the given asset and have a revealed public key on-chain.
+Useful for DePIN messaging recipient discovery. Requires -assetindex and -pubkeyindex.
 
 Arguments:
-1. "asset_name"      (string, required) The DEPIN asset name
+1. "asset_name"      (string, required) name of asset
+2. "count"           (integer, optional, default=50000, MAX=50000) truncates results to include only the first _count_ addresses found
+3. "start"           (integer, optional, default=0) results skip over the first _start_ addresses found (if negative it skips back from the end)
+
+Result:
+[
+  {
+    "address": "address",   (string) The address
+    "pubkey": "pubkey_hex"  (string) The revealed public key in hex
+  },
+  ...
+]
+
+Examples:
+> neurai-cli listdepinaddresses "&FRANCE"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listdepinaddresses", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/ listdepinaddresses: 'listdepinaddresses',
+    /** listdepinholders "asset_name"
+
+Returns all addresses holding a dedicated DePIN asset with validity status
+
+Dedicated DePIN assets are soulbound and can be frozen/revoked. They currently use the '&' prefix.
+
+Arguments:
+1. "asset_name"      (string, required) The DePIN asset name
 
 Result:
 [
   {
     "address": "address",     (string) The address
-    "amount": n,                (numeric) The amount (always 1 for DEPIN)
+    "amount": n,                (numeric) The amount held
     "valid": 1|0                (numeric) 1 = active/valid, 0 = blocked/revoked
   },
   ...
@@ -3266,6 +3290,20 @@ Examples:
 > neurai-cli listmyassets "ASSET*" true 10 20
 > neurai-cli listmyassets "ASSET*" true 10 20 1
 **/ listmyassets: 'listmyassets',
+    /** listpqaddresses
+
+Returns post-quantum (ML-DSA-44) Bech32m addresses in the wallet.
+
+Result:
+[
+  "nq1...",    (string) A post-quantum wallet address
+  ...
+]
+
+Examples:
+> neurai-cli listpqaddresses
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listpqaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/ listpqaddresses: 'listpqaddresses',
     /** listreceivedbyaccount ( minconf include_empty include_watchonly)
 
 DEPRECATED. List balances by account.
@@ -3699,6 +3737,7 @@ Examples:
 Reissues a quantity of an asset to an owned address if you own the Owner Token
 Can change the reissuable flag during reissuance
 Can change the ipfs hash during reissuance
+For dedicated DePIN assets (name starts with '&'), qty must stay positive and units must remain 0.
 Arguments:
 1. "asset_name"               (string, required) name of asset that is being reissued
 2. "qty"                      (numeric, required) number of assets to reissue
@@ -3818,14 +3857,14 @@ Examples:
 **/ savemempool: 'savemempool',
     /** selfrevokedepin "asset_name"
 
-Self-revoke a DEPIN asset held in this wallet
+Self-revoke a dedicated DePIN asset held in this wallet
 
 The asset will be marked as invalid but will remain in the address
 
 This action can only be undone by the asset owner
 
 Arguments:
-1. "asset_name"       (string, required) The DEPIN asset name
+1. "asset_name"       (string, required) The DePIN asset name
 
 Result:
 "txid"                (string) The transaction id
@@ -4361,14 +4400,14 @@ Examples:
 **/ unfreezeaddress: 'unfreezeaddress',
     /** unfreezedepin "asset_name" "address" ("change_address")
 
-Unfreeze a DEPIN asset for a specific address (owner only)
+Unfreeze a dedicated DePIN asset for a specific address (owner only)
 
 The asset will be marked as valid again
 
-Requires the owner token (ASSET!) in the wallet
+Requires the owner token for the DePIN asset (for example, '&FRANCE!' for '&FRANCE') in the wallet
 
 Arguments:
-1. "asset_name"       (string, required) The DEPIN asset name
+1. "asset_name"       (string, required) The DePIN asset name
 2. "address"          (string, required) The address to unfreeze
 3. "change_address"   (string, optional) The change address for the owner token
 

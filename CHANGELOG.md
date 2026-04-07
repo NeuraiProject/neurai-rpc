@@ -8,15 +8,14 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 ## [0.4.6] - 2025-12-10
 
 ### Fixed
-- **IMPORTANT**: Removed an incorrect restriction that required DePIN assets to start with `&`.
-  - The Neurai DePIN system can operate with **any asset** on the blockchain.
-  - Documentation updated in `docs.json`, `docs.ts`, `DEPIN_IMPLEMENTATION_GUIDE.md`, and `neurai_methods.md`.
-  - Examples that showed tokens requiring the `&` prefix were corrected.
-  - Affected commands: `checkdepinvalidity`, `listdepinholders`, `freezedepin`, `unfreezedepin`, `selfrevokedepin`.
+- Clarified the DePIN documentation to distinguish between:
+  - the messaging token configured in `depintoken`, which can be any asset
+  - the dedicated DePIN asset type used by asset-management RPCs, which uses the `&` prefix in current core
+- Corrected examples for the dedicated DePIN asset-management RPCs.
 
 ### Changed
-- Updated owner token example from `&ASSET!` to `ASSET!` in the documentation.
-- Updated the technical implementation guide (`DEPIN_IMPLEMENTATION_GUIDE.md`) to reflect that any asset can be used.
+- Documented the dedicated DePIN asset behavior for package consumers as enabled on mainnet and testnet, with `units=0` on issue/reissue.
+- Added missing RPC documentation for `listdepinaddresses` and `listpqaddresses`.
 
 ## [0.4.5] - 2025-12-09
 
@@ -78,28 +77,31 @@ See repository commits for the full history of changes.
 
 ### From 0.4.5 to 0.4.6
 
-**IMPORTANT**: If you were validating that DePIN tokens start with `&` in your code:
+**IMPORTANT**: Distinguish between DePIN messaging tokens and dedicated DePIN assets:
 
-❌ **Incorrect (old code):**
+❌ **Incorrect (treating them as the same thing):**
 ```javascript
-if (!token.startsWith('&')) {
-  throw new Error('Token must start with &');
-}
+const token = 'FRANCE';
+await rpc('checkdepinvalidity', [token, address]);
 ```
 
 ✅ **Correct (0.4.6+):**
 ```javascript
-// DePIN tokens can be any asset on the blockchain
-// Do not validate by prefix; use checkdepinvalidity instead
-const validity = await rpc('checkdepinvalidity', [token, address]);
+const messagingToken = 'FRANCE';
+const depinAsset = '&FRANCE';
+
+// Messaging token for depinmsg can be any asset.
+// Dedicated DePIN asset-management commands use the &-prefixed DePIN asset type.
+const validity = await rpc('checkdepinvalidity', [depinAsset, address]);
 if (!validity.has_asset || validity.valid === 0) {
-  throw new Error('Invalid DePIN token for this address');
+  throw new Error('Invalid DePIN asset for this address');
 }
 ```
 
 **Updated examples:**
-- `&FRANCE` → may be `FRANCE`, `&FRANCE`, or any other asset
-- Owner token: `&ASSET!` → `ASSET!` (no mandatory prefix)
+- Messaging token: `FRANCE` can still be any asset
+- Dedicated DePIN asset: `&FRANCE`
+- Owner token for a dedicated DePIN asset: `&FRANCE!`
 
 ### Node configuration
 
@@ -108,14 +110,15 @@ Ensure the following in `neurai.conf`:
 ```ini
 # DePIN Messaging
 depinmsg=1
-depintoken=YOUR_TOKEN_HERE    # Any valid asset
+depintoken=YOUR_TOKEN_HERE    # Messaging token, can be any valid asset
 depinport=19002
 depinmaxmessagesize=1024
 depinmessageexpiry=168
 depinmaxpoolsize=100
 
-# Asset Index (required for listdepinholders)
+# Asset indexes (required for listdepinholders/listdepinaddresses)
 assetindex=1
+pubkeyindex=1
 ```
 
 ---

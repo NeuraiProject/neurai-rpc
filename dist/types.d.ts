@@ -121,10 +121,12 @@ interface IMethods {
     listassetbalancesbyaddress: string;
     listassets: string;
     listbanned: string;
+    listdepinaddresses: string;
     listdepinholders: string;
     listglobalrestrictions: string;
     listlockunspent: string;
     listmyassets: string;
+    listpqaddresses: string;
     listreceivedbyaccount: string;
     listreceivedbyaddress: string;
     listsinceblock: string;

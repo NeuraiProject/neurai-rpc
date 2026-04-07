@@ -91,11 +91,18 @@ const depinRPC = await getDePinRPC({
 });
 
 // Send a DePIN message
-const result = await depinRPC("depinsendmsg", ["SEND", "ipfs_hash", 3600]);
+const result = await depinRPC("depinsendmsg", [
+  "FRANCE",
+  "192.168.1.100:19002",
+  "Hello team!",
+  "NYourAddressHere"
+]);
 console.log(result);
 ```
 
 For complete DePIN examples including browser wallet integration, error handling, and advanced usage, see [DEPIN_EXAMPLES.md](./DEPIN_EXAMPLES.md).
+
+The messaging token configured for a DePIN gateway can be any asset. Separately, the dedicated DePIN asset-management RPCs work with the newer `&ASSET` DePIN asset type, which is soulbound, documented here as enabled for mainnet and testnet, and must use `units=0`.
 
 ## DePIN Authentication
 
@@ -173,15 +180,21 @@ getcacheinfo
 getsnapshot "asset_name" block_height
 issue "asset_name" qty "( to_address )" "( change_address )" ( units ) ( reissuable ) ( has_ipfs ) "( ipfs_hash )"
 issueunique "root_name" [asset_tags] ( [ipfs_hashes] ) "( to_address )" "( change_address )"
+checkdepinvalidity "asset_name" "address"
+freezedepin "asset_name" "address" ("change_address")
 listaddressesbyasset "asset_name" (onlytotal) (count) (start)
 listassetbalancesbyaddress "address" (onlytotal) (count) (start)
 listassets "( asset )" ( verbose ) ( count ) ( start )
+listdepinaddresses "asset_name" (count) (start)
+listdepinholders "asset_name"
 listmyassets "( asset )" ( verbose ) ( count ) ( start ) (confs)
 purgesnapshot "asset_name" block_height
 reissue "asset_name" qty "to_address" "change_address" ( reissuable ) ( new_units) "( new_ipfs )"
+selfrevokedepin "asset_name"
 transfer "asset_name" qty "to_address" "message" expire_time "change_address" "asset_change_address"
 transferfromaddress "asset_name" "from_address" qty "to_address" "message" expire_time "xna_change_address" "asset_change_address"
 transferfromaddresses "asset_name" ["from_addresses"] qty "to_address" "message" expire_time "xna_change_address" "asset_change_address"
+unfreezedepin "asset_name" "address" ("change_address")
 
 == Blockchain ==
 clearmempool
@@ -343,6 +356,7 @@ keypoolrefill ( newsize )
 listaccounts ( minconf include_watchonly)
 listaddressgroupings
 listlockunspent
+listpqaddresses
 listreceivedbyaccount ( minconf include_empty include_watchonly)
 listreceivedbyaddress ( minconf include_empty include_watchonly)
 listsinceblock ( "blockhash" target_confirmations include_watchonly include_removed )
