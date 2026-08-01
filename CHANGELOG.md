@@ -78,6 +78,9 @@ the client was rewritten:
 - Build switched from parcel to tsup with two entries (`.` and `./depin`),
   each shipping ESM (`.mjs`), CJS (`.cjs`) and type declarations; `exports`
   map rewritten with `types`/`import`/`require` conditions per entry.
+- Dropped the now-unused parcel toolchain and `buffer` polyfill from
+  devDependencies and pinned esbuild to a patched version via `overrides` —
+  `npm audit` reports 0 vulnerabilities.
 - `files` whitelist added to `package.json` (internal working notes and tests
   are no longer published).
 - Fixed the `create-docs` npm script (`node createDocs.mjs`).
