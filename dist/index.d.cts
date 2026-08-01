@@ -22,20 +22,26 @@ interface IMethods {
     decoderawtransaction: string;
     decodescript: string;
     depinclearmsg: string;
+    depingetancestorrecipients: string;
     depingetmsg: string;
     depingetmsginfo: string;
     depingetpoolcontent: string;
+    depinlistsections: string;
     depinmcpstatus: string;
+    depinpoolpkey: string;
     depinpoolstats: string;
+    depinreceivemsg: string;
     depinsendmsg: string;
     depinsubmitmsg: string;
     disconnectnode: string;
     distributereward: string;
+    dumpextkeypq: string;
     dumpprivkey: string;
     dumpwallet: string;
     encryptwallet: string;
     estimatefee: string;
     estimatesmartfee: string;
+    exportxpqpub: string;
     freezeaddress: string;
     freezedepin: string;
     freezerestrictedasset: string;
@@ -187,67 +193,8 @@ interface IMethods {
     viewmyrestrictedaddresses: string;
     viewmytaggedaddresses: string;
 }
-export const methods: IMethods;
-/**
- * DePIN RPC Client for Neurai
- *
- * This module provides support for communicating with Neurai DePIN messaging
- * on port 19002 using the challenge/response authentication protocol.
- */
-export interface DePinAuthOptions {
-    /** DePIN token name (e.g., "MYTOKEN") */
-    token: string;
-    /** Neurai address that will sign challenges */
-    address: string;
-    /** Function to sign messages (must return base64 signature) */
-    signMessage: (message: string) => Promise<string>;
-    /** Operation mode: SEND or RECEIVE (default: RECEIVE) */
-    mode?: 'SEND' | 'RECEIVE';
-}
-export interface DePinChallenge {
-    /** Challenge string from server */
-    challenge: string;
-    /** Timeout in seconds */
-    timeout: number;
-    /** Complete message that needs to be signed */
-    messageToSign: string;
-}
-/**
- * Create a DePIN RPC client with challenge/response authentication
- *
- * @param url DePIN server URL (e.g., "http://localhost:19002")
- * @param authOptions Authentication options including token, address, and signing function
- * @returns Async RPC function
- *
- * @example
- * ```typescript
- * import { getDePinRPC } from "@neuraiproject/neurai-rpc";
- *
- * const depinRpc = getDePinRPC("http://localhost:19002", {
- *   token: "MYTOKEN",
- *   address: "NXmyaddress...",
- *   signMessage: async (msg) => {
- *     // Use your wallet to sign the message
- *     return await wallet.signMessage(msg);
- *   },
- *   mode: "SEND"
- * });
- *
- * // Send a DePIN message
- * const result = await depinRpc("depinsendmsg", [
- *   "MYTOKEN",
- *   "localhost",
- *   "Hello from DePIN!",
- *   "NXmyaddress..."
- * ]);
- * ```
- */
-export function getDePinRPC(url: string, authOptions: DePinAuthOptions): (method: string, params: any[]) => Promise<unknown>;
-/**
- * Helper function to request a challenge without making an RPC call
- * Useful for testing or manual challenge handling
- */
-export function requestDePinChallenge(url: string, authOptions: DePinAuthOptions): Promise<DePinChallenge>;
-export function getRPC(username: string, password: string, URL: string): (method: string, params: any[]) => Promise<unknown>;
+declare const methods: IMethods;
 
-//# sourceMappingURL=types.d.ts.map
+declare function getRPC(username: string, password: string, URL: string): (method: string, params: any[]) => Promise<unknown>;
+
+export { getRPC, methods };

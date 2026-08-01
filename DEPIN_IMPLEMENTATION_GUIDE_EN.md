@@ -2,10 +2,14 @@
 
 ## Change Summary
 
-Thirteen new RPC commands have been added for Neurai's DePIN (Decentralized Physical Infrastructure Networks) system, grouped into three categories: DePIN asset management, encrypted messaging, and AI/MCP monitoring.
+This guide covers the RPC commands of Neurai's DePIN (Decentralized Physical
+Infrastructure Networks) system — asset management, encrypted messaging and
+AI/MCP monitoring — and the library's DePIN client. As of 0.5.0 the client
+speaks the gateway's real raw-TCP line protocol from the Node.js-only entry
+`@neuraiproject/neurai-rpc/depin` (see §3.2 and the changelog in §10).
 
-**Version:** 0.4.5  
-**Date:** December 2025  
+**Version:** 0.5.0  
+**Date:** August 2026  
 **Branch:** master
 
 ---
@@ -16,15 +20,15 @@ Thirteen new RPC commands have been added for Neurai's DePIN (Decentralized Phys
 
 The DePIN system uses two distinct ports for different operations:
 
-- **Port 8766** (standard RPC): Asset management commands and queries
-- **Port 19002** (DePIN Server): Encrypted messaging and P2P operations
+- **Ports 19001 (mainnet) / 19101 (testnet)** (standard RPC, HTTP): Asset management commands and queries
+- **Port 19002** (DePIN gateway, raw TCP): Encrypted messaging and P2P operations (default of `-depinmsgport`, same on every network)
 
 ### 1.2 DePIN Asset Types
 
 There are two related but different concepts in the current DePIN stack:
 
-- **DePIN messaging token:** the asset configured in `depintoken` for gateway messaging. This can be any asset.
-- **Dedicated DePIN asset type:** a newer asset class used by the asset-management RPCs (`checkdepinvalidity`, `listdepinholders`, `freezedepin`, `unfreezedepin`, `selfrevokedepin`). These assets use the `&` prefix, are soulbound, are documented here as enabled for mainnet and testnet, require the owner token `&ASSET!`, and must be issued and reissued with `units=0`.
+- **DePIN messaging token:** the DEPIN asset configured in `depinmsgtoken` for gateway messaging. It must start with `&` (e.g. `&FRANCE`); sections like `&FRANCE/GENERAL` scope hierarchical pools.
+- **Dedicated DePIN asset type:** a newer asset class used by the asset-management RPCs (`checkdepinvalidity`, `listdepinholders`, `freezedepin`, `unfreezedepin`, `selfrevokedepin`). These assets use the `&` prefix, are soulbound, are currently enabled on **testnet and regtest only** in the node, require the owner token `&ASSET!`, and must be issued and reissued with `units=0`.
 
 ---
 
@@ -47,12 +51,12 @@ checkdepinvalidity(asset_name: string, address: string): Promise<{
 
 **Example:**
 ```javascript
-const rpc = getRPC('http://127.0.0.1:8766', 'username', 'password');
+const rpc = getRPC('username', 'password', 'http://127.0.0.1:19001');
 const result = await rpc('checkdepinvalidity', ['&FRANCE', 'NXabcd...']);
 // Returns: { has_asset: true, amount: 1, valid: 1, blocked: false }
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Requires Wallet:** No
 
 ---
@@ -78,7 +82,7 @@ const holders = await rpc('listdepinholders', ['&FRANCE']);
 // ]
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Requires:** `-assetindex` enabled on the node
 
 ---
@@ -104,7 +108,7 @@ const recipients = await rpc('listdepinaddresses', ['&FRANCE']);
 // ]
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Requires:** `-assetindex` and `-pubkeyindex` enabled on the node
 
 ---
@@ -127,7 +131,7 @@ const txid = await rpc('freezedepin', ['&FRANCE', 'NXmalicious...']);
 // Returns: "a1b2c3d4e5f6..." (transaction ID)
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Requires:** Owner token `&FRANCE!` in the wallet
 
 ---
@@ -144,7 +148,7 @@ unfreezedepin(
 ): Promise<string> // txid
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Requires:** Owner token `ASSET!` in the wallet
 
 ---
@@ -162,7 +166,7 @@ selfrevokedepin(asset_name: string): Promise<string> // txid
 const txid = await rpc('selfrevokedepin', ['&FRANCE']);
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Requires Wallet:** Yes (the wallet must hold the asset)
 
 ---
@@ -195,7 +199,7 @@ depingetmsginfo(): Promise<{
 const info = await rpc('depingetmsginfo', []);
 // Returns: {
 //   enabled: true,
-//   token: "FRANCE",
+//   token: "&FRANCE",
 //   port: 19002,
 //   maxmessagesize: 1024,
 //   messages: 42,
@@ -203,7 +207,7 @@ const info = await rpc('depingetmsginfo', []);
 // }
 ```
 
-**Port:** 8766
+**Port:** standard RPC (19001 mainnet / 19101 testnet)
 
 ---
 
@@ -230,14 +234,15 @@ depinsendmsg(
 1. Client connects to remote gateway on port 19002
 2. Requests challenge: `AUTH|TOKEN|ADDRESS|SEND`
 3. Gateway responds: `CHALLENGE|<challenge>|<timeout>`
-4. Client signs the challenge with its private key
-5. Client sends: `SUBMIT|<signature>|<encrypted_message>`
+4. Client signs `DEPIN-SEND|token|address|challenge` with its private key
+5. Client sends the JSON-RPC request with challenge and signature appended
+   to the params — the gateway validates and trims them (see §3.2)
 6. Gateway validates and distributes the message
 
 **Example:**
 ```javascript
 const result = await rpc('depinsendmsg', [
-  'FRANCE',
+  '&FRANCE',
   '192.168.1.100:19002',
   'Hello team!',
   'NXsender...'
@@ -245,7 +250,7 @@ const result = await rpc('depinsendmsg', [
 // Returns: { result: "success", hash: "abc123...", recipients: 5, timestamp: 1702123456 }
 ```
 
-**Port:** 8766 (RPC), connects to remote node port 19002  
+**Port:** standard RPC (19001/19101); the node connects out to the remote gateway on TCP 19002  
 **Encryption:** ECIES (ECDH + AES-256-CBC + HMAC-SHA256)
 
 ---
@@ -308,35 +313,39 @@ depingetmsg(
 
 1. **Local - all addresses:**
 ```javascript
-const messages = await rpc('depingetmsg', ['FRANCE']);
+const messages = await rpc('depingetmsg', ['&FRANCE']);
 ```
 
 2. **Local - specific address:**
 ```javascript
-const messages = await rpc('depingetmsg', ['FRANCE', 'NXyouraddr...']);
+const messages = await rpc('depingetmsg', ['&FRANCE', 'NXyouraddr...']);
 ```
 
 3. **Remote - IP without port:**
 ```javascript
-const messages = await rpc('depingetmsg', ['FRANCE', '192.168.1.78']);
+const messages = await rpc('depingetmsg', ['&FRANCE', '192.168.1.78']);
 ```
 
 4. **Remote - IP with port:**
 ```javascript
-const messages = await rpc('depingetmsg', ['FRANCE', '192.168.1.78:19002']);
+const messages = await rpc('depingetmsg', ['&FRANCE', '192.168.1.78:19002']);
 ```
 
 5. **Remote - with specific address:**
 ```javascript
 const messages = await rpc('depingetmsg', [
-  'FRANCE', 
+  '&FRANCE', 
   '192.168.1.78:19002', 
   'NXyouraddr...'
 ]);
 ```
 
-**Port:** 8766 (for local queries), 19002 (for remote queries)  
+**Port:** standard RPC (19001/19101) for local queries; remote queries reach the remote gateway on TCP 19002  
 **Decryption:** Automatic using the wallet's private keys
+
+> **Gateway note:** calling `depingetmsg` directly against the TCP gateway
+> (port 19002) is currently blocked by a node-side parameter bug — see §3.2.
+> Through the standard RPC port (shown above) it works normally.
 
 ---
 
@@ -345,7 +354,10 @@ Removes messages from the DePIN messaging pool.
 
 **Signature:**
 ```typescript
-depinclearmsg(mode?: 'all' | number): Promise<{
+depinclearmsg(
+  mode?: 'all' | number,
+  scope?: string            // section token, e.g. "&TOKEN/GENERAL"
+): Promise<{
   removed: number;
   remaining: number;
 }>
@@ -355,6 +367,9 @@ depinclearmsg(mode?: 'all' | number): Promise<{
 - No parameters: Remove only expired messages (default)
 - `"all"`: Remove ALL messages from the pool
 - `<hours>`: Remove messages older than the specified hours
+- With `scope`: restrict the purge to one section's subtree (owner of the
+  section or of an ancestor required over the gateway; purging a subtree
+  never touches parents or siblings)
 
 **Examples:**
 ```javascript
@@ -366,9 +381,12 @@ const result = await rpc('depinclearmsg', ['all']);
 
 // Remove older than 7 days
 const result = await rpc('depinclearmsg', [168]);
+
+// Remove everything in one section only
+const result = await rpc('depinclearmsg', ['all', '&FRANCE/GENERAL']);
 ```
 
-**Port:** 8766
+**Port:** standard RPC (19001/19101); over the gateway (19002) it requires an ADMIN challenge — see §3.2
 
 ---
 
@@ -416,7 +434,7 @@ const pool = await rpc('depingetpoolcontent', ['raw']);
 const pool = await rpc('depingetpoolcontent', [false, 'NXsender...']);
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Note:** Recipient filtering does not work with ECIES shared encryption
 
 ---
@@ -451,7 +469,108 @@ depinpoolstats(): Promise<{
 const stats = await rpc('depinpoolstats', []);
 ```
 
-**Port:** 8766
+**Port:** standard RPC (19001 mainnet / 19101 testnet)
+
+---
+
+#### **depinreceivemsg**
+Retrieves DePIN messages from the pool with optional pagination. If the
+server has a DePIN pool key and the requester's address has a revealed
+public key, the response is fully encrypted using the privacy layer.
+
+**Signature:**
+```typescript
+depinreceivemsg(
+  token: string,
+  address: string,
+  timestamp?: number,   // only messages with timestamp >= (timestamp-1)
+  after_hash?: string,  // hash of last received message, "" = from beginning
+  limit?: number        // max messages, 0/omitted = all
+): Promise<Array<object> | object>
+```
+
+**Examples:**
+```javascript
+// Everything for one address
+const msgs = await rpc('depinreceivemsg', ['&FRANCE', 'NXyouraddr...']);
+
+// Paginated: 50 messages after a known hash
+const page = await rpc('depinreceivemsg', [
+  '&FRANCE', 'NXyouraddr...', 0, 'abcdef123...', 50,
+]);
+```
+
+**Port:** standard RPC (19001/19101) and 19002 (served without auth by the gateway)  
+**Node:** requires July 2026+ for `after_hash`/`limit` pagination
+
+---
+
+#### **depingetancestorrecipients**
+Lists the active holders of a DEPIN branch: the deduplicated union of the
+holders of the given token and of every one of its `/`-separated ancestors,
+each with the public key revealed on chain. Active means: positive balance,
+public key revealed, and not blocked by an owner freeze or self-revocation.
+
+**Signature:**
+```typescript
+depingetancestorrecipients(
+  token: string,
+  max_results?: number,
+  stop_at?: string      // ancestor at which to stop climbing
+): Promise<object>
+```
+
+**Example:**
+```javascript
+const holders = await rpc('depingetancestorrecipients', ['&FRANCE/PARIS']);
+```
+
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
+**Node:** requires July 2026+
+
+---
+
+#### **depinlistsections**
+Lists the hierarchical DePIN sections known to the wallet. With an address it
+also reports access and per-section message counters — that mode requires the
+standard RPC port (over the gateway only section names are served).
+
+**Signature:**
+```typescript
+depinlistsections(address?: string): Promise<object>
+```
+
+**Example:**
+```javascript
+const sections = await rpc('depinlistsections', []);
+const mine = await rpc('depinlistsections', ['NXyouraddr...']);
+```
+
+**Port:** standard RPC (19001/19101) (names also on 19002)  
+**Node:** requires July 2026+
+
+---
+
+#### **depinpoolpkey**
+Returns the public key of the DePIN pool address from the internal wallet
+(wallet must be loaded and unlocked at node startup). Derivation paths:
+mainnet `m/44'/0'/200'/0/0`, testnet `m/44'/0'/200'/1/0`.
+
+**Signature:**
+```typescript
+depinpoolpkey(): Promise<{
+  pubkey: string;
+  address: string;
+  path: string;
+}>
+```
+
+**Example:**
+```javascript
+const poolKey = await rpc('depinpoolpkey', []);
+```
+
+**Port:** standard RPC (19001/19101) and 19002 (served without auth by the gateway)
 
 ---
 
@@ -494,7 +613,7 @@ const status = await rpc('depinmcpstatus', []);
 // }
 ```
 
-**Port:** 8766  
+**Port:** standard RPC (19001 mainnet / 19101 testnet)  
 **Note:** The MCP worker processes AI commands sent through the DePIN messaging system
 
 ---
@@ -532,40 +651,60 @@ The system uses ECIES (Elliptic Curve Integrated Encryption Scheme) with the fol
 5. Decrypt: plaintext = AES-256-CBC-decrypt(ciphertext, encryption_key, iv)
 ```
 
-### 3.2 Challenge/Response Authentication
+### 3.2 Gateway Transport and Challenge/Response Authentication
 
-For remote operations (depinsendmsg):
+The gateway (default port 19002) speaks a **raw TCP line protocol, not HTTP**:
+each connection carries exactly one request line terminated by `\n` and
+receives one response line back. A request line is either a protocol command
+(`PING`, `INFO`, `AUTH|...`) or a serialized JSON-RPC object.
 
 **Protocol:**
 ```
-Client → Server: AUTH|<token>|<address>|<mode>
-  mode = SEND | RECEIVE
+Client → Server: AUTH|<token>|<address>|<mode>\n
+  mode = SEND | RECEIVE | ADMIN
 
-Server → Client: CHALLENGE|<random_challenge>|<timeout_seconds>
+Server → Client: CHALLENGE|<random_challenge>|<timeout_seconds>\n
 
-Client:
-  1. Sign challenge: signature = sign(sha256(challenge), privkey)
-  2. Prepare encrypted message
+Client signs the mode-specific message with the address key:
+  SEND    → "DEPIN-SEND|<token>|<address>|<challenge>"   (depinsendmsg)
+  RECEIVE → "DEPIN-GET|<token>|<address>|<challenge>"
+  ADMIN   → "DEPIN-CLEAR|<token>|<address>|<challenge>"  (depinclearmsg, owner only)
 
-Client → Server: SUBMIT|<signature>|<hex_encrypted_message>
+Client → Server (new connection): {"jsonrpc":"2.0","id":...,"method":...,"params":[...]}\n
+  Challenge and signature placement depends on the method:
+  - depinsendmsg:  [token, ip, message, fromaddress, (port), challenge, signature]
+                   (the gateway validates and trims the last two)
+  - depinclearmsg: [mode, address, challenge, signature] or
+                   [mode, scope, address, challenge, signature]
+  - depinreceivemsg, depinsubmitmsg, depingetmsginfo, depingetpoolcontent,
+    depinpoolstats, depinmcpstatus, depinlistsections, depinpoolpkey:
+                   params untouched — the gateway serves them without auth
 
-Server:
-  1. Verify signature with address pubkey
-  2. Verify token ownership
-  3. Validate and store message
-  4. Return confirmation
+Server → Client: JSON-RPC response line
 ```
+
+Note: `depingetmsg` over the gateway is currently blocked by a node-side bug
+(the gateway reads `fromaddress` from `params[3]`, where this method carries
+it at index 1 or 2 and accepts at most 3 arguments). Use `depinreceivemsg`
+over the gateway, or `depingetmsg` through the standard RPC port.
 
 ---
 
 ## 4. Wallet Web Implementation
+
+> **Transport note:** the class below talks to the node's **standard HTTP RPC
+> port** with Basic auth, which works from a browser and is the right choice
+> for wallet web apps (for `depinsendmsg` the local node opens the TCP
+> connection to the remote gateway itself). Direct access to the DePIN
+> gateway (TCP 19002) is only possible from Node.js — use
+> `import { getDePinRPC } from "@neuraiproject/neurai-rpc/depin"` for that.
 
 ### 4.1 Recommended DePINClient Class
 
 ```typescript
 class DePINClient {
   private rpcUrl: string;
-  private rpcPort: number = 8766;
+  private rpcPort: number = 19001;
   private depinPort: number = 19002;
   private username: string;
   private password: string;
@@ -578,13 +717,13 @@ class DePINClient {
     password: string;
   }) {
     this.rpcUrl = `http://${config.host}`;
-    this.rpcPort = config.rpcPort || 8766;
+    this.rpcPort = config.rpcPort || 19001;
     this.depinPort = config.depinPort || 19002;
     this.username = config.username;
     this.password = config.password;
   }
 
-  // Standard RPC operations (port 8766)
+  // Standard RPC operations (standard RPC port)
   async checkValidity(asset: string, address: string) {
     return this.callRPC('checkdepinvalidity', [asset, address]);
   }
@@ -602,7 +741,7 @@ class DePINClient {
     return this.callRPC('depinpoolstats', []);
   }
 
-  // Messaging operations (port 19002 for sending)
+  // Messaging operations (the local node opens the TCP gateway connection)
   async sendMessage(
     token: string, 
     remoteHost: string, 
@@ -754,7 +893,7 @@ async function verifyTokenOwnership(address: string, token: string) {
 }
 ```
 
-**Note:** For DePIN messaging, the token can be any asset. For the dedicated DePIN asset-management RPCs, use the `&ASSET` asset type.
+**Note:** Both DePIN messaging and the asset-management RPCs use the dedicated `&ASSET` DEPIN asset type — `-depinmsgtoken` must start with `&`, and DEPIN assets are currently testnet/regtest only.
 
 ### 5.2 Key Management
 
@@ -799,17 +938,19 @@ To enable DePIN on the node:
 # RPC Configuration
 rpcuser=yourusername
 rpcpassword=yourpassword
-rpcport=8766
+rpcport=19001            # 19101 on testnet
 rpcallowip=127.0.0.1
 rpcallowip=192.168.1.0/24
 
 # DePIN Messaging
 depinmsg=1
-depintoken=FRANCE
-depinport=19002
-depinmaxmessagesize=1024
-depinmessageexpiry=168  # 7 days in hours
-depinmaxpoolsize=100    # MB
+depinmsgtoken=&FRANCE   # must start with '&' (DEPIN assets: testnet/regtest only)
+depinmsgport=19002
+depinmsgbind=0.0.0.0    # use 127.0.0.1 for local-only
+depinmsgsize=1024       # max message size in bytes (default 1024)
+depinmsgexpire=168      # message expiry in hours (default 168 = 7 days)
+depinpoolsize=100       # max pool size in MB (default 100)
+depinpoolpersist=0      # save/load the pool across restarts
 
 # Asset indexes (required for DePIN holder and pubkey discovery)
 assetindex=1
@@ -820,16 +961,17 @@ pubkeyindex=1
 
 # MCP/AI Worker (optional)
 depinmcp=1
-depinmcpurl=http://localhost:8080
-depinmcpmodel=claude-3-sonnet
-depinmcpkey=/ai
+depinmcpurl=http://localhost:1234        # MCP server (default http://localhost:1234)
+depinmcpendpoint=/v1/chat/completions
+depinmcpaddress=NXbotaddress             # required: address that signs bot responses
+depinmcpkey=/ai                          # command prefix that triggers the AI
 ```
 
 ### 6.2 Ports to Open
 
 In your firewall/router:
-- **8766**: RPC (only localhost or trusted IPs)
-- **19002**: DePIN Messaging (public if you want to receive messages)
+- **19001** (mainnet) / **19101** (testnet): standard RPC (only localhost or trusted IPs)
+- **19002**: DePIN Messaging gateway, raw TCP (public if you want to receive messages; configurable with `-depinmsgport`)
 
 ---
 
@@ -872,7 +1014,7 @@ async function testMessaging() {
 
   // Send message
   const result = await client.sendMessage(
-    'FRANCE',
+    '&FRANCE',
     '192.168.1.100:19002',
     'Test message',
     'NXyouraddr...'
@@ -880,7 +1022,7 @@ async function testMessaging() {
   console.log('Message sent:', result);
 
   // Retrieve messages
-  const messages = await client.getMessages('FRANCE', 'NXyouraddr...');
+  const messages = await client.getMessages('&FRANCE', 'NXyouraddr...');
   console.log('Messages:', messages);
 }
 ```
@@ -905,7 +1047,8 @@ async function testMessaging() {
 Enable detailed logs in `neurai.conf`:
 
 ```ini
-debug=depin
+debug=net      # the DePIN gateway logs under the net category
+debug=mempool  # the DePIN message pool logs under mempool
 debug=rpc
 ```
 
@@ -914,7 +1057,7 @@ debug=rpc
 ## 9. References
 
 - **Repository:** https://github.com/NeuraiProject/neurai-rpc
-- **Version:** 0.4.5
+- **Version:** 0.5.0
 - **RPC Documentation:** See `neurai_methods.md`
 - **DePIN source code:** `Neurai/src/rpc/messages.cpp`, `Neurai/src/rpc/assets.cpp`
 - **ECIES specification:** `Neurai/src/depinecies.cpp`
@@ -922,6 +1065,32 @@ debug=rpc
 ---
 
 ## 10. Changelog
+
+### v0.5.0 (August 2026)
+
+**Library breaking change:**
+- The DePIN client now speaks the gateway's real raw-TCP line protocol
+  (it previously used HTTP, which the gateway never supported) and moved to
+  the Node.js-only entry `@neuraiproject/neurai-rpc/depin` with a
+  `{ host, port }` constructor.
+- Per-method authentication: `DEPIN-SEND|`/`DEPIN-GET|`/`DEPIN-CLEAR|` sign
+  formats, ADMIN challenges for `depinclearmsg`, and no auth appended to the
+  gateway's unauthenticated methods.
+
+**Documentation corrections:**
+- Real Neurai ports throughout (standard RPC 19001/19101 — 8766 was
+  Ravencoin's), real `-depinmsg*`/`-depinmcp*` option names in §6, `debug=net`
+  instead of the nonexistent `depin` category, the obsolete `SUBMIT|` step
+  replaced by the real JSON-RPC flow, and the `&` messaging-token requirement
+  (DEPIN assets are testnet/regtest only in the current node).
+
+**New commands documented:**
+- `depinreceivemsg` - Pool retrieval with pagination
+- `depingetancestorrecipients` - Active holders of a DEPIN branch
+- `depinlistsections` - Hierarchical sections
+- `depinpoolpkey` - Pool public key
+- `depinclearmsg` scope parameter
+- `dumpextkeypq` / `exportxpqpub` - Post-quantum wallet (see neurai_methods.md)
 
 ### v0.4.5 (December 2025)
 

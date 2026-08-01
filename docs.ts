@@ -23,20 +23,26 @@ decodeblock: string;
 decoderawtransaction: string;
 decodescript: string;
 depinclearmsg: string;
+depingetancestorrecipients: string;
 depingetmsg: string;
 depingetmsginfo: string;
 depingetpoolcontent: string;
+depinlistsections: string;
 depinmcpstatus: string;
+depinpoolpkey: string;
 depinpoolstats: string;
+depinreceivemsg: string;
 depinsendmsg: string;
 depinsubmitmsg: string;
 disconnectnode: string;
 distributereward: string;
+dumpextkeypq: string;
 dumpprivkey: string;
 dumpwallet: string;
 encryptwallet: string;
 estimatefee: string;
 estimatesmartfee: string;
+exportxpqpub: string;
 freezeaddress: string;
 freezedepin: string;
 freezerestrictedasset: string;
@@ -295,6 +301,9 @@ addnode:'addnode',
 
 /** addtagtoaddress tag_name to_address (change_address) (asset_data)
 
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
+
 Assign a tag to a address
 
 Arguments:
@@ -353,7 +362,8 @@ backupwallet:'backupwallet',
 
 
 
-/** bumpfee has been deprecated on the XNA Wallet.**/
+/** bumpfee has been deprecated on the XNA Wallet.
+**/
 bumpfee:'bumpfee',
 
 
@@ -385,6 +395,9 @@ cancelsnapshotrequest:'cancelsnapshotrequest',
 
 /** checkaddressrestriction address restricted_name
 
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
+
 Checks to see if an address has been frozen by the given restricted asset
 
 Arguments:
@@ -405,6 +418,9 @@ checkaddressrestriction:'checkaddressrestriction',
 
 
 /** checkaddresstag address tag_name
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Checks to see if an address has the given tag
 
@@ -427,10 +443,13 @@ checkaddresstag:'checkaddresstag',
 
 /** checkdepinvalidity "asset_name" "address"
 
-Check if a dedicated DePIN asset is valid/active for a specific address. Dedicated DePIN assets currently use the '&' prefix.
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Check if a DEPIN asset is valid/active for a specific address
 
 Arguments:
-1. "asset_name"      (string, required) The DePIN asset name
+1. "asset_name"      (string, required) The DEPIN asset name (must start with &)
 2. "address"         (string, required) The address to check
 
 Result:
@@ -443,7 +462,7 @@ Result:
 
 Examples:
 > neurai-cli checkdepinvalidity "&FRANCE" "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkdepinvalidity", "params": ["&FRANCE", "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkdepinvalidity", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 checkdepinvalidity:'checkdepinvalidity',
 
@@ -452,6 +471,9 @@ checkdepinvalidity:'checkdepinvalidity',
 
 
 /** checkglobalrestriction restricted_name
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Checks to see if a restricted asset is globally frozen
 
@@ -500,6 +522,9 @@ clearmempool:'clearmempool',
 
 
 /** clearmessages 
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
 
 Delete current database of messages
 
@@ -575,7 +600,8 @@ createmultisig:'createmultisig',
 
 
 /** createrawtransaction [{"txid":"id","vout":n},...] {"address":(amount or object),"data":"hex",...}
-                     ( locktime ) ( replaceable )
+createrawtransaction [{"txid":"id","vout":n},...] [{"address":(amount or object)},{"data":"hex"},...]
+                     ( locktime ) ( [{"txid":"id","vout":n},...] )
 
 Create a transaction spending the given inputs and creating new outputs.
 Outputs are addresses (paired with a XNA amount, data or object specifying an asset operation) or data.
@@ -589,16 +615,16 @@ Paying for Asset Operations:
     Operation          Amount + Burn Address
     transfer                 0
     transferwithmessage      0
-    issue                  500 to RXissueAssetXXXXXXXXXXXXXXXXXhhZGt
-    issue (subasset)       100 to RXissueSubAssetXXXXXXXXXXXXXWcwhwL
-    issue_unique             5 to RXissueUniqueAssetXXXXXXXXXXWEAe58
-    reissue                100 to RXReissueAssetXXXXXXXXXXXXXXVEFAWu
-    issue_restricted      1500 to RXissueRestrictedXXXXXXXXXXXXzJZ1q
-    reissue_restricted     100 to RXReissueAssetXXXXXXXXXXXXXXVEFAWu
-    issue_qualifier       1000 to RXissueQuaLifierXXXXXXXXXXXXUgEDbC
-    issue_qualifier (sub)  100 to RXissueSubQuaLifierXXXXXXXXXVTzvv5
-    tag_addresses          0.1 to RXaddTagBurnXXXXXXXXXXXXXXXXZQm5ya (per address)
-    untag_addresses        0.1 to RXaddTagBurnXXXXXXXXXXXXXXXXZQm5ya (per address)
+    issue                  1000 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    issue (subasset)       200 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    issue_unique             10 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    reissue                200 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    issue_restricted      3000 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    reissue_restricted     200 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    issue_qualifier       2000 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    issue_qualifier (sub)  200 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy
+    tag_addresses          0.1 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy (per address)
+    untag_addresses        0.1 to tBURNXXXXXXXXXXXXXXXXXXXXXXXVZLroy (per address)
     freeze_addresses         0
     unfreeze_addresses       0
     freeze_asset             0
@@ -638,7 +664,7 @@ Arguments:
        } 
        ,...
      ]
-2. "outputs"                               (object, required) a json object with outputs
+2. "outputs"                               (object or array, required) outputs in object or ordered-array form
      {
        "address":                          (string, required) The destination neurai address.
                                                Each output must have a different address.
@@ -652,6 +678,7 @@ Arguments:
                ,...
              }
          }
+     }
            or
          {                                 (object) A json object of describing the transfer and message contents to send
            "transferwithmessage":
@@ -803,7 +830,23 @@ Arguments:
        "data": "hex"                       (string, required) The key is "data", the value is hex encoded data
        ,...
      }
+     or
+     [
+       {"address":x.xxx},                  (object, required) exactly one key per entry
+       {"address":{...}},                  (object, required) ordered form allows duplicate addresses
+       {"data":"hex"},
+       ...
+     ]
+                                               Array form must be non-empty.
 3. locktime                  (numeric, optional, default=0) Raw locktime. Non-0 value also locktime-activates inputs
+4. "refinputs"               (array, optional) NIP-014: reference inputs (forces v3 transaction)
+     [
+       {
+         "txid":"id",                      (string, required) The transaction id
+         "vout":n                          (number, required) The output number
+       }
+       ,...
+     ]
 
 Result:
 "transaction"              (string) hex string of the transaction
@@ -817,6 +860,7 @@ Examples:
 > neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myasset\",\"vout\":0}]" "{\"address\":{\"transfer\":{\"MYASSET\":50}}}"
 > neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myasset\",\"vout\":0}]" "{\"address\":{\"transferwithmessage\":{\"MYASSET\":50,\"message\":\"hash\",\"expire_time\": utc_time}}}"
 > neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myownership\",\"vout\":0}]" "{\"issuer_address\":{\"reissue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":2000000}}}"
+> neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "[{\"address\":500},{\"address\":{\"issue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":1000000,\"units\":1,\"reissuable\":0,\"has_ipfs\":0}}}]"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createrawtransaction", "params": ["[{\"txid\":\"mycoin\",\"vout\":0}]", "{\"data\":\"00010203\"}"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 createrawtransaction:'createrawtransaction',
@@ -964,7 +1008,7 @@ decodescript:'decodescript',
 
 
 
-/** depinclearmsg ( "all" | hours )
+/** depinclearmsg ( "all" | hours ) ( "scope" )
 
 Remove messages from DePIN messaging pool
 
@@ -973,6 +1017,9 @@ Arguments:
            - omitted: Remove only expired messages (default)
            - "all": Remove ALL messages from pool
            - <hours>: Remove messages older than specified hours (numeric)
+2. scope   (string, optional) Section token. When given, only messages of that
+           section's subtree are removed; parents and siblings are untouched.
+           Omitted or "" keeps the historical pool-wide behavior.
 
 Result:
 {
@@ -981,12 +1028,78 @@ Result:
 }
 
 Examples:
-> neurai-cli depinclearmsg
+> neurai-cli depinclearmsg 
 > neurai-cli depinclearmsg "all"
 > neurai-cli depinclearmsg 7
+> neurai-cli depinclearmsg "all" "&TOKEN/GENERAL"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": ["all"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [7] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 depinclearmsg:'depinclearmsg',
+
+
+
+
+
+/** depingetancestorrecipients "token" ( max_results ) ( "stop_at" )
+
+List the active holders of a DEPIN branch: the deduplicated union of the
+holders of the given token and of every one of its '/'-separated ancestors,
+each with the public key it has revealed on chain.
+
+Active means: positive balance, public key revealed, and not blocked by an
+owner freeze or by self-revocation. Restriction is per (asset, address), so an
+address that is active in at least one ancestor is returned even if it revoked
+itself in another -- holding the root already grants visibility over the branch.
+
+The query is exact: '&TEST' returns holders of '&TEST' only, never of
+'&TEST/APPLE', '&TESTING' or '&TEST.FOO'. Every derived ancestor must exist; a
+missing intermediate level is an error rather than something skipped.
+
+This command is informational. It does not know about -depinmsgmaxusers, does
+not decide whether a message fits in a pool, and a truncated result must not be
+treated as a complete recipient set.
+
+Requires -assetindex and -pubkeyindex.
+
+Arguments:
+1. "token"        (string, required) DEPIN token, e.g. "&TEST/APPLE/GOLDEN"
+2. max_results   (numeric, optional, default=1000) Maximum recipients to return
+                 (1..10000)
+3. "stop_at"      (string, optional) Stop deriving ancestors at this token,
+                 inclusive. Must be the token itself or one of its ancestors.
+                 Omitted: derive up to the absolute root.
+
+Result:
+{
+  "token": "name",                    (string) Token queried
+  "stop_at": "name",                  (string) Where derivation stopped ("" = root)
+  "ancestors": ["name", ...],         (array) Token first, then each ancestor
+  "recipients": [                     (array) Active holders, ordered by address
+    {
+      "address": "address",           (string) Holder address
+      "pubkey": "hex"                 (string) Public key revealed on chain
+    }, ...
+  ],
+  "returned": n,                      (numeric) Number of recipients returned
+  "max_results": n,                   (numeric) Limit applied
+  "truncated": true|false,            (boolean) True if more eligible recipients exist
+  "skipped_no_pubkey": n,             (numeric) Addresses dropped for lacking a usable
+                                       revealed public key
+  "skipped_no_pubkey_complete": bool, (boolean) False when truncated: the count then
+                                       covers only the addresses examined
+  "skipped_restricted": n,            (numeric) Addresses dropped as frozen or
+                                       self-revoked in every ancestor they hold
+  "skipped_restricted_complete": bool (boolean) Same rule as above
+}
+
+Examples:
+> neurai-cli depingetancestorrecipients "&TEST/APPLE/GOLDEN"
+> neurai-cli depingetancestorrecipients "&TEST/APPLE/GOLDEN" 50 "&TEST/APPLE"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetancestorrecipients", "params": ["&TEST/APPLE/GOLDEN", 50, "&TEST/APPLE"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/
+depingetancestorrecipients:'depingetancestorrecipients',
 
 
 
@@ -1039,6 +1152,7 @@ Result:
   "enabled": true|false,        (boolean) Whether DePIN messaging is enabled
   "token": "name",              (string) Active token name
   "port": n,                    (numeric) Listening port
+  "cipher": "name",            (string) Encryption cipher used by the pool
   "maxrecipients": n,           (numeric) Maximum recipients per message
   "maxmessagesize": n,          (numeric) Maximum message size in bytes
   "messageexpiryhours": n,      (numeric) Message expiry time in hours
@@ -1051,7 +1165,7 @@ Result:
 }
 
 Examples:
-> neurai-cli depingetmsginfo
+> neurai-cli depingetmsginfo 
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetmsginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 depingetmsginfo:'depingetmsginfo',
@@ -1078,22 +1192,85 @@ Result (verbose=false):
   {
     "hash": "hex",
     "sender": "address",
+    "message_type": "private|group",
     "timestamp": n,
     "date": "YYYY-MM-DD HH:MM:SS",
     "expires": "YYYY-MM-DD HH:MM:SS",
-    "encryption_type": "ECIES_shared",
+    "recipients": n,
     "size": n
   },
   ...
 ]
 
+Result (verbose=true):
+[
+  {
+    "hash": "hex",
+    "sender": "address",
+    "message_type": "private|group",
+    "timestamp": n,
+    "date": "YYYY-MM-DD HH:MM:SS",
+    "expires": "YYYY-MM-DD HH:MM:SS",
+    "recipients": [
+      {
+        "address": "address",
+        "encrypted_size": n
+      },
+      ...
+    ],
+    "signature_size": n,
+    "total_encrypted_size": n,
+    "total_size": n
+  },
+  ...
+]
+
 Examples:
-> neurai-cli depingetpoolcontent
+> neurai-cli depingetpoolcontent 
 > neurai-cli depingetpoolcontent true
-> neurai-cli depingetpoolcontent "all"
+> neurai-cli depingetpoolcontent all
+> neurai-cli depingetpoolcontent raw
+> neurai-cli depingetpoolcontent false "NXXaddress..."
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetpoolcontent", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 depingetpoolcontent:'depingetpoolcontent',
+
+
+
+
+
+/** depinlistsections ( "address" )
+
+List the sections (sub-assets) of the pool's active token, for UI tabs.
+The list is served from a per-tip snapshot; section names are public on
+chain, so no address is needed to see them. Message counters, however,
+are only exposed for sections the given address has access to -- counts
+of an unreadable section would leak metadata. For the same reason the
+address mode is only served over node RPC: the DePIN port is
+unauthenticated and answers the bare form (names only) there.
+
+Arguments:
+1. "address"   (string, optional) Report this address's access per section
+
+Result:
+[
+  {
+    "name": "&TOKEN/GENERAL",   (string) Full section token
+    "label": "GENERAL",         (string) Name relative to the pool root ("" = root)
+    "depth": n,                 (numeric) Levels below the pool root (0 = root)
+    "access": true|false,       (boolean, only with address) Active inherited access
+    "messages": n               (numeric, only with address and access) Messages in
+                                 this section's subtree
+  },
+  ...
+]
+
+Examples:
+> neurai-cli depinlistsections 
+> neurai-cli depinlistsections "NXyouraddress..."
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinlistsections", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/
+depinlistsections:'depinlistsections',
 
 
 
@@ -1114,14 +1291,45 @@ Result:
   "poll_interval": n,            (numeric) Polling interval in seconds
   "commands_processed": n,       (numeric) Total commands processed
   "total_errors": n,             (numeric) Total errors encountered
+  "rate_limited": n,             (numeric) Commands rejected by rate limiting
+  "concurrency": n,              (numeric) Number of parallel task threads
+  "tasks_in_flight": n,          (numeric) AI requests currently being processed
+  "processed_cache": n,          (numeric) Size of the processed-message dedup cache
+  "context_sessions": n,         (numeric) Active conversation contexts
   "last_poll_time": n            (numeric) Unix timestamp of last poll
 }
 
 Examples:
-> neurai-cli depinmcpstatus
+> neurai-cli depinmcpstatus 
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinmcpstatus", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 depinmcpstatus:'depinmcpstatus',
+
+
+
+
+
+/** depinpoolpkey
+
+Returns the public key of the DePIN pool address from the internal wallet.
+This command only works if the wallet is loaded and unlocked at node startup.
+
+Derived path:
+  Mainnet:  m/44'/0'/200'/0/0
+  Testnet:  m/44'/0'/200'/1/0
+
+Result:
+{
+  "pubkey": "hex",           (string) Public key in hex format
+  "address": "address",      (string) Corresponding Neurai address
+  "path": "derivation_path"  (string) BIP44 derivation path used
+}
+
+Examples:
+> neurai-cli depinpoolpkey 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolpkey", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/
+depinpoolpkey:'depinpoolpkey',
 
 
 
@@ -1146,15 +1354,72 @@ Result:
     "last_week": n
   },
   "unique_senders": n,
+  "unique_recipients": n,
+  "avg_recipients_per_message": n.nn,
   "avg_message_size": n,
   "expiring_in_24h": n
 }
 
 Examples:
-> neurai-cli depinpoolstats
+> neurai-cli depinpoolstats 
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolstats", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 depinpoolstats:'depinpoolstats',
+
+
+
+
+
+/** depinreceivemsg "token" "address" (timestamp) ("after_hash") (limit)
+
+Retrieve DePIN messages from the pool with optional pagination
+
+This endpoint returns the messages. If the server has a DePIN pool key
+and the requester's address has a revealed public key, the response will be
+fully encrypted using the privacy layer.
+
+Arguments:
+1. "token"      (string, required) Token name
+2. "address"    (string, required) Neurai address (used as access selector and encryption target)
+3. timestamp    (numeric, optional) Unix time. Return only messages with timestamp >= (timestamp-1 if timestamp>0)
+4. "after_hash" (string, optional) Hash of last received message for pagination. Empty "" starts from beginning
+5. limit        (numeric, optional) Maximum messages to return. 0 or omitted = no limit (return all)
+
+Result (without pagination - backward compatible):
+[
+  {
+    "hash": "...",                 (string) Message hash
+    "token": "...",                (string) Token
+    "sender": "...",               (string) Sender address
+    "timestamp": n,                 (numeric) Unix timestamp
+    "message_type": "private|group", (string) Message type (private=1-to-1, group=broadcast)
+    "encrypted_payload_hex": "...", (string) Encrypted payload (hex)
+    "signature_hex": "..."         (string) Message signature (hex)
+  },
+  ...
+]
+
+Result (with pagination - when limit > 0):
+{
+  "messages": [...],               (array) Array of message objects (same structure as above)
+  "has_more": true|false           (boolean) Whether more messages are available
+}
+
+Note: Both message types are filtered by recipientKeys membership; the sender always sees their own messages.
+
+Result (privacy layer active):
+{
+  "encrypted": "hex_blob"        (string) Full JSON response encrypted with ECIES
+}
+
+Examples:
+> neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress"
+> neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 1730000000
+> neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 0 "" 5
+> neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 0 "abc123..." 5
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinreceivemsg", "params": ["TOKEN", "NeuraiAddress", 0, "", 5] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/
+depinreceivemsg:'depinreceivemsg',
 
 
 
@@ -1190,15 +1455,23 @@ depinsendmsg:'depinsendmsg',
 
 
 
-/** depinsubmitmsg "hexmessage"
+/** depinsubmitmsg "hexmessage"|{"sender":"...","encrypted":"..."}
 
 Submit a pre-encrypted and signed DePIN message to the pool
 
 This is the secure protocol where the client prepares the complete message
 (encryption + signature) and the server only validates and stores it.
 
+This command also supports an optional privacy layer where the entire message
+is wrapped in a second layer of encryption for the server's pool key.
+
 Arguments:
-1. "hexmessage"   (string, required) Hex-encoded serialized CDepinMessage
+1. "hexmessage"     (string) Hex-encoded serialized CDepinMessage
+   OR
+   {                  (json object) Wrapped encrypted message
+     "sender": "...", (string, required) Sender address
+     "encrypted": "..." (string, required) Hex-encoded ECIES wrapper
+   }
 
 Result:
 {
@@ -1207,11 +1480,9 @@ Result:
   "timestamp": n                  (numeric) Unix timestamp
 }
 
-Note: This endpoint is typically called by remote nodes after challenge/response authentication.
-
 Examples:
 > neurai-cli depinsubmitmsg "0a3f2e..."
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsubmitmsg", "params": ["0a3f2e..."] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsubmitmsg", "params": [{"sender":"NX...","encrypted":"..."}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 depinsubmitmsg:'depinsubmitmsg',
 
@@ -1280,6 +1551,24 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 distributereward:'distributereward',
+
+
+
+
+
+/** dumpextkeypq
+
+Returns the master PQ extended private key (xpqpriv) for this wallet.
+WARNING: exposes the master secret — keep it safe.
+
+Result:
+"xpqpriv..."   (string) Base58Check-encoded master CExtKeyPQ
+
+Examples:
+> neurai-cli dumpextkeypq 
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpextkeypq", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/
+dumpextkeypq:'dumpextkeypq',
 
 
 
@@ -1431,7 +1720,32 @@ estimatesmartfee:'estimatesmartfee',
 
 
 
+/** exportxpqpub count ( chain offset )
+
+Generates a batch of count ML-DSA-44 public keys and returns the xpqpub blob.
+
+Arguments:
+1. count   (numeric, required) Number of pubkeys to generate (max 1000)
+2. chain   (numeric, optional, default=0) Chain index (0=external, 1=change)
+3. offset  (numeric, optional, default=0) Starting index
+
+Result:
+"hex"   (string) Hex-encoded xpqpub binary blob
+
+Examples:
+> neurai-cli exportxpqpub 20
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "exportxpqpub", "params": [20, 0, 0] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+**/
+exportxpqpub:'exportxpqpub',
+
+
+
+
+
 /** freezeaddress asset_name address (change_address) (asset_data)
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Freeze an address from transferring a restricted asset
 
@@ -1458,14 +1772,17 @@ freezeaddress:'freezeaddress',
 
 /** freezedepin "asset_name" "address" ("change_address")
 
-Freeze a dedicated DePIN asset for a specific address (owner only)
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Freeze a DEPIN asset for a specific address (owner only)
 
 The address will still hold the asset but it will be marked as invalid
 
-Requires the owner token for the DePIN asset (for example, '&FRANCE!' for '&FRANCE') in the wallet
+Requires the owner token (&ASSET!) in the wallet
 
 Arguments:
-1. "asset_name"       (string, required) The DePIN asset name
+1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
 2. "address"          (string, required) The address to freeze
 3. "change_address"   (string, optional) The change address for the owner token
 
@@ -1474,7 +1791,7 @@ Result:
 
 Examples:
 > neurai-cli freezedepin "&FRANCE" "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezedepin", "params": ["&FRANCE", "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezedepin", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 freezedepin:'freezedepin',
 
@@ -1483,6 +1800,9 @@ freezedepin:'freezedepin',
 
 
 /** freezerestrictedasset asset_name (change_address) (asset_data)
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Freeze all trading for a specific restricted asset
 
@@ -1745,7 +2065,7 @@ Arguments:
   "start" (number) The start block height
   "end" (number) The end block height
   "chainInfo" (boolean) Include chain info in results, only applies if start and end specified
-  "assetName"   (string, optional) Get deltas for a particular asset instead of XNA.
+  "assetName"   (string, optional) Get deltas for a particular asset instead of XNA ('*' for all assets).
 }
 
 Result:
@@ -1910,6 +2230,9 @@ getaddressutxos:'getaddressutxos',
 
 
 /** getassetdata "asset_name"
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
 
 Returns assets metadata if that asset exists
 
@@ -2306,6 +2629,9 @@ getblocktemplate:'getblocktemplate',
 
 /** getcacheinfo 
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Result:
 [
   uxto cache size:
@@ -2535,6 +2861,8 @@ Result:
   "bip32_root_private" : (string) extended master private key,
   "bip32_root_public" :  (string) extended master public key,
   "account_derivation_path" : (string) The derivation path to the account public/private keys
+  "external_derivation_path" : (string) The derivation path prefix for receiving addresses
+  "internal_derivation_path" : (string) The derivation path prefix for change addresses
   "account_extended_private_key" : (string) extended account private key,
   "account_extended_public_key" :  (string) extended account public key,
 }
@@ -2966,8 +3294,8 @@ Result:
 {
   "address": "address",         (string) The Neurai address
   "pubkey": "hex",              (string) The public key in hex format
-  "revealed": true|false,       (boolean) Whether the public key has been revealed
-  "height": n,                  (numeric) Block height where it was revealed
+  "revealed": true|false,         (boolean) Whether the public key has been revealed
+  "height": n,                    (numeric) Block height where it was revealed
   "txid": "hash"                (string) Transaction ID where it was revealed
 }
 
@@ -3204,6 +3532,9 @@ getrpcinfo:'getrpcinfo',
 
 
 /** getsnapshot "asset_name" block_height
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
 
 Returns details for the asset snapshot, at the specified height
 
@@ -3452,6 +3783,9 @@ getunconfirmedbalance:'getunconfirmedbalance',
 
 /** getverifierstring restricted_name
 
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
+
 Retrieve the verifier string that belongs to the given restricted asset
 
 Arguments:
@@ -3693,12 +4027,14 @@ importwallet:'importwallet',
 
 /** issue "asset_name" qty "( to_address )" "( change_address )" ( units ) ( reissuable ) ( has_ipfs ) "( ipfs_hash )"
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Issue an asset, subasset or unique asset.
 Asset name must not conflict with any existing asset.
 Unit as the number of decimals precision for the asset (0 for whole units ("1"), 8 for max precision ("1.00000000")
 Reissuable is true/false for whether additional units can be issued by the original issuer.
 If issuing a unique asset these values are required (and will be defaulted to): qty=1, units=0, reissuable=false.
-Dedicated DePIN assets (name starts with '&') are documented here as enabled for mainnet and testnet, with qty > 0 and units=0.
 
 Arguments:
 1. "asset_name"            (string, required) a unique name
@@ -3729,6 +4065,9 @@ issue:'issue',
 
 
 /** issuequalifierasset "asset_name" qty "( to_address )" "( change_address )" ( has_ipfs ) "( ipfs_hash )"
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Issue an qualifier or sub qualifier asset
 If the '#' character isn't added, it will be added automatically
@@ -3765,6 +4104,9 @@ issuequalifierasset:'issuequalifierasset',
 
 /** issuerestrictedasset "asset_name" qty "verifier" "to_address" "( change_address )" (units) ( reissuable ) ( has_ipfs ) "( ipfs_hash )"
 
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
+
 Issue a restricted asset.
 Restricted asset names must not conflict with any existing restricted asset.
 Restricted assets have units set to 0.
@@ -3799,6 +4141,9 @@ issuerestrictedasset:'issuerestrictedasset',
 
 /** issueunique "root_name" [asset_tags] ( [ipfs_hashes] ) "( to_address )" "( change_address )"
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Issue unique asset(s).
 root_name must be an asset you own.
 An asset will be created for each element of asset_tags.
@@ -3826,6 +4171,9 @@ issueunique:'issueunique',
 
 
 /** isvalidverifierstring verifier_string
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Checks to see if the given verifier string is valid
 
@@ -3898,6 +4246,9 @@ listaccounts:'listaccounts',
 
 /** listaddressesbyasset "asset_name" (onlytotal) (count) (start)
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Returns a list of all address that own the given asset (with balances)
 Or returns the total size of how many address own the given asset
 Arguments:
@@ -3923,6 +4274,9 @@ listaddressesbyasset:'listaddressesbyasset',
 
 
 /** listaddressesfortag tag_name
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 List all addresses that have been assigned a given tag
 
@@ -3975,6 +4329,9 @@ listaddressgroupings:'listaddressgroupings',
 
 /** listaddressrestrictions address
 
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
+
 List all assets that have frozen this address
 
 Arguments:
@@ -3996,6 +4353,9 @@ listaddressrestrictions:'listaddressrestrictions',
 
 
 /** listassetbalancesbyaddress "address" (onlytotal) (count) (start)
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
 
 Returns a list of all asset balances for an address.
 
@@ -4023,6 +4383,9 @@ listassetbalancesbyaddress:'listassetbalancesbyaddress',
 
 
 /** listassets "( asset )" ( verbose ) ( count ) ( start )
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
 
 Returns a list of all assets
 
@@ -4081,26 +4444,30 @@ listbanned:'listbanned',
 
 /** listdepinaddresses "asset_name" (count) (start)
 
-Returns a list of addresses that own the given asset and have a revealed public key on-chain.
-Useful for DePIN messaging recipient discovery. Requires -assetindex and -pubkeyindex.
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Returns a list of addresses that own the given asset AND have a revealed public key on the blockchain.
+This is useful for DePIN messaging systems where only addresses with revealed public keys can participate.
 
 Arguments:
-1. "asset_name"      (string, required) name of asset
-2. "count"           (integer, optional, default=50000, MAX=50000) truncates results to include only the first _count_ addresses found
-3. "start"           (integer, optional, default=0) results skip over the first _start_ addresses found (if negative it skips back from the end)
+1. "asset_name"               (string, required) name of asset
+2. "count"                    (integer, optional, default=50000, MAX=50000) truncates results to include only the first _count_ addresses found
+3. "start"                    (integer, optional, default=0) results skip over the first _start_ addresses found (if negative it skips back from the end)
 
 Result:
 [
   {
-    "address": "address",   (string) The address
-    "pubkey": "pubkey_hex"  (string) The revealed public key in hex
+    "address": "address",     (string) The Neurai address
+    "pubkey": "pubkey_hex"    (string) The public key in hex format
   },
   ...
 ]
 
 Examples:
-> neurai-cli listdepinaddresses "&FRANCE"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listdepinaddresses", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> neurai-cli listdepinaddresses "ASSET_NAME"
+> neurai-cli listdepinaddresses "ASSET_NAME" 10 0
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listdepinaddresses", "params": ["ASSET_NAME"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 listdepinaddresses:'listdepinaddresses',
 
@@ -4110,18 +4477,21 @@ listdepinaddresses:'listdepinaddresses',
 
 /** listdepinholders "asset_name"
 
-Returns all addresses holding a dedicated DePIN asset with validity status
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
 
-Dedicated DePIN assets are soulbound and can be frozen/revoked. They currently use the '&' prefix.
+Returns all addresses holding a DEPIN asset with validity status
+
+DEPIN assets are soulbound (non-transferable except by owner) and can be frozen/revoked
 
 Arguments:
-1. "asset_name"      (string, required) The DePIN asset name
+1. "asset_name"      (string, required) The DEPIN asset name (must start with &)
 
 Result:
 [
   {
     "address": "address",     (string) The address
-    "amount": n,                (numeric) The amount held
+    "amount": n,                (numeric) The amount held at the address
     "valid": 1|0                (numeric) 1 = active/valid, 0 = blocked/revoked
   },
   ...
@@ -4138,6 +4508,9 @@ listdepinholders:'listdepinholders',
 
 
 /** listglobalrestrictions
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 List all global restricted assets
 
@@ -4195,6 +4568,9 @@ listlockunspent:'listlockunspent',
 
 /** listmyassets "( asset )" ( verbose ) ( count ) ( start ) (confs) 
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Returns a list of all asset that are owned by this wallet
 
 Arguments:
@@ -4242,16 +4618,16 @@ listmyassets:'listmyassets',
 
 /** listpqaddresses
 
-Returns post-quantum (ML-DSA-44) Bech32m addresses in the wallet.
+Returns the list of post-quantum (ML-DSA-44) Bech32m addresses in the wallet.
 
 Result:
-[
-  "nq1...",    (string) A post-quantum wallet address
+[                        (json array of strings)
+  "address"             (string) A post-quantum Bech32m address (nq1...)
   ...
 ]
 
 Examples:
-> neurai-cli listpqaddresses
+> neurai-cli listpqaddresses 
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listpqaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 listpqaddresses:'listpqaddresses',
@@ -4412,6 +4788,9 @@ listsnapshotrequests:'listsnapshotrequests',
 
 
 /** listtagsforaddress address
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 List all tags assigned to an address
 
@@ -4762,6 +5141,9 @@ pruneblockchain:'pruneblockchain',
 
 /** purgesnapshot "asset_name" block_height
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Removes details for the asset snapshot, at the specified height
 
 Arguments:
@@ -4786,10 +5168,12 @@ purgesnapshot:'purgesnapshot',
 
 /** reissue "asset_name" qty "to_address" "change_address" ( reissuable ) ( new_units) "( new_ipfs )" 
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Reissues a quantity of an asset to an owned address if you own the Owner Token
 Can change the reissuable flag during reissuance
 Can change the ipfs hash during reissuance
-For dedicated DePIN assets (name starts with '&'), qty must stay positive and units must remain 0.
 Arguments:
 1. "asset_name"               (string, required) name of asset that is being reissued
 2. "qty"                      (numeric, required) number of assets to reissue
@@ -4813,6 +5197,9 @@ reissue:'reissue',
 
 
 /** reissuerestrictedasset "asset_name" qty to_address ( change_verifier ) ( "new_verifier" ) "( change_address )" ( new_units ) ( reissuable ) "( new_ipfs )"
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Reissue an already created restricted asset
 Reissuable is true/false for whether additional asset quantity can be created and if the verifier string can be changed
@@ -4864,6 +5251,9 @@ removeprunedfunds:'removeprunedfunds',
 
 
 /** removetagfromaddress tag_name to_address (change_address) (asset_data)
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Remove a tag from a address
 
@@ -4951,14 +5341,29 @@ savemempool:'savemempool',
 
 /** selfrevokedepin "asset_name"
 
-Self-revoke a dedicated DePIN asset held in this wallet
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Self-revoke a DEPIN asset held in this wallet
+
+Builds a self-transfer: one UTXO of the asset is spent and returned to its own
+
+address together with the revocation marker. Spending that UTXO is the proof of
+
+ownership, so the address needs no XNA of its own; the fee is paid by the wallet.
 
 The asset will be marked as invalid but will remain in the address
 
-This action can only be undone by the asset owner
+This action can only be undone by the asset owner (unfreezedepin). If the
+
+revoked address also held the owner token, the owner must first move the owner
+
+token to another address and then unfreeze; this wallet refuses to auto-pick
+
+that address for exactly that reason.
 
 Arguments:
-1. "asset_name"       (string, required) The DePIN asset name
+1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
 
 Result:
 "txid"                (string) The transaction id
@@ -5099,6 +5504,9 @@ sendmany:'sendmany',
 
 
 /** sendmessage "channel_name" "ipfs_hash" (expire_time)
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
 
 Creates and broadcasts a message transaction to the network for a channel this wallet owns
 Arguments:
@@ -5411,7 +5819,8 @@ signrawtransaction:'signrawtransaction',
 
 /** stop
 
-Stop Neurai server.**/
+Stop Neurai server.
+**/
 stop:'stop',
 
 
@@ -5421,7 +5830,7 @@ stop:'stop',
 /** submitblock "hexdata"  ( "dummy" )
 
 Attempts to submit new block to network.
-See https://en.neurai.it/wiki/BIP_0022 for full specification.
+See https://en.bitcoin.it/wiki/BIP_0022 for full specification.
 
 Arguments
 1. "hexdata"        (string, required) the hex-encoded block data to submit
@@ -5440,6 +5849,9 @@ submitblock:'submitblock',
 
 
 /** subscribetochannel 
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
 
 Subscribe to a certain message channel
 
@@ -5504,6 +5916,9 @@ testmempoolaccept:'testmempoolaccept',
 
 /** transfer "asset_name" qty "to_address" "message" expire_time "change_address" "asset_change_address"
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Transfers a quantity of an owned asset to a given address
 Arguments:
 1. "asset_name"               (string, required) name of asset
@@ -5530,6 +5945,9 @@ transfer:'transfer',
 
 
 /** transferfromaddress "asset_name" "from_address" qty "to_address" "message" expire_time "xna_change_address" "asset_change_address"
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
 
 Transfer a quantity of an owned asset in a specific address to a given address
 Arguments:
@@ -5559,6 +5977,9 @@ transferfromaddress:'transferfromaddress',
 
 /** transferfromaddresses "asset_name" ["from_addresses"] qty "to_address" "message" expire_time "xna_change_address" "asset_change_address"
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
 Transfer a quantity of an owned asset in specific address(es) to a given address
 Arguments:
 1. "asset_name"               (string, required) name of asset
@@ -5587,6 +6008,9 @@ transferfromaddresses:'transferfromaddresses',
 
 /** transferqualifier "qualifier_name" qty "to_address" ("change_address") ("message") (expire_time) 
 
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
+
 Transfer a qualifier asset owned by this wallet to the given address
 Arguments:
 1. "qualifier_name"           (string, required) name of qualifier asset
@@ -5613,6 +6037,9 @@ transferqualifier:'transferqualifier',
 
 /** unfreezeaddress asset_name address (change_address) (asset_data)
 
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
+
 Unfreeze an address from transferring a restricted asset
 
 Arguments:
@@ -5638,14 +6065,17 @@ unfreezeaddress:'unfreezeaddress',
 
 /** unfreezedepin "asset_name" "address" ("change_address")
 
-Unfreeze a dedicated DePIN asset for a specific address (owner only)
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Unfreeze a DEPIN asset for a specific address (owner only)
 
 The asset will be marked as valid again
 
-Requires the owner token for the DePIN asset (for example, '&FRANCE!' for '&FRANCE') in the wallet
+Requires the owner token (&ASSET!) in the wallet
 
 Arguments:
-1. "asset_name"       (string, required) The DePIN asset name
+1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
 2. "address"          (string, required) The address to unfreeze
 3. "change_address"   (string, optional) The change address for the owner token
 
@@ -5654,7 +6084,7 @@ Result:
 
 Examples:
 > neurai-cli unfreezedepin "&FRANCE" "address"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezedepin", "params": ["&FRANCE", "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezedepin", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
 **/
 unfreezedepin:'unfreezedepin',
 
@@ -5663,6 +6093,9 @@ unfreezedepin:'unfreezedepin',
 
 
 /** unfreezerestrictedasset asset_name (change_address) (asset_data)
+
+THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
+
 
 Unfreeze all trading for a specific restricted asset
 
@@ -5687,6 +6120,9 @@ unfreezerestrictedasset:'unfreezerestrictedasset',
 
 
 /** unsubscribefromchannel 
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
 
 Unsubscribe from a certain message channel
 
@@ -5837,6 +6273,9 @@ verifytxoutproof:'verifytxoutproof',
 
 /** viewallmessagechannels 
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
+
 View all message channels the wallet is subscribed to
 
 Result:[
@@ -5855,6 +6294,9 @@ viewallmessagechannels:'viewallmessagechannels',
 
 
 /** viewallmessages 
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
 
 View all messages that the wallet contains
 
@@ -5879,6 +6321,9 @@ viewallmessages:'viewallmessages',
 
 /** viewmyrestrictedaddresses 
 
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
+
 View all addresses this wallet owns that have been restricted
 
 Result:
@@ -5900,6 +6345,9 @@ viewmyrestrictedaddresses:'viewmyrestrictedaddresses',
 
 
 /** viewmytaggedaddresses 
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
 
 View all addresses this wallet owns that have been tagged
 

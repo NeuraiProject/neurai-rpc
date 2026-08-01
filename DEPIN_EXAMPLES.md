@@ -1,271 +1,199 @@
 # DePIN RPC Examples
 
-This file demonstrates how to use the DePIN messaging functionality in neurai-rpc.
+Practical examples for the DePIN messaging client in
+`@neuraiproject/neurai-rpc`.
+
+> **Node.js only.** The DePIN gateway (default port 19002) speaks a raw TCP
+> line protocol — not HTTP — so this client uses `node:net` sockets and lives
+> in its own package entry. Browsers cannot open raw TCP connections; from a
+> browser, talk to the node's standard HTTP RPC port instead (see
+> `DEPIN_IMPLEMENTATION_GUIDE_EN.md` §4), or put an HTTP/WebSocket proxy in
+> front of the gateway.
 
 ## Basic Setup
 
 ```javascript
-import { getDePinRPC } from "@neuraiproject/neurai-rpc";
-
-// You need a function that can sign messages with your Neurai address
-// This example uses neurai-cli via the standard RPC
 import { getRPC, methods } from "@neuraiproject/neurai-rpc";
+import { getDePinRPC } from "@neuraiproject/neurai-rpc/depin";
 
+// Standard RPC (HTTP) — works in Node.js and browsers
 const standardRpc = getRPC("user", "password", "http://localhost:19001");
 
-async function signMessage(message) {
-  // Sign using neurai-cli via RPC
-  return await standardRpc(methods.signmessage, ["NXyouraddress...", message]);
-}
+// DePIN gateway (raw TCP) — Node.js only
+const depinRpc = getDePinRPC(
+  { host: "127.0.0.1", port: 19002 },
+  {
+    token: "&FRANCE",
+    address: "NXyouraddress...",
+    signMessage: async (message) => {
+      // Sign with the standard RPC (wallet must hold the address key),
+      // or with any other wallet integration that returns base64.
+      return await standardRpc(methods.signmessage, [
+        "NXyouraddress...",
+        message,
+      ]);
+    },
+  }
+);
+```
 
-// Create DePIN RPC client
-const depinRpc = getDePinRPC("http://localhost:19002", {
-  token: "MYTOKEN",
-  address: "NXyouraddress...",
-  signMessage: signMessage,
-  mode: "SEND"
-});
+The second argument is optional: without auth options the client can still
+call every gateway method that the server serves without authentication
+(`depinreceivemsg`, `depinsubmitmsg`, `depingetmsginfo`, `depingetpoolcontent`,
+`depinpoolstats`, `depinmcpstatus`, `depinlistsections`, `depinpoolpkey`).
+
+```javascript
+const publicRpc = getDePinRPC({ host: "127.0.0.1", port: 19002 });
+const info = await publicRpc("depingetmsginfo", []);
 ```
 
 ## Example 1: Send a DePIN Message
 
+`depinsendmsg` needs a SEND challenge. The client requests it, signs
+`DEPIN-SEND|token|address|challenge` with your `signMessage`, appends
+challenge and signature where the gateway expects them, and retries once
+automatically if the challenge expired.
+
 ```javascript
-import { getDePinRPC } from "@neuraiproject/neurai-rpc";
-
-async function sendDePinMessage() {
-  const depinRpc = getDePinRPC("http://localhost:19002", {
-    token: "MYTOKEN",
-    address: "NXsenderAddress...",
-    signMessage: async (msg) => {
-      // Use your signing method
-      return await yourWallet.signMessage(msg);
-    },
-    mode: "SEND"
-  });
-
-  try {
-    const result = await depinRpc("depinsendmsg", [
-      "MYTOKEN",              // token
-      "localhost",            // server (use "localhost" for local pool)
-      "Hello DePIN!",         // message
-      "NXsenderAddress..."    // from address
-    ]);
-    
-    console.log("Message sent successfully:", result);
-  } catch (error) {
-    console.error("Failed to send message:", error);
-  }
-}
+const result = await depinRpc("depinsendmsg", [
+  "&FRANCE",              // token
+  "192.168.1.100:19002", // destination gateway ip[:port]
+  "Hello team!",         // message
+  "NXyouraddress...",    // fromaddress — must be the authenticated address
+]);
+console.log(result);
 ```
 
-## Example 2: Retrieve DePIN Messages
+If you omit `fromaddress` (3 params), the client fills it in with the
+authenticated address.
+
+## Example 2: Retrieve Messages with Pagination
+
+`depinreceivemsg` is served without authentication and supports pagination
+(node from July 2026+):
 
 ```javascript
-import { getDePinRPC } from "@neuraiproject/neurai-rpc";
+// Everything for the address
+const all = await depinRpc("depinreceivemsg", ["&FRANCE", "NXyouraddress..."]);
 
-async function getDePinMessages() {
-  const depinRpc = getDePinRPC("http://localhost:19002", {
-    token: "MYTOKEN",
-    address: "NXreceiverAddress...",
-    signMessage: async (msg) => {
-      return await yourWallet.signMessage(msg);
-    },
-    mode: "RECEIVE"
-  });
-
-  try {
-    const messages = await depinRpc("depingetmsg", [
-      "MYTOKEN",              // token
-      "localhost",            // server or address
-      "NXreceiverAddress..."  // your address
-    ]);
-    
-    console.log("Received messages:", messages);
-    
-    messages.forEach(msg => {
-      console.log(`From: ${msg.sender}`);
-      console.log(`Message: ${msg.message}`);
-      console.log(`Time: ${new Date(msg.timestamp * 1000).toLocaleString()}`);
-    });
-  } catch (error) {
-    console.error("Failed to get messages:", error);
-  }
-}
-```
-
-## Example 3: Submit Pre-encrypted Message
-
-```javascript
-import { getDePinRPC } from "@neuraiproject/neurai-rpc";
-
-async function submitPreEncryptedMessage() {
-  const depinRpc = getDePinRPC("http://localhost:19002", {
-    token: "MYTOKEN",
-    address: "NXsenderAddress...",
-    signMessage: async (msg) => {
-      return await yourWallet.signMessage(msg);
-    },
-    mode: "SEND"
-  });
-
-  try {
-    // Assume you have a pre-encrypted and signed message in hex format
-    const hexMessage = "0a1b2c3d..."; // Your encrypted message hex
-    
-    const result = await depinRpc("depinsubmitmsg", [hexMessage]);
-    
-    console.log("Pre-encrypted message submitted:", result);
-  } catch (error) {
-    console.error("Failed to submit message:", error);
-  }
-}
-```
-
-## Example 4: Using with Browser Wallet
-
-```javascript
-import { getDePinRPC } from "@neuraiproject/neurai-rpc";
-
-// Example with a hypothetical browser wallet extension
-async function useBrowserWallet() {
-  // Check if wallet is available
-  if (!window.neuraiWallet) {
-    throw new Error("Neurai wallet extension not found");
-  }
-
-  // Request wallet connection
-  const accounts = await window.neuraiWallet.connect();
-  const address = accounts[0];
-
-  // Create DePIN RPC client with wallet signing
-  const depinRpc = getDePinRPC("http://localhost:19002", {
-    token: "MYTOKEN",
-    address: address,
-    signMessage: async (msg) => {
-      // Use wallet extension to sign
-      return await window.neuraiWallet.signMessage(address, msg);
-    },
-    mode: "SEND"
-  });
-
-  // Send message
-  const result = await depinRpc("depinsendmsg", [
-    "MYTOKEN",
-    "localhost",
-    "Hello from browser!",
-    address
+// Pages of 50, resuming after the last received hash
+let afterHash = "";
+while (true) {
+  const page = await depinRpc("depinreceivemsg", [
+    "&FRANCE",
+    "NXyouraddress...",
+    0,          // timestamp filter (0 = no filter)
+    afterHash,  // "" starts from the beginning
+    50,         // limit
   ]);
-
-  console.log("Message sent:", result);
+  if (!page || page.length === 0) break;
+  process(page);
+  afterHash = page[page.length - 1].hash;
 }
 ```
 
-## Example 5: Manual Challenge Handling
+> `depingetmsg` over the gateway is currently blocked by a node-side bug and
+> the client rejects it with a clear error. Use `depinreceivemsg` (above), or
+> call `depingetmsg` through the standard RPC port:
+> `standardRpc(methods.depingetmsg, ["&FRANCE"])`.
+
+## Example 3: Submit a Pre-encrypted Message
 
 ```javascript
-import { requestDePinChallenge } from "@neuraiproject/neurai-rpc";
-
-async function manualChallengeFlow() {
-  // Request a challenge manually
-  const challengeData = await requestDePinChallenge("http://localhost:19002", {
-    token: "MYTOKEN",
-    address: "NXyourAddress...",
-    signMessage: async () => "", // Not used in requestChallenge
-    mode: "SEND"
-  });
-
-  console.log("Challenge:", challengeData.challenge);
-  console.log("Expires in:", challengeData.timeout, "seconds");
-  console.log("Message to sign:", challengeData.messageToSign);
-
-  // Now you can sign this message manually
-  const signature = await yourSigningFunction(challengeData.messageToSign);
-  
-  console.log("Signature:", signature);
-}
+const result = await depinRpc("depinsubmitmsg", [
+  "48656c6c6f...", // hex-encoded encrypted message
+]);
 ```
 
-## Example 6: Error Handling
+## Example 4: Clear Messages (ADMIN, owner only)
+
+`depinclearmsg` over the gateway requires an ADMIN challenge signed as
+`DEPIN-CLEAR|token|address|challenge` by an owner of the token (or of an
+ancestor). The client inserts your address into the parameters the way the
+gateway expects — you only pass the mode and optional scope:
 
 ```javascript
-import { getDePinRPC } from "@neuraiproject/neurai-rpc";
+// Remove expired messages
+await depinRpc("depinclearmsg", []);
 
-async function robustDePinCall() {
-  const depinRpc = getDePinRPC("http://localhost:19002", {
-    token: "MYTOKEN",
-    address: "NXyourAddress...",
-    signMessage: async (msg) => {
-      try {
-        return await yourWallet.signMessage(msg);
-      } catch (error) {
-        throw new Error(`Signing failed: ${error.message}`);
-      }
-    },
-    mode: "SEND"
-  });
+// Remove ALL messages
+await depinRpc("depinclearmsg", ["all"]);
 
-  try {
-    const result = await depinRpc("depinsendmsg", [
-      "MYTOKEN",
-      "localhost",
-      "Test message",
-      "NXyourAddress..."
-    ]);
-    
-    return { success: true, result };
-  } catch (error) {
-    // Handle different error types
-    if (error.type === 'DePinRequestError') {
-      console.error("DePIN request failed:", error.error);
-      console.error("Description:", error.description);
-    } else if (error.error?.message?.includes('challenge')) {
-      console.error("Challenge error:", error.error.message);
-    } else if (error.error?.message?.includes('signature')) {
-      console.error("Signature verification failed");
-    } else {
-      console.error("Unknown error:", error);
-    }
-    
-    return { success: false, error: error.error };
+// Remove messages older than 7 days
+await depinRpc("depinclearmsg", [168]);
+
+// Restrict the purge to one section's subtree — the ADMIN challenge is
+// requested for that scope automatically
+await depinRpc("depinclearmsg", ["all", "&FRANCE/GENERAL"]);
+```
+
+## Example 5: Sections and Branch Holders
+
+```javascript
+// Section names (full address mode needs the standard RPC port)
+const sections = await depinRpc("depinlistsections", []);
+
+// Active holders of a branch with their revealed pubkeys (standard RPC port)
+const holders = await standardRpc(methods.depingetancestorrecipients, [
+  "&FRANCE/PARIS",
+]);
+```
+
+## Example 6: Manual Challenge Handling
+
+```javascript
+import { requestDePinChallenge } from "@neuraiproject/neurai-rpc/depin";
+
+const challengeData = await requestDePinChallenge(
+  { host: "127.0.0.1", port: 19002 },
+  {
+    token: "&FRANCE",
+    address: "NXyouraddress...",
+    signMessage: async (m) => "unused-here",
+    mode: "SEND", // "SEND" | "RECEIVE" | "ADMIN" (default "RECEIVE")
+  }
+);
+
+console.log(challengeData.challenge);     // random challenge from the server
+console.log(challengeData.timeout);       // seconds until it expires
+console.log(challengeData.messageToSign); // e.g. "DEPIN-SEND|&FRANCE|NX...|abc123"
+```
+
+Note: `mode` is only honored here. `getDePinRPC` derives the challenge type
+from the method being called and rejects a conflicting `mode` in its auth
+options.
+
+## Example 7: Error Handling
+
+```javascript
+try {
+  await depinRpc("depinsendmsg", ["&FRANCE", "10.0.0.1", "hi", "NXaddr..."]);
+} catch (e) {
+  if (e.type === "DePinRequestError") {
+    // Transport problem: gateway unreachable, timeout, connection closed…
+    console.error("Transport:", e.error);
+  } else if (e.error) {
+    // JSON-RPC error from the gateway/node
+    console.error("RPC:", e.description);
   }
 }
 ```
 
-## Example 7: Connecting to Remote DePIN Node
+The client raises a clear error, without touching the network, when:
 
-```javascript
-import { getDePinRPC } from "@neuraiproject/neurai-rpc";
-
-async function connectToRemoteNode() {
-  const depinRpc = getDePinRPC("http://remote-node.example.com:19002", {
-    token: "MYTOKEN",
-    address: "NXyourAddress...",
-    signMessage: async (msg) => {
-      return await yourWallet.signMessage(msg);
-    },
-    mode: "SEND"
-  });
-
-  // The library handles challenge/response automatically
-  const result = await depinRpc("depinsendmsg", [
-    "MYTOKEN",
-    "remote-node.example.com:19002",
-    "Hello remote node!",
-    "NXyourAddress..."
-  ]);
-
-  console.log("Sent to remote node:", result);
-}
-```
+- the target is not `{ host, port }` (URL strings are rejected),
+- an authenticated method is called on a client built without auth options,
+- `depingetmsg` is attempted over the gateway (node-side bug, see README),
+- `fromaddress` in `depinsendmsg` differs from the authenticated address.
 
 ## Notes
 
-1. **Challenge Expiry**: Challenges expire after 60 seconds. The library automatically handles expiry and retries with a new challenge.
-
-2. **Signature Format**: The signature must be in base64 format as returned by Neurai's `signmessage` RPC command.
-
-3. **Mode Selection**: Use `mode: "SEND"` for `depinsendmsg` and `depinsubmitmsg`, and `mode: "RECEIVE"` for `depingetmsg`.
-
-4. **Port**: DePIN messaging uses port 19002 by default (configurable via `-depinmsgport`).
-
-5. **Token Requirement**: You must hold the specified DePIN token to send or receive messages.
+- One TCP connection per request; the request is a single line terminated by
+  `\n` and the response is read up to the first `\n` (30 s timeout, matching
+  the node's `DEPIN_SOCKET_TIMEOUT`).
+- Challenges are single-use — the node consumes the nonce when it validates
+  it — so the client requests a fresh challenge for every authenticated call;
+  an expired-challenge error triggers one automatic retry (with a new nonce).
+- The messaging token (`-depinmsgtoken`) must be a dedicated `&ASSET` DePIN
+  asset (soulbound, `units=0`), currently testnet/regtest only in the node —
+  the same type the DePIN asset RPCs operate on.

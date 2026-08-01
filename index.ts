@@ -2,13 +2,9 @@ import { methods } from "./docs";
 
 export { methods };
 
-// Export DePIN RPC functionality
-export {
-  getDePinRPC,
-  requestDePinChallenge,
-  type DePinAuthOptions,
-  type DePinChallenge,
-} from "./depin";
+// The DePIN client is Node.js-only (raw TCP against the gateway) and lives in
+// its own entry so this root module stays free of Node built-ins and safe to
+// bundle for the browser. Import it from "@neuraiproject/neurai-rpc/depin".
 
 function throwSyntaxError() {
   throw new Error("Syntax error, call getRPC with (username, password, URL)");
@@ -46,9 +42,17 @@ export function getRPC(username: string, password: string, URL: string) {
             */
 
             if (response.ok) {
-              //Happy flow
               const obj = await response.json(); //Convert to JSON
-              resolutionFunc(obj.result);
+              // A JSON-RPC error can arrive with HTTP 200 — it must reject,
+              // not resolve undefined.
+              if (obj && obj.error) {
+                rejectionFunc({
+                  error: obj.error,
+                  description: obj.error.message || "Unknown RPC error",
+                });
+              } else {
+                resolutionFunc(obj.result);
+              }
             } else if (response.status !== 200) {
               //OK something is wrong
               let obj = {
