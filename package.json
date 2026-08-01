@@ -1,6 +1,6 @@
 {
   "name": "@neuraiproject/neurai-rpc",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Helps you access your Neurai full node using RPC from JavaScript",
   "types": "dist/index.d.ts",
   "type": "module",
