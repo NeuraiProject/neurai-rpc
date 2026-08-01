@@ -67,6 +67,9 @@ the client was rewritten:
 
 - `getRPC` now rejects JSON-RPC errors that arrive with HTTP 200 (previously
   it resolved `undefined`, silently swallowing the error object).
+- All documentation examples now use Neurai's real ports instead of
+  Ravencoin's: standard RPC 19001 (was 8766) and P2P 19000 (was 8767 in
+  `addnode`/`disconnectnode` examples).
 
 ### Changed
 

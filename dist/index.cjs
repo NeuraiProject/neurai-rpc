@@ -41,7 +41,7 @@ var methods = {
   
   Examples:
   > neurai-cli abandontransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abandontransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abandontransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   abandontransaction: "abandontransaction",
   /** abortrescan
@@ -57,7 +57,7 @@ var methods = {
   > neurai-cli abortrescan 
   
   As a JSON-RPC call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abortrescan", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abortrescan", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   abortrescan: "abortrescan",
   /** addmultisigaddress nrequired ["key",...] ( "account" )
@@ -84,7 +84,7 @@ var methods = {
   > neurai-cli addmultisigaddress 2 "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"
   
   As json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addmultisigaddress", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addmultisigaddress", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   addmultisigaddress: "addmultisigaddress",
   /** addnode "node" "add|remove|onetry"
@@ -99,8 +99,8 @@ var methods = {
   2. "command"  (string, required) 'add' to add a node to the list, 'remove' to remove a node from the list, 'onetry' to try a connection to the node once
   
   Examples:
-  > neurai-cli addnode "192.168.0.6:8767" "onetry"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addnode", "params": ["192.168.0.6:8767", "onetry"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > neurai-cli addnode "192.168.0.6:19000" "onetry"
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addnode", "params": ["192.168.0.6:19000", "onetry"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   addnode: "addnode",
   /** addtagtoaddress tag_name to_address (change_address) (asset_data)
@@ -121,9 +121,9 @@ var methods = {
   
   Examples:
   > neurai-cli addtagtoaddress "#TAG" "to_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli addtagtoaddress "#TAG" "to_address" "change_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addtagtoaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   addtagtoaddress: "addtagtoaddress",
   /** addwitnessaddress "address"
@@ -148,7 +148,7 @@ var methods = {
   
   Examples:
   > neurai-cli backupwallet "backup.dat"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "backupwallet", "params": ["backup.dat"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "backupwallet", "params": ["backup.dat"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   backupwallet: "backupwallet",
   /** bumpfee has been deprecated on the XNA Wallet.
@@ -169,7 +169,7 @@ var methods = {
   
   Examples:
   > neurai-cli cancelsnapshotrequest "TRONCO" 12345
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "cancelsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "cancelsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   cancelsnapshotrequest: "cancelsnapshotrequest",
   /** checkaddressrestriction address restricted_name
@@ -188,7 +188,7 @@ var methods = {
   
   Examples:
   > neurai-cli checkaddressrestriction "address" "restricted_name"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddressrestriction", "params": ["address" "restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddressrestriction", "params": ["address" "restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   checkaddressrestriction: "checkaddressrestriction",
   /** checkaddresstag address tag_name
@@ -207,7 +207,7 @@ var methods = {
   
   Examples:
   > neurai-cli checkaddresstag "address" "tag_name"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddresstag", "params": ["address" "tag_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkaddresstag", "params": ["address" "tag_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   checkaddresstag: "checkaddresstag",
   /** checkdepinvalidity "asset_name" "address"
@@ -231,7 +231,7 @@ var methods = {
   
   Examples:
   > neurai-cli checkdepinvalidity "&FRANCE" "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkdepinvalidity", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkdepinvalidity", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   checkdepinvalidity: "checkdepinvalidity",
   /** checkglobalrestriction restricted_name
@@ -249,7 +249,7 @@ var methods = {
   
   Examples:
   > neurai-cli checkglobalrestriction "restricted_name"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkglobalrestriction", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "checkglobalrestriction", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   checkglobalrestriction: "checkglobalrestriction",
   /** clearbanned
@@ -258,7 +258,7 @@ var methods = {
   
   Examples:
   > neurai-cli clearbanned 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   clearbanned: "clearbanned",
   /** clearmempool
@@ -267,7 +267,7 @@ var methods = {
   
   Examples:
   > neurai-cli clearmempool 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   clearmempool: "clearmempool",
   /** clearmessages 
@@ -283,7 +283,7 @@ var methods = {
   
   Examples:
   > neurai-cli clearmessages 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   clearmessages: "clearmessages",
   /** combinerawtransaction ["hexstring",...]
@@ -330,7 +330,7 @@ var methods = {
   > neurai-cli createmultisig 2 "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createmultisig", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createmultisig", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   createmultisig: "createmultisig",
   /** createrawtransaction [{"txid":"id","vout":n},...] {"address":(amount or object),"data":"hex",...}
@@ -595,7 +595,7 @@ var methods = {
   > neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myasset\",\"vout\":0}]" "{\"address\":{\"transferwithmessage\":{\"MYASSET\":50,\"message\":\"hash\",\"expire_time\": utc_time}}}"
   > neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0},{\"txid\":\"myownership\",\"vout\":0}]" "{\"issuer_address\":{\"reissue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":2000000}}}"
   > neurai-cli createrawtransaction "[{\"txid\":\"mycoin\",\"vout\":0}]" "[{\"address\":500},{\"address\":{\"issue\":{\"asset_name\":\"MYASSET\",\"asset_quantity\":1000000,\"units\":1,\"reissuable\":0,\"has_ipfs\":0}}}]"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createrawtransaction", "params": ["[{\"txid\":\"mycoin\",\"vout\":0}]", "{\"data\":\"00010203\"}"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createrawtransaction", "params": ["[{\"txid\":\"mycoin\",\"vout\":0}]", "{\"data\":\"00010203\"}"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   createrawtransaction: "createrawtransaction",
   /** decodeblock "blockhex"
@@ -624,7 +624,7 @@ var methods = {
   
   Examples:
   > neurai-cli decodeblock "xxxx"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodeblock", "params": ["xxxx"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodeblock", "params": ["xxxx"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   decodeblock: "decodeblock",
   /** decoderawtransaction "hexstring"
@@ -681,7 +681,7 @@ var methods = {
   
   Examples:
   > neurai-cli decoderawtransaction "hexstring"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decoderawtransaction", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decoderawtransaction", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   decoderawtransaction: "decoderawtransaction",
   /** decodescript "hexstring"
@@ -719,7 +719,7 @@ var methods = {
   
   Examples:
   > neurai-cli decodescript "hexstring"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodescript", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodescript", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   decodescript: "decodescript",
   /** depinclearmsg ( "all" | hours ) ( "scope" )
@@ -746,9 +746,9 @@ var methods = {
   > neurai-cli depinclearmsg "all"
   > neurai-cli depinclearmsg 7
   > neurai-cli depinclearmsg "all" "&TOKEN/GENERAL"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": ["all"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [7] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": ["all"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [7] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinclearmsg: "depinclearmsg",
   /** depingetancestorrecipients "token" ( max_results ) ( "stop_at" )
@@ -806,7 +806,7 @@ var methods = {
   Examples:
   > neurai-cli depingetancestorrecipients "&TEST/APPLE/GOLDEN"
   > neurai-cli depingetancestorrecipients "&TEST/APPLE/GOLDEN" 50 "&TEST/APPLE"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetancestorrecipients", "params": ["&TEST/APPLE/GOLDEN", 50, "&TEST/APPLE"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetancestorrecipients", "params": ["&TEST/APPLE/GOLDEN", 50, "&TEST/APPLE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depingetancestorrecipients: "depingetancestorrecipients",
   /** depingetmsg "token" ("ip[:port]"|"fromaddress") ("fromaddress")
@@ -839,7 +839,7 @@ var methods = {
   > neurai-cli depingetmsg "MYTOKEN" "NXyouraddress..."
   > neurai-cli depingetmsg "MYTOKEN" "192.168.1.78"
   > neurai-cli depingetmsg "MYTOKEN" "192.168.1.78:19002" "NXyouraddress..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetmsg", "params": ["MYTOKEN"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetmsg", "params": ["MYTOKEN"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depingetmsg: "depingetmsg",
   /** depingetmsginfo
@@ -865,7 +865,7 @@ var methods = {
   
   Examples:
   > neurai-cli depingetmsginfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetmsginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetmsginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depingetmsginfo: "depingetmsginfo",
   /** depingetpoolcontent ( verbose sender_address recipient_address start_time end_time limit offset )
@@ -925,7 +925,7 @@ var methods = {
   > neurai-cli depingetpoolcontent all
   > neurai-cli depingetpoolcontent raw
   > neurai-cli depingetpoolcontent false "NXXaddress..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetpoolcontent", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetpoolcontent", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depingetpoolcontent: "depingetpoolcontent",
   /** depinlistsections ( "address" )
@@ -957,7 +957,7 @@ var methods = {
   Examples:
   > neurai-cli depinlistsections 
   > neurai-cli depinlistsections "NXyouraddress..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinlistsections", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinlistsections", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinlistsections: "depinlistsections",
   /** depinmcpstatus
@@ -985,7 +985,7 @@ var methods = {
   
   Examples:
   > neurai-cli depinmcpstatus 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinmcpstatus", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinmcpstatus", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinmcpstatus: "depinmcpstatus",
   /** depinpoolpkey
@@ -1006,7 +1006,7 @@ var methods = {
   
   Examples:
   > neurai-cli depinpoolpkey 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolpkey", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolpkey", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinpoolpkey: "depinpoolpkey",
   /** depinpoolstats
@@ -1036,7 +1036,7 @@ var methods = {
   
   Examples:
   > neurai-cli depinpoolstats 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolstats", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolstats", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinpoolstats: "depinpoolstats",
   /** depinreceivemsg "token" "address" (timestamp) ("after_hash") (limit)
@@ -1086,7 +1086,7 @@ var methods = {
   > neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 1730000000
   > neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 0 "" 5
   > neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 0 "abc123..." 5
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinreceivemsg", "params": ["TOKEN", "NeuraiAddress", 0, "", 5] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinreceivemsg", "params": ["TOKEN", "NeuraiAddress", 0, "", 5] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinreceivemsg: "depinreceivemsg",
   /** depinsendmsg "token" "ip[:port]" "message" "fromaddress" (port)
@@ -1111,7 +1111,7 @@ var methods = {
   Examples:
   > neurai-cli depinsendmsg "MYTOKEN" "192.168.1.100" "Hello team!" "NXsender..."
   > neurai-cli depinsendmsg "MYTOKEN" "192.168.1.100:19005" "Hello team!" "NXsender..." 19005
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsendmsg", "params": ["MYTOKEN", "192.168.1.100", "Hello team!", "NXsender..."] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsendmsg", "params": ["MYTOKEN", "192.168.1.100", "Hello team!", "NXsender..."] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinsendmsg: "depinsendmsg",
   /** depinsubmitmsg "hexmessage"|{"sender":"...","encrypted":"..."}
@@ -1141,7 +1141,7 @@ var methods = {
   
   Examples:
   > neurai-cli depinsubmitmsg "0a3f2e..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsubmitmsg", "params": [{"sender":"NX...","encrypted":"..."}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsubmitmsg", "params": [{"sender":"NX...","encrypted":"..."}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinsubmitmsg: "depinsubmitmsg",
   /** disconnectnode "[address]" [nodeid]
@@ -1157,10 +1157,10 @@ var methods = {
   2. "nodeid"      (number, optional) The node ID (see getpeerinfo for node IDs)
   
   Examples:
-  > neurai-cli disconnectnode "192.168.0.6:8767"
+  > neurai-cli disconnectnode "192.168.0.6:19000"
   > neurai-cli disconnectnode "" 1
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["192.168.0.6:8767"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["192.168.0.6:19000"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "disconnectnode", "params": ["", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   disconnectnode: "disconnectnode",
   /** distributereward "asset_name" snapshot_height "distribution_asset_name" gross_distribution_amount ( "exception_addresses" ) ("change_address") ("dry_run")
@@ -1196,8 +1196,8 @@ var methods = {
   Examples:
   > neurai-cli distributereward "TRONCO" 12345 "XNA" 1000
   > neurai-cli distributereward "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   distributereward: "distributereward",
   /** dumpextkeypq
@@ -1210,7 +1210,7 @@ var methods = {
   
   Examples:
   > neurai-cli dumpextkeypq 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpextkeypq", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpextkeypq", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   dumpextkeypq: "dumpextkeypq",
   /** dumpprivkey "address"
@@ -1227,7 +1227,7 @@ var methods = {
   Examples:
   > neurai-cli dumpprivkey "myaddress"
   > neurai-cli importprivkey "mykey"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpprivkey", "params": ["myaddress"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpprivkey", "params": ["myaddress"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   dumpprivkey: "dumpprivkey",
   /** dumpwallet "filename"
@@ -1244,7 +1244,7 @@ var methods = {
   
   Examples:
   > neurai-cli dumpwallet "test"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   dumpwallet: "dumpwallet",
   /** encryptwallet "passphrase"
@@ -1274,7 +1274,7 @@ var methods = {
   > neurai-cli walletlock 
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "encryptwallet", "params": ["my pass phrase"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "encryptwallet", "params": ["my pass phrase"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   encryptwallet: "encryptwallet",
   /** estimatefee nblocks
@@ -1348,7 +1348,7 @@ var methods = {
   
   Examples:
   > neurai-cli exportxpqpub 20
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "exportxpqpub", "params": [20, 0, 0] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "exportxpqpub", "params": [20, 0, 0] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   exportxpqpub: "exportxpqpub",
   /** freezeaddress asset_name address (change_address) (asset_data)
@@ -1369,9 +1369,9 @@ var methods = {
   
   Examples:
   > neurai-cli freezeaddress "$RESTRICTED_ASSET" "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli freezeaddress "$RESTRICTED_ASSET" "address" "change_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   freezeaddress: "freezeaddress",
   /** freezedepin "asset_name" "address" ("change_address")
@@ -1395,7 +1395,7 @@ var methods = {
   
   Examples:
   > neurai-cli freezedepin "&FRANCE" "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezedepin", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezedepin", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   freezedepin: "freezedepin",
   /** freezerestrictedasset asset_name (change_address) (asset_data)
@@ -1415,9 +1415,9 @@ var methods = {
   
   Examples:
   > neurai-cli freezerestrictedasset "$RESTRICTED_ASSET"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli freezerestrictedasset "$RESTRICTED_ASSET" "change_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "freezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   freezerestrictedasset: "freezerestrictedasset",
   /** fundrawtransaction "hexstring" ( options )
@@ -1526,7 +1526,7 @@ var methods = {
   
   Examples:
   > neurai-cli getaccount "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaccount: "getaccount",
   /** getaccountaddress "account"
@@ -1543,7 +1543,7 @@ var methods = {
   > neurai-cli getaccountaddress 
   > neurai-cli getaccountaddress ""
   > neurai-cli getaccountaddress "myaccount"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccountaddress", "params": ["myaccount"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccountaddress", "params": ["myaccount"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaccountaddress: "getaccountaddress",
   /** getaddednodeinfo ( "node" )
@@ -1561,7 +1561,7 @@ var methods = {
       "connected" : true|false,          (boolean) If connected
       "addresses" : [                    (list of objects) Only when connected = true
          {
-           "address" : "192.168.0.201:8767",  (string) The neurai server IP and port we're connected to
+           "address" : "192.168.0.201:19000",  (string) The neurai server IP and port we're connected to
            "connected" : "outbound"           (string) connection, inbound or outbound
          }
        ]
@@ -1571,7 +1571,7 @@ var methods = {
   
   Examples:
   > neurai-cli getaddednodeinfo "192.168.0.201"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddednodeinfo", "params": ["192.168.0.201"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddednodeinfo", "params": ["192.168.0.201"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaddednodeinfo: "getaddednodeinfo",
   /** getaddressbalance
@@ -1606,8 +1606,8 @@ var methods = {
   Examples:
   > neurai-cli getaddressbalance '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
   > neurai-cli getaddressbalance '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressbalance", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaddressbalance: "getaddressbalance",
   /** getaddressdeltas
@@ -1641,9 +1641,9 @@ var methods = {
   
   Examples:
   > neurai-cli getaddressdeltas '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli getaddressdeltas '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressdeltas", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaddressdeltas: "getaddressdeltas",
   /** getaddressesbyaccount "account"
@@ -1661,7 +1661,7 @@ var methods = {
   
   Examples:
   > neurai-cli getaddressesbyaccount "tabby"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressesbyaccount", "params": ["tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressesbyaccount", "params": ["tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaddressesbyaccount: "getaddressesbyaccount",
   /** getaddressmempool
@@ -1694,9 +1694,9 @@ var methods = {
   
   Examples:
   > neurai-cli getaddressmempool '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli getaddressmempool '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressmempool", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaddressmempool: "getaddressmempool",
   /** getaddresstxids
@@ -1723,9 +1723,9 @@ var methods = {
   
   Examples:
   > neurai-cli getaddresstxids '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli getaddresstxids '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}', true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddresstxids", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaddresstxids: "getaddresstxids",
   /** getaddressutxos
@@ -1758,9 +1758,9 @@ var methods = {
   
   Examples:
   > neurai-cli getaddressutxos '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"]}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli getaddressutxos '{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressutxos", "params": [{"addresses": ["12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX"],"assetName":"MY_ASSET"}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getaddressutxos: "getaddressutxos",
   /** getassetdata "asset_name"
@@ -1787,7 +1787,7 @@ var methods = {
   
   Examples:
   > neurai-cli getassetdata "ASSET_NAME"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getassetdata", "params": ["ASSET_NAME"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getassetdata", "params": ["ASSET_NAME"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getassetdata: "getassetdata",
   /** getbalance ( "account" minconf include_watchonly )
@@ -1825,7 +1825,7 @@ var methods = {
   > neurai-cli getbalance "*" 6
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbalance", "params": ["*", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbalance", "params": ["*", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getbalance: "getbalance",
   /** getbestblockhash
@@ -1837,7 +1837,7 @@ var methods = {
   
   Examples:
   > neurai-cli getbestblockhash 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbestblockhash", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbestblockhash", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getbestblockhash: "getbestblockhash",
   /** getblock "blockhash" ( verbosity ) 
@@ -1889,7 +1889,7 @@ var methods = {
   
   Examples:
   > neurai-cli getblock "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblock", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblock", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getblock: "getblock",
   /** getblockchaininfo
@@ -1940,7 +1940,7 @@ var methods = {
   
   Examples:
   > neurai-cli getblockchaininfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getblockchaininfo: "getblockchaininfo",
   /** getblockcount
@@ -1952,7 +1952,7 @@ var methods = {
   
   Examples:
   > neurai-cli getblockcount 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockcount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockcount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getblockcount: "getblockcount",
   /** getblockhash height
@@ -1967,7 +1967,7 @@ var methods = {
   
   Examples:
   > neurai-cli getblockhash 1000
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhash", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhash", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getblockhash: "getblockhash",
   /** getblockhashes timestamp
@@ -1996,7 +1996,7 @@ var methods = {
   
   Examples:
   > neurai-cli getblockhashes 1231614698 1231024505
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhashes", "params": [1231614698, 1231024505] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhashes", "params": [1231614698, 1231024505] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli getblockhashes 1231614698 1231024505 '{"noOrphans":false, "logicalTimes":true}'
   **/
   getblockhashes: "getblockhashes",
@@ -2032,7 +2032,7 @@ var methods = {
   
   Examples:
   > neurai-cli getblockheader "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockheader", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockheader", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getblockheader: "getblockheader",
   /** getblocktemplate ( TemplateRequest )
@@ -2108,7 +2108,7 @@ var methods = {
   
   Examples:
   > neurai-cli getblocktemplate 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblocktemplate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblocktemplate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getblocktemplate: "getblocktemplate",
   /** getcacheinfo 
@@ -2130,7 +2130,7 @@ var methods = {
   ]
   
   Examples:
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getcacheinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getcacheinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli getcacheinfo 
   **/
   getcacheinfo: "getcacheinfo",
@@ -2161,7 +2161,7 @@ var methods = {
   
   Examples:
   > neurai-cli getchaintips 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintips", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintips", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getchaintips: "getchaintips",
   /** getchaintxstats ( nblocks blockhash )
@@ -2184,7 +2184,7 @@ var methods = {
   
   Examples:
   > neurai-cli getchaintxstats 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintxstats", "params": [2016] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintxstats", "params": [2016] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getchaintxstats: "getchaintxstats",
   /** getconnectioncount
@@ -2196,7 +2196,7 @@ var methods = {
   
   Examples:
   > neurai-cli getconnectioncount 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getconnectioncount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getconnectioncount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getconnectioncount: "getconnectioncount",
   /** getdifficulty
@@ -2208,7 +2208,7 @@ var methods = {
   
   Examples:
   > neurai-cli getdifficulty 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdifficulty", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdifficulty", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getdifficulty: "getdifficulty",
   /** getdistributestatus "asset_name" snapshot_height "distribution_asset_name" gross_distribution_amount ( "exception_addresses" )
@@ -2225,8 +2225,8 @@ var methods = {
   Examples:
   > neurai-cli getdistributestatus "TRONCO" 12345 "XNA" 1000
   > neurai-cli getdistributestatus "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getdistributestatus: "getdistributestatus",
   /** getgenerate
@@ -2240,7 +2240,7 @@ var methods = {
   
   Examples:
   > neurai-cli getgenerate 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getgenerate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getgenerate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getgenerate: "getgenerate",
   /** getinfo
@@ -2270,7 +2270,7 @@ var methods = {
   
   Examples:
   > neurai-cli getinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getinfo: "getinfo",
   /** getkawpowhash "header_hash" "mix_hash" nonce, height, "target"
@@ -2288,7 +2288,7 @@ var methods = {
   
   Examples:
   > neurai-cli getkawpowhash "header_hash" "mix_hash" "0x100000" 2456
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getkawpowhash", "params": ["header_hash" "mix_hash" "0x100000" 2456] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getkawpowhash", "params": ["header_hash" "mix_hash" "0x100000" 2456] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getkawpowhash: "getkawpowhash",
   /** getmasterkeyinfo
@@ -2308,7 +2308,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmasterkeyinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmasterkeyinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmasterkeyinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmasterkeyinfo: "getmasterkeyinfo",
   /** getmemoryinfo ("mode")
@@ -2335,7 +2335,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmemoryinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmemoryinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmemoryinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmemoryinfo: "getmemoryinfo",
   /** getmempoolancestors txid (verbose)
@@ -2375,7 +2375,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmempoolancestors "mytxid"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolancestors", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolancestors", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmempoolancestors: "getmempoolancestors",
   /** getmempooldescendants txid (verbose)
@@ -2415,7 +2415,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmempooldescendants "mytxid"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempooldescendants", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempooldescendants", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmempooldescendants: "getmempooldescendants",
   /** getmempoolentry txid
@@ -2446,7 +2446,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmempoolentry "mytxid"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolentry", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolentry", "params": ["mytxid"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmempoolentry: "getmempoolentry",
   /** getmempoolinfo
@@ -2464,7 +2464,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmempoolinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmempoolinfo: "getmempoolinfo",
   /** getmininginfo
@@ -2486,7 +2486,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmininginfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmininginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmininginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmininginfo: "getmininginfo",
   /** getmywords ( "account" )
@@ -2500,7 +2500,7 @@ var methods = {
   
   Examples:
   > neurai-cli getmywords 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmywords", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmywords", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getmywords: "getmywords",
   /** getnettotals
@@ -2526,7 +2526,7 @@ var methods = {
   
   Examples:
   > neurai-cli getnettotals 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnettotals", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnettotals", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getnettotals: "getnettotals",
   /** getnetworkhashps ( nblocks height )
@@ -2544,7 +2544,7 @@ var methods = {
   
   Examples:
   > neurai-cli getnetworkhashps 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkhashps", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkhashps", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getnetworkhashps: "getnetworkhashps",
   /** getnetworkinfo
@@ -2585,7 +2585,7 @@ var methods = {
   
   Examples:
   > neurai-cli getnetworkinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getnetworkinfo: "getnetworkinfo",
   /** getnewaddress ( "account" )
@@ -2602,7 +2602,7 @@ var methods = {
   
   Examples:
   > neurai-cli getnewaddress 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getnewaddress: "getnewaddress",
   /** getpeerinfo
@@ -2654,7 +2654,7 @@ var methods = {
   
   Examples:
   > neurai-cli getpeerinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpeerinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpeerinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getpeerinfo: "getpeerinfo",
   /** getpubkey "address"
@@ -2675,7 +2675,7 @@ var methods = {
   
   Examples:
   > neurai-cli getpubkey "NXa1b2c3d4e5f6..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpubkey", "params": ["NXa1b2c3d4e5f6..."] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpubkey", "params": ["NXa1b2c3d4e5f6..."] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getpubkey: "getpubkey",
   /** getrawchangeaddress
@@ -2688,7 +2688,7 @@ var methods = {
   
   Examples:
   > neurai-cli getrawchangeaddress 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawchangeaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawchangeaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getrawchangeaddress: "getrawchangeaddress",
   /** getrawmempool ( verbose )
@@ -2729,7 +2729,7 @@ var methods = {
   
   Examples:
   > neurai-cli getrawmempool true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawmempool", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawmempool", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getrawmempool: "getrawmempool",
   /** getrawtransaction "txid" ( verbose )
@@ -2798,7 +2798,7 @@ var methods = {
   Examples:
   > neurai-cli getrawtransaction "mytxid"
   > neurai-cli getrawtransaction "mytxid" true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawtransaction", "params": ["mytxid", true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawtransaction", "params": ["mytxid", true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getrawtransaction: "getrawtransaction",
   /** getreceivedbyaccount "account" ( minconf )
@@ -2824,7 +2824,7 @@ var methods = {
   > neurai-cli getreceivedbyaccount "tabby" 6
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaccount", "params": ["tabby", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaccount", "params": ["tabby", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getreceivedbyaccount: "getreceivedbyaccount",
   /** getreceivedbyaddress "address" ( minconf )
@@ -2850,7 +2850,7 @@ var methods = {
   > neurai-cli getreceivedbyaddress "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" 6
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaddress", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getreceivedbyaddress", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getreceivedbyaddress: "getreceivedbyaddress",
   /** getrpcinfo
@@ -2867,7 +2867,7 @@ var methods = {
     ],
   }
   > neurai-cli getrpcinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrpcinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrpcinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getrpcinfo: "getrpcinfo",
   /** getsnapshot "asset_name" block_height
@@ -2893,7 +2893,7 @@ var methods = {
   }
   
   Examples:
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getsnapshot: "getsnapshot",
   /** getsnapshotrequest "asset_name" block_height
@@ -2912,7 +2912,7 @@ var methods = {
   
   Examples:
   > neurai-cli getsnapshotrequest "TRONCO" 12345
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshotrequest", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getsnapshotrequest: "getsnapshotrequest",
   /** getspentinfo
@@ -2934,7 +2934,7 @@ var methods = {
   
   Examples:
   > neurai-cli getspentinfo '{"txid": "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9", "index": 0}'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getspentinfo", "params": [{"txid": "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9", "index": 0}] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getspentinfo", "params": [{"txid": "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9", "index": 0}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getspentinfo: "getspentinfo",
   /** gettransaction "txid" ( include_watchonly )
@@ -2991,7 +2991,7 @@ var methods = {
   Examples:
   > neurai-cli gettransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
   > neurai-cli gettransaction "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d" true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettransaction", "params": ["1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   gettransaction: "gettransaction",
   /** gettxout "txid" n ( include_mempool )
@@ -3030,7 +3030,7 @@ var methods = {
   > neurai-cli gettxout "txid" 1
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxout", "params": ["txid", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxout", "params": ["txid", 1] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   gettxout: "gettxout",
   /** gettxoutproof ["txid",...] ( blockhash )
@@ -3073,7 +3073,7 @@ var methods = {
   
   Examples:
   > neurai-cli gettxoutsetinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxoutsetinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxoutsetinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   gettxoutsetinfo: "gettxoutsetinfo",
   /** getunconfirmedbalance
@@ -3095,7 +3095,7 @@ var methods = {
   
   Examples:
   > neurai-cli getverifierstring "restricted_name"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getverifierstring", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getverifierstring", "params": ["restricted_name"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getverifierstring: "getverifierstring",
   /** getwalletinfo
@@ -3120,7 +3120,7 @@ var methods = {
   
   Examples:
   > neurai-cli getwalletinfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getwalletinfo: "getwalletinfo",
   /** help ( "command" )
@@ -3159,7 +3159,7 @@ var methods = {
   > neurai-cli importaddress "myscript" "testing" false
   
   As a JSON-RPC call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importaddress", "params": ["myscript", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importaddress", "params": ["myscript", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   importaddress: "importaddress",
   /** importmulti "requests" ( "options" )
@@ -3225,7 +3225,7 @@ var methods = {
   > neurai-cli importprivkey "mykey" "" false
   
   As a JSON-RPC call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importprivkey", "params": ["mykey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importprivkey", "params": ["mykey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   importprivkey: "importprivkey",
   /** importprunedfunds
@@ -3257,7 +3257,7 @@ var methods = {
   > neurai-cli importpubkey "mypubkey" "testing" false
   
   As a JSON-RPC call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importpubkey", "params": ["mypubkey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importpubkey", "params": ["mypubkey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   importpubkey: "importpubkey",
   /** importwallet "filename"
@@ -3276,7 +3276,7 @@ var methods = {
   > neurai-cli importwallet "test"
   
   Import using the json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   importwallet: "importwallet",
   /** issue "asset_name" qty "( to_address )" "( change_address )" ( units ) ( reissuable ) ( has_ipfs ) "( ipfs_hash )"
@@ -3419,7 +3419,7 @@ var methods = {
   
   Examples:
   > neurai-cli isvalidverifierstring "verifier_string"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "isvalidverifierstring", "params": ["verifier_string"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "isvalidverifierstring", "params": ["verifier_string"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   isvalidverifierstring: "isvalidverifierstring",
   /** keypoolrefill ( newsize )
@@ -3431,7 +3431,7 @@ var methods = {
   
   Examples:
   > neurai-cli keypoolrefill 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "keypoolrefill", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "keypoolrefill", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   keypoolrefill: "keypoolrefill",
   /** listaccounts ( minconf include_watchonly)
@@ -3460,7 +3460,7 @@ var methods = {
   > neurai-cli listaccounts 6
   
   As json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaccounts", "params": [6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaccounts", "params": [6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listaccounts: "listaccounts",
   /** listaddressesbyasset "asset_name" (onlytotal) (count) (start)
@@ -3504,7 +3504,7 @@ var methods = {
   
   Examples:
   > neurai-cli listaddressesfortag "#TAG"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressesfortag", "params": ["#TAG"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressesfortag", "params": ["#TAG"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listaddressesfortag: "listaddressesfortag",
   /** listaddressgroupings
@@ -3528,7 +3528,7 @@ var methods = {
   
   Examples:
   > neurai-cli listaddressgroupings 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressgroupings", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressgroupings", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listaddressgroupings: "listaddressgroupings",
   /** listaddressrestrictions address
@@ -3548,7 +3548,7 @@ var methods = {
   
   Examples:
   > neurai-cli listaddressrestrictions "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressrestrictions", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressrestrictions", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listaddressrestrictions: "listaddressrestrictions",
   /** listassetbalancesbyaddress "address" (onlytotal) (count) (start)
@@ -3612,7 +3612,7 @@ var methods = {
   }
   
   Examples:
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli listassets ASSET
   > neurai-cli listassets "ASSET*" true 10 20
   **/
@@ -3623,7 +3623,7 @@ var methods = {
   
   Examples:
   > neurai-cli listbanned 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listbanned: "listbanned",
   /** listdepinaddresses "asset_name" (count) (start)
@@ -3651,7 +3651,7 @@ var methods = {
   Examples:
   > neurai-cli listdepinaddresses "ASSET_NAME"
   > neurai-cli listdepinaddresses "ASSET_NAME" 10 0
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listdepinaddresses", "params": ["ASSET_NAME"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listdepinaddresses", "params": ["ASSET_NAME"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listdepinaddresses: "listdepinaddresses",
   /** listdepinholders "asset_name"
@@ -3678,7 +3678,7 @@ var methods = {
   
   Examples:
   > neurai-cli listdepinholders "&FRANCE"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listdepinholders", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listdepinholders", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listdepinholders: "listdepinholders",
   /** listglobalrestrictions
@@ -3695,7 +3695,7 @@ var methods = {
   
   Examples:
   > neurai-cli listglobalrestrictions 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listglobalrestrictions", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listglobalrestrictions", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listglobalrestrictions: "listglobalrestrictions",
   /** listlockunspent
@@ -3727,7 +3727,7 @@ var methods = {
   > neurai-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listlockunspent", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listlockunspent", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listlockunspent: "listlockunspent",
   /** listmyassets "( asset )" ( verbose ) ( count ) ( start ) (confs) 
@@ -3769,7 +3769,7 @@ var methods = {
   {...}, {...}
   
   Examples:
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listmyassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listmyassets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli listmyassets ASSET
   > neurai-cli listmyassets "ASSET*" true 10 20
   > neurai-cli listmyassets "ASSET*" true 10 20 1
@@ -3787,7 +3787,7 @@ var methods = {
   
   Examples:
   > neurai-cli listpqaddresses 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listpqaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listpqaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listpqaddresses: "listpqaddresses",
   /** listreceivedbyaccount ( minconf include_empty include_watchonly)
@@ -3814,7 +3814,7 @@ var methods = {
   Examples:
   > neurai-cli listreceivedbyaccount 
   > neurai-cli listreceivedbyaccount 6 true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaccount", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaccount", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listreceivedbyaccount: "listreceivedbyaccount",
   /** listreceivedbyaddress ( minconf include_empty include_watchonly)
@@ -3846,7 +3846,7 @@ var methods = {
   Examples:
   > neurai-cli listreceivedbyaddress 
   > neurai-cli listreceivedbyaddress 6 true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaddress", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaddress", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listreceivedbyaddress: "listreceivedbyaddress",
   /** listsinceblock ( "blockhash" target_confirmations include_watchonly include_removed )
@@ -3897,7 +3897,7 @@ var methods = {
   Examples:
   > neurai-cli listsinceblock 
   > neurai-cli listsinceblock "000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad" 6
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsinceblock", "params": ["000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsinceblock", "params": ["000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listsinceblock: "listsinceblock",
   /** listsnapshotrequests ["asset_name" [block_height]]
@@ -3918,7 +3918,7 @@ var methods = {
   
   Examples:
   > neurai-cli listsnapshotrequests 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsnapshotrequests", "params": ["TRONCO" 345333] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsnapshotrequests", "params": ["TRONCO" 345333] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listsnapshotrequests: "listsnapshotrequests",
   /** listtagsforaddress address
@@ -3938,7 +3938,7 @@ var methods = {
   
   Examples:
   > neurai-cli listtagsforaddress "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtagsforaddress", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtagsforaddress", "params": ["address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listtagsforaddress: "listtagsforaddress",
   /** listtransactions ( "account" count skip include_watchonly)
@@ -4002,7 +4002,7 @@ var methods = {
   > neurai-cli listtransactions "*" 20 100
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtransactions", "params": ["*", 20, 100] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listtransactions", "params": ["*", 20, 100] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listtransactions: "listtransactions",
   /** listunspent ( minconf maxconf  ["addresses",...] [include_unsafe] [query_options])
@@ -4052,9 +4052,9 @@ var methods = {
   Examples
   > neurai-cli listunspent 
   > neurai-cli listunspent 6 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli listunspent 6 9999999 '[]' true '{ "minimumAmount": 0.005 }'
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999, [] , true, { "minimumAmount": 0.005 } ] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999, [] , true, { "minimumAmount": 0.005 } ] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listunspent: "listunspent",
   /** listwallets
@@ -4069,7 +4069,7 @@ var methods = {
   
   Examples:
   > neurai-cli listwallets 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listwallets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listwallets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   listwallets: "listwallets",
   /** lockunspent unlock ([{"txid":"txid","vout":n},...])
@@ -4111,7 +4111,7 @@ var methods = {
   > neurai-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "lockunspent", "params": [false, "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "lockunspent", "params": [false, "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   lockunspent: "lockunspent",
   /** move "fromaccount" "toaccount" amount ( minconf "comment" )
@@ -4137,7 +4137,7 @@ var methods = {
   > neurai-cli move "timotei" "akiko" 0.01 6 "happy birthday!"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "move", "params": ["timotei", "akiko", 0.01, 6, "happy birthday!"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "move", "params": ["timotei", "akiko", 0.01, 6, "happy birthday!"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   move: "move",
   /** ping
@@ -4148,7 +4148,7 @@ var methods = {
   
   Examples:
   > neurai-cli ping 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "ping", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "ping", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   ping: "ping",
   /** pprpcsb "header_hash" "mix_hash" "nonce"
@@ -4164,7 +4164,7 @@ var methods = {
   
   Examples:
   > neurai-cli pprpcsb "header_hash" "mix_hash" 100000
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pprpcsb", "params": ["header_hash" "mix_hash" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pprpcsb", "params": ["header_hash" "mix_hash" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   pprpcsb: "pprpcsb",
   /** preciousblock "blockhash"
@@ -4182,7 +4182,7 @@ var methods = {
   
   Examples:
   > neurai-cli preciousblock "blockhash"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "preciousblock", "params": ["blockhash"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "preciousblock", "params": ["blockhash"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   preciousblock: "preciousblock",
   /** prioritisetransaction <txid> <dummy value> <fee delta>
@@ -4201,7 +4201,7 @@ var methods = {
   
   Examples:
   > neurai-cli prioritisetransaction "txid" 0.0 10000
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "prioritisetransaction", "params": ["txid", 0.0, 10000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "prioritisetransaction", "params": ["txid", 0.0, 10000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   prioritisetransaction: "prioritisetransaction",
   /** pruneblockchain
@@ -4215,7 +4215,7 @@ var methods = {
   
   Examples:
   > neurai-cli pruneblockchain 1000
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pruneblockchain", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pruneblockchain", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   pruneblockchain: "pruneblockchain",
   /** purgesnapshot "asset_name" block_height
@@ -4237,7 +4237,7 @@ var methods = {
   
   Examples:
   > neurai-cli purgesnapshot "ASSET_NAME" 28546
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "purgesnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "purgesnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   purgesnapshot: "purgesnapshot",
   /** reissue "asset_name" qty "to_address" "change_address" ( reissuable ) ( new_units) "( new_ipfs )" 
@@ -4262,7 +4262,7 @@ var methods = {
   
   Examples:
   > neurai-cli reissue "ASSET_NAME" 20 "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "reissue", "params": ["ASSET_NAME" 20 "address" "change_address" "true" 8 "Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "reissue", "params": ["ASSET_NAME" 20 "address" "change_address" "true" 8 "Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   reissue: "reissue",
   /** reissuerestrictedasset "asset_name" qty to_address ( change_verifier ) ( "new_verifier" ) "( change_address )" ( new_units ) ( reissuable ) "( new_ipfs )"
@@ -4306,7 +4306,7 @@ var methods = {
   > neurai-cli removeprunedfunds "a8d0c0184dde994a09ec054286f1ce581bebf46446a512166eae7628734ea0a5"
   
   As a JSON-RPC call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removeprunedfunds", "params": ["a8d0c0184dde994a09ec054286f1ce581bebf46446a512166eae7628734ea0a5"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removeprunedfunds", "params": ["a8d0c0184dde994a09ec054286f1ce581bebf46446a512166eae7628734ea0a5"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   removeprunedfunds: "removeprunedfunds",
   /** removetagfromaddress tag_name to_address (change_address) (asset_data)
@@ -4327,9 +4327,9 @@ var methods = {
   
   Examples:
   > neurai-cli removetagfromaddress "#TAG" "to_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli removetagfromaddress "#TAG" "to_address" "change_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   removetagfromaddress: "removetagfromaddress",
   /** requestsnapshot "asset_name" block_height
@@ -4347,7 +4347,7 @@ var methods = {
   
   Examples:
   > neurai-cli requestsnapshot "TRONCO" 12345
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "requestsnapshot", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "requestsnapshot", "params": ["PHATSTACKS" 34987] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   requestsnapshot: "requestsnapshot",
   /** rescanblockchain ("start_height") ("stop_height")
@@ -4366,7 +4366,7 @@ var methods = {
   
   Examples:
   > neurai-cli rescanblockchain 100000 120000
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "rescanblockchain", "params": [100000, 120000] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "rescanblockchain", "params": [100000, 120000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   rescanblockchain: "rescanblockchain",
   /** savemempool
@@ -4375,7 +4375,7 @@ var methods = {
   
   Examples:
   > neurai-cli savemempool 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "savemempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "savemempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   savemempool: "savemempool",
   /** selfrevokedepin "asset_name"
@@ -4409,7 +4409,7 @@ var methods = {
   
   Examples:
   > neurai-cli selfrevokedepin "&FRANCE"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "selfrevokedepin", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "selfrevokedepin", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   selfrevokedepin: "selfrevokedepin",
   /** sendfrom "fromaccount" "toaddress" amount ( minconf "comment" "comment_to" )
@@ -4442,7 +4442,7 @@ var methods = {
   > neurai-cli sendfrom "tabby" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.01 6 "donation" "seans outpost"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfrom", "params": ["tabby", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.01, 6, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfrom", "params": ["tabby", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.01, 6, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendfrom: "sendfrom",
   /** sendfromaddress "from_address" "to_address" amount ( "comment" "comment_to" subtractfeefromamount replaceable conf_target "estimate_mode")
@@ -4473,7 +4473,7 @@ var methods = {
   > neurai-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1
   > neurai-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "donation" "seans outpost"
   > neurai-cli sendfromaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "" "" true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfromaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfromaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendfromaddress: "sendfromaddress",
   /** sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] replaceable conf_target "estimate_mode")
@@ -4519,7 +4519,7 @@ var methods = {
   > neurai-cli sendmany "" "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}" 1 "" "[\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\",\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\"]"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendmany", "params": ["", "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}", 6, "testing"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendmany", "params": ["", "{\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\":0.01,\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\":0.02}", 6, "testing"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendmany: "sendmany",
   /** sendmessage "channel_name" "ipfs_hash" (expire_time)
@@ -4566,7 +4566,7 @@ var methods = {
   > neurai-cli sendrawtransaction "signedhex"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendrawtransaction", "params": ["signedhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendrawtransaction", "params": ["signedhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendrawtransaction: "sendrawtransaction",
   /** sendtoaddress "address" amount ( "comment" "comment_to" subtractfeefromamount replaceable conf_target "estimate_mode")
@@ -4596,7 +4596,7 @@ var methods = {
   > neurai-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1
   > neurai-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "donation" "seans outpost"
   > neurai-cli sendtoaddress "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" 0.1 "" "" true
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendtoaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendtoaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendtoaddress: "sendtoaddress",
   /** setaccount "address" "account"
@@ -4609,7 +4609,7 @@ var methods = {
   
   Examples:
   > neurai-cli setaccount "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "tabby"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setaccount", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   setaccount: "setaccount",
   /** setban "subnet" "add|remove" (bantime) (absolute)
@@ -4625,7 +4625,7 @@ var methods = {
   Examples:
   > neurai-cli setban "192.168.0.6" "add" 86400
   > neurai-cli setban "192.168.0.0/24" "add"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setban", "params": ["192.168.0.6", "add", 86400] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setban", "params": ["192.168.0.6", "add", 86400] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   setban: "setban",
   /** setgenerate generate ( genproclimit )
@@ -4650,7 +4650,7 @@ var methods = {
   > neurai-cli setgenerate false
   
   Using json rpc
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setgenerate", "params": [true, 1] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "setgenerate", "params": [true, 1] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   setgenerate: "setgenerate",
   /** setnetworkactive true|false
@@ -4673,7 +4673,7 @@ var methods = {
   
   Examples:
   > neurai-cli settxfee 0.00001
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "settxfee", "params": [0.00001] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "settxfee", "params": [0.00001] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   settxfee: "settxfee",
   /** signmessage "address" "message"
@@ -4699,7 +4699,7 @@ var methods = {
   > neurai-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
   
   As json rpc
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   signmessage: "signmessage",
   /** signmessagewithprivkey "privkey" "message"
@@ -4722,7 +4722,7 @@ var methods = {
   > neurai-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
   
   As json rpc
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessagewithprivkey", "params": ["privkey", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signmessagewithprivkey", "params": ["privkey", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   signmessagewithprivkey: "signmessagewithprivkey",
   /** signrawtransaction "hexstring" ( [{"txid":"id","vout":n,"scriptPubKey":"hex","redeemScript":"hex"},...] ["privatekey1",...] sighashtype )
@@ -4778,7 +4778,7 @@ var methods = {
   
   Examples:
   > neurai-cli signrawtransaction "myhex"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signrawtransaction", "params": ["myhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "signrawtransaction", "params": ["myhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   signrawtransaction: "signrawtransaction",
   /** stop
@@ -4799,7 +4799,7 @@ var methods = {
   
   Examples:
   > neurai-cli submitblock "mydata"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "submitblock", "params": ["mydata"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "submitblock", "params": ["mydata"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   submitblock: "submitblock",
   /** subscribetochannel 
@@ -4818,7 +4818,7 @@ var methods = {
   
   Examples:
   > neurai-cli subscribetochannel "ASSET_NAME!"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "subscribetochannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "subscribetochannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   subscribetochannel: "subscribetochannel",
   /** testmempoolaccept ["rawtxs"] ( allowhighfees )
@@ -4855,7 +4855,7 @@ var methods = {
   > neurai-cli testmempoolaccept "signedhex"
   
   As a json rpc call
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "testmempoolaccept", "params": [["signedhex"]] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "testmempoolaccept", "params": [["signedhex"]] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   testmempoolaccept: "testmempoolaccept",
   /** transfer "asset_name" qty "to_address" "message" expire_time "change_address" "asset_change_address"
@@ -4906,7 +4906,7 @@ var methods = {
   
   Examples:
   > neurai-cli transferfromaddress "ASSET_NAME" "fromaddress" 20 "address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E", 156545652
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddress", "params": ["ASSET_NAME" "fromaddress" 20 "address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E", 156545652] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddress", "params": ["ASSET_NAME" "fromaddress" 20 "address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E", 156545652] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   transferfromaddress: "transferfromaddress",
   /** transferfromaddresses "asset_name" ["from_addresses"] qty "to_address" "message" expire_time "xna_change_address" "asset_change_address"
@@ -4932,7 +4932,7 @@ var methods = {
   
   Examples:
   > neurai-cli transferfromaddresses "ASSET_NAME" '["fromaddress1", "fromaddress2"]' 20 "to_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 154652365
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddresses", "params": ["ASSET_NAME" '["fromaddress1", "fromaddress2"]' 20 "to_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 154652365] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "transferfromaddresses", "params": ["ASSET_NAME" '["fromaddress1", "fromaddress2"]' 20 "to_address" "QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E" 154652365] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   transferfromaddresses: "transferfromaddresses",
   /** transferqualifier "qualifier_name" qty "to_address" ("change_address") ("message") (expire_time) 
@@ -4977,9 +4977,9 @@ var methods = {
   
   Examples:
   > neurai-cli unfreezeaddress "$RESTRICTED_ASSET" "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli unfreezeaddress "$RESTRICTED_ASSET" "address" "change_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezeaddress", "params": ["$RESTRICTED_ASSET" "address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   unfreezeaddress: "unfreezeaddress",
   /** unfreezedepin "asset_name" "address" ("change_address")
@@ -5003,7 +5003,7 @@ var methods = {
   
   Examples:
   > neurai-cli unfreezedepin "&FRANCE" "address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezedepin", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezedepin", "params": ["&FRANCE" "address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   unfreezedepin: "unfreezedepin",
   /** unfreezerestrictedasset asset_name (change_address) (asset_data)
@@ -5023,9 +5023,9 @@ var methods = {
   
   Examples:
   > neurai-cli unfreezerestrictedasset "$RESTRICTED_ASSET"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   > neurai-cli unfreezerestrictedasset "$RESTRICTED_ASSET" "change_address"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unfreezerestrictedasset", "params": ["$RESTRICTED_ASSET" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   unfreezerestrictedasset: "unfreezerestrictedasset",
   /** unsubscribefromchannel 
@@ -5044,7 +5044,7 @@ var methods = {
   
   Examples:
   > neurai-cli unsubscribefromchannel "ASSET_NAME!"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unsubscribefromchannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "unsubscribefromchannel", "params": ["ASSET_NAME!"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   unsubscribefromchannel: "unsubscribefromchannel",
   /** uptime
@@ -5056,7 +5056,7 @@ var methods = {
   
   Examples:
   > neurai-cli uptime 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "uptime", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "uptime", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   uptime: "uptime",
   /** validateaddress "address"
@@ -5092,7 +5092,7 @@ var methods = {
   
   Examples:
   > neurai-cli validateaddress "1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "validateaddress", "params": ["1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "validateaddress", "params": ["1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   validateaddress: "validateaddress",
   /** verifychain ( checklevel nblocks )
@@ -5108,7 +5108,7 @@ var methods = {
   
   Examples:
   > neurai-cli verifychain 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifychain", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifychain", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   verifychain: "verifychain",
   /** verifymessage "address" "signature" "message"
@@ -5135,7 +5135,7 @@ var methods = {
   > neurai-cli verifymessage "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" "signature" "my message"
   
   As json rpc
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "signature", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": ["1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX", "signature", "my message"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   verifymessage: "verifymessage",
   /** verifytxoutproof "proof"
@@ -5164,7 +5164,7 @@ var methods = {
   
   Examples:
   > neurai-cli viewallmessagechannels 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessagechannels", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessagechannels", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   viewallmessagechannels: "viewallmessagechannels",
   /** viewallmessages 
@@ -5185,7 +5185,7 @@ var methods = {
   
   Examples:
   > neurai-cli viewallmessages 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   viewallmessages: "viewallmessages",
   /** viewmyrestrictedaddresses 
@@ -5205,7 +5205,7 @@ var methods = {
   
   Examples:
   > neurai-cli viewmyrestrictedaddresses 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmyrestrictedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmyrestrictedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   viewmyrestrictedaddresses: "viewmyrestrictedaddresses",
   /** viewmytaggedaddresses 
@@ -5225,7 +5225,7 @@ var methods = {
   
   Examples:
   > neurai-cli viewmytaggedaddresses 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmytaggedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8766/
+  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmytaggedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   viewmytaggedaddresses: "viewmytaggedaddresses"
 };

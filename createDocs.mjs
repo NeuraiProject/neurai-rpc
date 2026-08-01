@@ -1,6 +1,18 @@
 import fs from "fs";
 
-const docs = JSON.parse(fs.readFileSync("./docs.json"));
+// The node's help output still carries Ravencoin's ports in its examples
+// (HelpExampleRpc hardcodes 8766 in src/rpc/server.cpp; addnode examples use
+// the 8767 P2P port). Normalize to Neurai's ports (RPC 19001, P2P 19000) so a
+// docs.json re-synced from `neurai-cli help` never reintroduces them.
+const raw = fs
+  .readFileSync("./docs.json", "utf8")
+  .replace(/127\.0\.0\.1:8766/g, "127.0.0.1:19001")
+  .replace(/:8767/g, ":19000");
+if (raw !== fs.readFileSync("./docs.json", "utf8")) {
+  console.warn("WARN: legacy Ravencoin ports found in docs.json — normalized in output; fix docs.json too");
+}
+
+const docs = JSON.parse(raw);
 
 const keys = Object.keys(docs).sort();
 
