@@ -2,9 +2,8 @@ import { methods } from "./docs";
 
 export { methods };
 
-// The DePIN client is Node.js-only (raw TCP against the gateway) and lives in
-// its own entry so this root module stays free of Node built-ins and safe to
-// bundle for the browser. Import it from "@neuraiproject/neurai-rpc/depin".
+// DePIN protocol 2 uses this same authenticated HTTP JSON-RPC transport. The
+// former raw-TCP gateway and its dedicated port were removed from the node.
 
 function throwSyntaxError() {
   throw new Error("Syntax error, call getRPC with (username, password, URL)");

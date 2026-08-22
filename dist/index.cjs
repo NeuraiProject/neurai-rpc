@@ -722,35 +722,36 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodescript", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   decodescript: "decodescript",
-  /** depinclearmsg ( "all" | hours ) ( "scope" )
+  /** depinchallenge "token" "address" timestamp "signature" ( "type" )
   
-  Remove messages from DePIN messaging pool
+  Issues a single-use challenge for authenticated DePIN RPCs. The request must be signed over:
+  "DEPIN-REQ|<type>|<token>|<address>|<timestamp>", where timestamp is Unix time in milliseconds and type is "receive" (default) or "admin".
   
-  Arguments:
-  1. mode    (string or numeric, optional) Cleanup mode:
-             - omitted: Remove only expired messages (default)
-             - "all": Remove ALL messages from pool
-             - <hours>: Remove messages older than specified hours (numeric)
-  2. scope   (string, optional) Section token. When given, only messages of that
-             section's subtree are removed; parents and siblings are untouched.
-             Omitted or "" keeps the historical pool-wide behavior.
+  The encrypted result contains challenge, expires_in and type. Decrypt it with depindecrypt, then sign the challenge with depinsignchallenge or signmessage.
+  
+  Examples:
+  > neurai-cli depinchallenge "&TOKEN/SECTION" "NXholder..." 1730000000000 "<signature>"
+  **/
+  depinchallenge: "depinchallenge",
+  /** depinclearmsg "scope" "address" "challenge" "signature" ( "all" | hours )
+  
+  Removes messages from a DePIN pool. This owner-level operation requires an admin challenge issued for the exact scope. Use an empty scope for the pool root. Omit mode to remove expired messages, use "all" to remove every message in scope, or pass an age in hours.
   
   Result:
   {
-    "removed": n,        (numeric) Number of messages removed
-    "remaining": n       (numeric) Number of messages remaining
+    "removed": n,
+    "remaining": n
   }
-  
-  Examples:
-  > neurai-cli depinclearmsg 
-  > neurai-cli depinclearmsg "all"
-  > neurai-cli depinclearmsg 7
-  > neurai-cli depinclearmsg "all" "&TOKEN/GENERAL"
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": ["all"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinclearmsg", "params": [7] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinclearmsg: "depinclearmsg",
+  /** depindecrypt "address" "encrypted"
+  
+  Decrypts an encrypted DePIN reply with a wallet key. Verify the reply's poolsig before using this method; depindecrypt does not verify it.
+  
+  Result:
+  The decrypted JSON value, or a string when the plaintext is not JSON.
+  **/
+  depindecrypt: "depindecrypt",
   /** depingetancestorrecipients "token" ( max_results ) ( "stop_at" )
   
   List the active holders of a DEPIN branch: the deduplicated union of the
@@ -809,155 +810,19 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetancestorrecipients", "params": ["&TEST/APPLE/GOLDEN", 50, "&TEST/APPLE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depingetancestorrecipients: "depingetancestorrecipients",
-  /** depingetmsg "token" ("ip[:port]"|"fromaddress") ("fromaddress")
+  /** depingetmsg "token" ( "fromaddress" )
   
-  Retrieve and decrypt DePIN messages for your addresses
-  
-  Arguments:
-  1. "token"        (string, required) Token name
-  2. "ip[:port]" OR "fromaddress" (string, optional)
-                      - IP address with optional port (e.g., "192.168.1.31" or "192.168.1.31:19002")
-                      - OR Neurai address for local query with specific address
-                      - Omit for local query with all addresses
-  3. "fromaddress"  (string, optional) Specific address to decrypt with (only if arg 2 is an IP)
-  
-  Result:
-  [
-    {
-      "recipient": "address",      (string) Recipient address (your address)
-      "sender": "address",         (string) Sender address
-      "message": "text",           (string) Decrypted message
-      "timestamp": n,              (numeric) Unix timestamp
-      "date": "YYYY-MM-DD HH:MM:SS", (string) Formatted date
-      "expires": "YYYY-MM-DD HH:MM:SS" (string) Expiration date
-    },
-    ...
-  ]
-  
-  Examples:
-  > neurai-cli depingetmsg "MYTOKEN"
-  > neurai-cli depingetmsg "MYTOKEN" "NXyouraddress..."
-  > neurai-cli depingetmsg "MYTOKEN" "192.168.1.78"
-  > neurai-cli depingetmsg "MYTOKEN" "192.168.1.78:19002" "NXyouraddress..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetmsg", "params": ["MYTOKEN"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  Uses the local node wallet to decrypt messages from the local DePIN pool. The optional address must belong to the wallet and hold the requested token or a related branch token.
   **/
   depingetmsg: "depingetmsg",
   /** depingetmsginfo
   
-  Returns information about the DePIN messaging system
-  
-  Result:
-  {
-    "enabled": true|false,        (boolean) Whether DePIN messaging is enabled
-    "token": "name",              (string) Active token name
-    "port": n,                    (numeric) Listening port
-    "cipher": "name",            (string) Encryption cipher used by the pool
-    "maxrecipients": n,           (numeric) Maximum recipients per message
-    "maxmessagesize": n,          (numeric) Maximum message size in bytes
-    "messageexpiryhours": n,      (numeric) Message expiry time in hours
-    "maxpoolsizemb": n,           (numeric) Maximum pool size in MB
-    "messages": n,                (numeric) Number of messages in mempool
-    "memoryusage": n,             (numeric) Memory usage in bytes
-    "memoryusagemb": n,           (numeric) Memory usage in MB
-    "oldestmessage": "time",      (string) Timestamp of oldest message
-    "newestmessage": "time"       (string) Timestamp of newest message
-  }
-  
-  Examples:
-  > neurai-cli depingetmsginfo 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetmsginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  Returns DePIN protocol and pool configuration. Protocol 2 publishes depinpoolpkey in this response; clients should pin it on first use. Responses are signed with the pool key.
   **/
   depingetmsginfo: "depingetmsginfo",
-  /** depingetpoolcontent ( verbose sender_address recipient_address start_time end_time limit offset )
+  /** depinlistsections ( "address" "scope" "challenge" "signature" )
   
-  Inspect the contents of the DePIN message pool.
-  
-  Arguments:
-  1. verbose           (boolean, "all", or "raw", optional, default=false) Show detailed message structure. Use "all" for all messages, "raw" to show encrypted hex data
-  2. sender_address    (string, optional) Filter by sender address
-  3. recipient_address (string, optional) Filter by recipient address
-  4. start_time        (numeric, optional) Filter messages after timestamp
-  5. end_time          (numeric, optional) Filter messages before timestamp
-  6. limit             (numeric, optional, default=100) Maximum messages to return
-  7. offset            (numeric, optional, default=0) Skip first N messages
-  
-  Result (verbose=false):
-  [
-    {
-      "hash": "hex",
-      "sender": "address",
-      "message_type": "private|group",
-      "timestamp": n,
-      "date": "YYYY-MM-DD HH:MM:SS",
-      "expires": "YYYY-MM-DD HH:MM:SS",
-      "recipients": n,
-      "size": n
-    },
-    ...
-  ]
-  
-  Result (verbose=true):
-  [
-    {
-      "hash": "hex",
-      "sender": "address",
-      "message_type": "private|group",
-      "timestamp": n,
-      "date": "YYYY-MM-DD HH:MM:SS",
-      "expires": "YYYY-MM-DD HH:MM:SS",
-      "recipients": [
-        {
-          "address": "address",
-          "encrypted_size": n
-        },
-        ...
-      ],
-      "signature_size": n,
-      "total_encrypted_size": n,
-      "total_size": n
-    },
-    ...
-  ]
-  
-  Examples:
-  > neurai-cli depingetpoolcontent 
-  > neurai-cli depingetpoolcontent true
-  > neurai-cli depingetpoolcontent all
-  > neurai-cli depingetpoolcontent raw
-  > neurai-cli depingetpoolcontent false "NXXaddress..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetpoolcontent", "params": [true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-  **/
-  depingetpoolcontent: "depingetpoolcontent",
-  /** depinlistsections ( "address" )
-  
-  List the sections (sub-assets) of the pool's active token, for UI tabs.
-  The list is served from a per-tip snapshot; section names are public on
-  chain, so no address is needed to see them. Message counters, however,
-  are only exposed for sections the given address has access to -- counts
-  of an unreadable section would leak metadata. For the same reason the
-  address mode is only served over node RPC: the DePIN port is
-  unauthenticated and answers the bare form (names only) there.
-  
-  Arguments:
-  1. "address"   (string, optional) Report this address's access per section
-  
-  Result:
-  [
-    {
-      "name": "&TOKEN/GENERAL",   (string) Full section token
-      "label": "GENERAL",         (string) Name relative to the pool root ("" = root)
-      "depth": n,                 (numeric) Levels below the pool root (0 = root)
-      "access": true|false,       (boolean, only with address) Active inherited access
-      "messages": n               (numeric, only with address and access) Messages in
-                                   this section's subtree
-    },
-    ...
-  ]
-  
-  Examples:
-  > neurai-cli depinlistsections 
-  > neurai-cli depinlistsections "NXyouraddress..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinlistsections", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  With no arguments, lists public section names. Address mode requires all four arguments, authenticates with a receive challenge for scope, limits results to that subtree, and returns encrypted personal access and message counters.
   **/
   depinlistsections: "depinlistsections",
   /** depinmcpstatus
@@ -990,23 +855,14 @@ var methods = {
   depinmcpstatus: "depinmcpstatus",
   /** depinpoolpkey
   
-  Returns the public key of the DePIN pool address from the internal wallet.
-  This command only works if the wallet is loaded and unlocked at node startup.
-  
-  Derived path:
-    Mainnet:  m/44'/0'/200'/0/0
-    Testnet:  m/44'/0'/200'/1/0
+  Wallet-only operator helper that derives the dedicated DePIN pool public key from the loaded service wallet.
   
   Result:
   {
-    "pubkey": "hex",           (string) Public key in hex format
-    "address": "address",      (string) Corresponding Neurai address
-    "path": "derivation_path"  (string) BIP44 derivation path used
+    "pubkey": "hex",
+    "address": "address",
+    "path": "derivation_path"
   }
-  
-  Examples:
-  > neurai-cli depinpoolpkey 
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolpkey", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinpoolpkey: "depinpoolpkey",
   /** depinpoolstats
@@ -1039,109 +895,42 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolstats", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   depinpoolstats: "depinpoolstats",
-  /** depinreceivemsg "token" "address" (timestamp) ("after_hash") (limit)
+  /** depinreceivemsg "token" "address" "challenge" "signature" ( timestamp "after_hash" limit )
   
-  Retrieve DePIN messages from the pool with optional pagination
-  
-  This endpoint returns the messages. If the server has a DePIN pool key
-  and the requester's address has a revealed public key, the response will be
-  fully encrypted using the privacy layer.
-  
-  Arguments:
-  1. "token"      (string, required) Token name
-  2. "address"    (string, required) Neurai address (used as access selector and encryption target)
-  3. timestamp    (numeric, optional) Unix time. Return only messages with timestamp >= (timestamp-1 if timestamp>0)
-  4. "after_hash" (string, optional) Hash of last received message for pagination. Empty "" starts from beginning
-  5. limit        (numeric, optional) Maximum messages to return. 0 or omitted = no limit (return all)
-  
-  Result (without pagination - backward compatible):
-  [
-    {
-      "hash": "...",                 (string) Message hash
-      "token": "...",                (string) Token
-      "sender": "...",               (string) Sender address
-      "timestamp": n,                 (numeric) Unix timestamp
-      "message_type": "private|group", (string) Message type (private=1-to-1, group=broadcast)
-      "encrypted_payload_hex": "...", (string) Encrypted payload (hex)
-      "signature_hex": "..."         (string) Message signature (hex)
-    },
-    ...
-  ]
-  
-  Result (with pagination - when limit > 0):
-  {
-    "messages": [...],               (array) Array of message objects (same structure as above)
-    "has_more": true|false           (boolean) Whether more messages are available
-  }
-  
-  Note: Both message types are filtered by recipientKeys membership; the sender always sees their own messages.
-  
-  Result (privacy layer active):
-  {
-    "encrypted": "hex_blob"        (string) Full JSON response encrypted with ECIES
-  }
-  
-  Examples:
-  > neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress"
-  > neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 1730000000
-  > neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 0 "" 5
-  > neurai-cli depinreceivemsg "TOKEN" "NeuraiAddress" 0 "abc123..." 5
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinreceivemsg", "params": ["TOKEN", "NeuraiAddress", 0, "", 5] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  Returns messages accessible to an address, encrypted for its revealed public key and signed by the pool key. Requires a receive challenge. Pagination uses timestamp, after_hash and limit. The decrypted reply includes next_challenge for subsequent calls.
   **/
   depinreceivemsg: "depinreceivemsg",
-  /** depinsendmsg "token" "ip[:port]" "message" "fromaddress" (port)
+  /** depinsendmsg "token" "message" "fromaddress"
   
-  Send an encrypted message through a remote DePIN gateway (challenge/response)
-  
-  Arguments:
-  1. "token"        (string, required) Token name
-  2. "ip[:port]"    (string, required) Target node address (optional :port to contact remote gateway)
-  3. "message"      (string, required) Message to send (max 1KB)
-  4. "fromaddress" (string, required) Wallet address used for signing/encryption
-  5. port           (numeric, optional) Destination message port (defaults to 19002). Only used when specified after fromaddress
-  
-  Result:
-  {
-    "result": "success",          (string) Status
-    "hash": "hash",                (string) Message hash
-    "recipients": n,              (numeric) Number of recipients
-    "timestamp": n                (numeric) Message timestamp
-  }
-  
-  Examples:
-  > neurai-cli depinsendmsg "MYTOKEN" "192.168.1.100" "Hello team!" "NXsender..."
-  > neurai-cli depinsendmsg "MYTOKEN" "192.168.1.100:19005" "Hello team!" "NXsender..." 19005
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsendmsg", "params": ["MYTOKEN", "192.168.1.100", "Hello team!", "NXsender..."] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  Uses the local node wallet to sign and encrypt a message for eligible recipients, then adds it to the local DePIN pool. Remote host and port parameters were removed in protocol 2.
   **/
   depinsendmsg: "depinsendmsg",
-  /** depinsubmitmsg "hexmessage"|{"sender":"...","encrypted":"..."}
+  /** depinsignchallenge "address" "token" "challenge" ( "type" )
   
-  Submit a pre-encrypted and signed DePIN message to the pool
-  
-  This is the secure protocol where the client prepares the complete message
-  (encryption + signature) and the server only validates and stores it.
-  
-  This command also supports an optional privacy layer where the entire message
-  is wrapped in a second layer of encryption for the server's pool key.
-  
-  Arguments:
-  1. "hexmessage"     (string) Hex-encoded serialized CDepinMessage
-     OR
-     {                  (json object) Wrapped encrypted message
-       "sender": "...", (string, required) Sender address
-       "encrypted": "..." (string, required) Hex-encoded ECIES wrapper
-     }
+  Wallet helper that signs "DEPIN-GET|<token>|<address>|<challenge>" for receive access or "DEPIN-CLEAR|..." for admin access.
   
   Result:
   {
-    "result": "success",           (string) Status
-    "hash": "hash",                (string) Message hash
-    "timestamp": n                  (numeric) Unix timestamp
+    "signature": "base64",
+    "preimage": "text"
   }
+  **/
+  depinsignchallenge: "depinsignchallenge",
+  /** depinsignrequest "address" "token" ( "type" )
   
-  Examples:
-  > neurai-cli depinsubmitmsg "0a3f2e..."
-  > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinsubmitmsg", "params": [{"sender":"NX...","encrypted":"..."}] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+  Wallet helper that signs a depinchallenge request over the current Unix time in milliseconds.
+  
+  Result:
+  {
+    "timestamp": n,
+    "signature": "base64",
+    "preimage": "DEPIN-REQ|..."
+  }
+  **/
+  depinsignrequest: "depinsignrequest",
+  /** depinsubmitmsg {"sender":"...","encrypted":"..."}
+  
+  Submits a client-prepared, signed DePIN message wrapped in an ECIES envelope for the pool key published by depingetmsginfo. Bare serialized hex is no longer accepted.
   **/
   depinsubmitmsg: "depinsubmitmsg",
   /** disconnectnode "[address]" [nodeid]
@@ -2243,6 +2032,27 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getgenerate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   getgenerate: "getgenerate",
+  /** getibdstatus
+  
+  Returns header synchronization timing collected since process start.
+  
+  Result:
+  {
+    "blocks": n,
+    "headers": n,
+    "header_batches": n,
+    "headers_in_batches": n,
+    "unsolicited_header_responses": n,
+    "average_request_to_response_us": n,
+    "average_validation_us": n,
+    "peers": [...]
+  }
+  
+  Examples:
+  > neurai-cli getibdstatus
+  > curl --user myusername --data-binary '{"jsonrpc":"2.0","id":1,"method":"getibdstatus","params":[]}' -H 'content-type: application/json' http://127.0.0.1:19001/
+  **/
+  getibdstatus: "getibdstatus",
   /** getinfo
   
   DEPRECATED. Returns an object containing various state info.

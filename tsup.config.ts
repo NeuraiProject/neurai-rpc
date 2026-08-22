@@ -1,12 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  // Two independent entries: the root stays free of Node built-ins (browser
-  // safe), the DePIN client is Node.js-only (raw TCP via node:net).
-  entry: {
-    index: "index.ts",
-    depin: "depin.ts",
-  },
+  entry: { index: "index.ts" },
   format: ["esm", "cjs"],
   dts: true,
   outDir: "dist",

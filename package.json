@@ -1,6 +1,6 @@
 {
   "name": "@neuraiproject/neurai-rpc",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Helps you access your Neurai full node using RPC from JavaScript",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -16,22 +16,11 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
-    },
-    "./depin": {
-      "import": {
-        "types": "./dist/depin.d.ts",
-        "default": "./dist/depin.mjs"
-      },
-      "require": {
-        "types": "./dist/depin.d.cts",
-        "default": "./dist/depin.cjs"
-      }
     }
   },
   "files": [
     "dist/",
     "index.ts",
-    "depin.ts",
     "docs.ts",
     "docs.json",
     "neurai_methods.md",

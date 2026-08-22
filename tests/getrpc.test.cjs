@@ -83,16 +83,22 @@ describe("getRPC", () => {
     expect(() => getRPC("user", "pass", "")).toThrow(/Syntax error/);
   });
 
-  test("methods catalog includes the 0.5.0 additions", () => {
+  test("methods catalog matches the DePIN protocol 2 additions and removals", () => {
     for (const m of [
+      "depinchallenge",
+      "depindecrypt",
       "depinreceivemsg",
       "depingetancestorrecipients",
       "depinlistsections",
       "depinpoolpkey",
+      "depinsignchallenge",
+      "depinsignrequest",
       "dumpextkeypq",
       "exportxpqpub",
+      "getibdstatus",
     ]) {
       expect(methods[m]).toBe(m);
     }
+    expect(methods.depingetpoolcontent).toBeUndefined();
   });
 });

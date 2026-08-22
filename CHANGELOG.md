@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-08-22
+
+### Breaking — Neurai DePIN protocol 2
+
+- Removed the raw-TCP `@neuraiproject/neurai-rpc/depin` entry and
+  `getDePinRPC`. DePIN now uses the standard authenticated HTTP JSON-RPC
+  endpoint through `getRPC`.
+- Removed the retired `depingetpoolcontent` method.
+- Updated the parameter contracts for `depinsendmsg`, `depingetmsg`,
+  `depinsubmitmsg`, `depinreceivemsg`, `depinlistsections`, and
+  `depinclearmsg`.
+
+### Added
+
+- `depinchallenge`
+- `depinsignrequest`
+- `depinsignchallenge`
+- `depindecrypt`
+- `getibdstatus`
+
+### Documentation
+
+- Replaced the dual-transport DePIN documentation and examples with the
+  protocol 2 single-RPC-port challenge flow.
+
+> Entries below describe the behavior of older releases and are retained as
+> history; their TCP gateway configuration does not apply to 0.6.0 or later.
+
 ## [0.5.0] - 2026-08-01
 
 ### Breaking — DePIN client rewritten for the gateway's real protocol
