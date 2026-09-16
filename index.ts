@@ -1,6 +1,35 @@
+import { parse, stringify, isSafeNumber, LosslessNumber } from 'lossless-json';
 import { methods } from "./docs";
 
 export { methods };
+
+/** Exact decimal parameter, emitted as a JSON number rather than a quoted string. */
+export function rpcNumber(value: string): LosslessNumber {
+  return new LosslessNumber(value);
+}
+
+/** Preserve unsafe JSON numeric tokens as strings; retain safe number compatibility. */
+export function parseRpcJson(text: string): any {
+  return parse(text, undefined, (token: string) => {
+    const value = Number(token);
+    return isSafeNumber(token) && Math.abs(value) <= Number.MAX_SAFE_INTEGER
+      && (Number.isInteger(value) || Math.abs(value) <= Number.MAX_SAFE_INTEGER / 1e8)
+      ? value : token;
+  });
+}
+
+export function stringifyRpcJson(value: unknown): string {
+  const result = stringify(value, (_key, item) => {
+    if (typeof item === 'number' && (!Number.isFinite(item) ||
+        (Number.isInteger(item) && !Number.isSafeInteger(item)) ||
+        (!Number.isInteger(item) && Math.abs(item) > Number.MAX_SAFE_INTEGER / 1e8))) {
+      throw new Error('Unsafe RPC numeric parameter: use bigint or rpcNumber(decimalText)');
+    }
+    return item;
+  });
+  if (result === undefined) throw new Error('RPC payload is not serializable');
+  return result;
+}
 
 // DePIN protocol 2 uses this same authenticated HTTP JSON-RPC transport. The
 // former raw-TCP gateway and its dedicated port were removed from the node.
@@ -41,7 +70,7 @@ export function getRPC(username: string, password: string, URL: string) {
             */
 
             if (response.ok) {
-              const obj = await response.json(); //Convert to JSON
+              const obj = parseRpcJson(await response.text()); //Convert to JSON
               // A JSON-RPC error can arrive with HTTP 200 — it must reject,
               // not resolve undefined.
               if (obj && obj.error) {
@@ -59,7 +88,7 @@ export function getRPC(username: string, password: string, URL: string) {
                 description: null,
               };
               try {
-                obj = await response.json();
+                obj = parseRpcJson(await response.text());
               } catch (e) {}
               const myError = {
                 statusText: response.statusText,
@@ -81,7 +110,7 @@ export function getRPC(username: string, password: string, URL: string) {
             });
           });
       } catch (e) {
-        rejectionFunc(e.response);
+        rejectionFunc(e);
       }
     });
     return promise;
@@ -121,7 +150,7 @@ async function postData(
     },
     redirect: "follow", // manual, *follow, error
     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
+    body: stringifyRpcJson(data), // body data type must match "Content-Type" header
   });
   return response;
 }

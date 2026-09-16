@@ -10,7 +10,7 @@ afterEach(() => {
 });
 
 function mockFetchOnce(response) {
-  global.fetch = jest.fn(async () => response);
+  global.fetch = jest.fn(async () => ({...response, text: async () => JSON.stringify(await response.json())}));
 }
 
 describe("getRPC", () => {

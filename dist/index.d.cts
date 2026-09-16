@@ -1,3 +1,5 @@
+import { LosslessNumber } from 'lossless-json';
+
 interface IMethods {
     abandontransaction: string;
     abortrescan: string;
@@ -199,6 +201,11 @@ interface IMethods {
 }
 declare const methods: IMethods;
 
+/** Exact decimal parameter, emitted as a JSON number rather than a quoted string. */
+declare function rpcNumber(value: string): LosslessNumber;
+/** Preserve unsafe JSON numeric tokens as strings; retain safe number compatibility. */
+declare function parseRpcJson(text: string): any;
+declare function stringifyRpcJson(value: unknown): string;
 declare function getRPC(username: string, password: string, URL: string): (method: string, params: any[]) => Promise<unknown>;
 
-export { getRPC, methods };
+export { getRPC, methods, parseRpcJson, rpcNumber, stringifyRpcJson };

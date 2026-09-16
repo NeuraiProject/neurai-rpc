@@ -113,3 +113,17 @@ Generated command documentation is in
 
 - [GitHub repository](https://github.com/neuraiproject/neurai-rpc)
 - [NPM package](https://www.npmjs.com/package/@neuraiproject/neurai-rpc)
+
+### Exact numeric values
+
+RPC responses are parsed from their original JSON text. Safe numbers retain
+`number` compatibility; numeric tokens that would lose digits (large raw
+integers or high-precision decimals) are returned as strings. Normalize monetary
+fields to bigint/decimal text in your application, never with parseFloat.
+
+For request parameters use bigint for exact integer JSON tokens, or
+`rpcNumber('100000000.00000001')` for an exact decimal JSON token. Ordinary
+strings remain quoted strings: use the representation required by the RPC
+method. Unsafe integer numbers, NaN and Infinity are rejected. No global
+BigInt.prototype mutation is performed. `parseRpcJson` and `stringifyRpcJson`
+are exported for callers implementing their own transport.

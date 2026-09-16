@@ -44,9 +44,11 @@ describeRpc("node RPC integration", () => {
     expect(decoded.version).toBe(3);
   });
 
-  testPq("exportxpqpub returns a hex blob", async () => {
-    const hex = await rpc(methods.exportxpqpub, [2]);
-    expect(typeof hex).toBe("string");
-    expect(hex).toMatch(/^[0-9a-fA-F]+$/);
+  testPq("exportxpqpub returns the public blob with batch metadata", async () => {
+    // The node returns an object; its help text labels only the hex field.
+    const result = await rpc(methods.exportxpqpub, [2]);
+    expect(result).toMatchObject({ chain: 0, offset: 0, count: 2 });
+    expect(result.hex).toMatch(/^[0-9a-fA-F]+$/);
+    expect(result.merkle_root).toMatch(/^[0-9a-fA-F]{64}$/);
   });
 });

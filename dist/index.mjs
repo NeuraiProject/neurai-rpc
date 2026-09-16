@@ -1,3 +1,6 @@
+// index.ts
+import { parse, stringify, isSafeNumber, LosslessNumber } from "lossless-json";
+
 // docs.ts
 var methods = {
   /** abandontransaction "txid"
@@ -5015,6 +5018,25 @@ var methods = {
 };
 
 // index.ts
+function rpcNumber(value) {
+  return new LosslessNumber(value);
+}
+function parseRpcJson(text) {
+  return parse(text, void 0, (token) => {
+    const value = Number(token);
+    return isSafeNumber(token) && Math.abs(value) <= Number.MAX_SAFE_INTEGER && (Number.isInteger(value) || Math.abs(value) <= Number.MAX_SAFE_INTEGER / 1e8) ? value : token;
+  });
+}
+function stringifyRpcJson(value) {
+  const result = stringify(value, (_key, item) => {
+    if (typeof item === "number" && (!Number.isFinite(item) || Number.isInteger(item) && !Number.isSafeInteger(item) || !Number.isInteger(item) && Math.abs(item) > Number.MAX_SAFE_INTEGER / 1e8)) {
+      throw new Error("Unsafe RPC numeric parameter: use bigint or rpcNumber(decimalText)");
+    }
+    return item;
+  });
+  if (result === void 0) throw new Error("RPC payload is not serializable");
+  return result;
+}
 function throwSyntaxError() {
   throw new Error("Syntax error, call getRPC with (username, password, URL)");
 }
@@ -5040,7 +5062,7 @@ function getRPC(username, password, URL) {
         const rpcResponse = postData(URL, data, username, password);
         rpcResponse.then(async (response) => {
           if (response.ok) {
-            const obj = await response.json();
+            const obj = parseRpcJson(await response.text());
             if (obj && obj.error) {
               rejectionFunc({
                 error: obj.error,
@@ -5055,7 +5077,7 @@ function getRPC(username, password, URL) {
               description: null
             };
             try {
-              obj = await response.json();
+              obj = parseRpcJson(await response.text());
             } catch (e) {
             }
             const myError = {
@@ -5075,7 +5097,7 @@ function getRPC(username, password, URL) {
           });
         });
       } catch (e) {
-        rejectionFunc(e.response);
+        rejectionFunc(e);
       }
     });
     return promise;
@@ -5104,12 +5126,15 @@ async function postData(url = "", data = {}, username, password) {
     // manual, *follow, error
     referrerPolicy: "no-referrer",
     // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data)
+    body: stringifyRpcJson(data)
     // body data type must match "Content-Type" header
   });
   return response;
 }
 export {
   getRPC,
-  methods
+  methods,
+  parseRpcJson,
+  rpcNumber,
+  stringifyRpcJson
 };

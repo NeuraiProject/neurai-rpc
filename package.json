@@ -1,6 +1,6 @@
 {
   "name": "@neuraiproject/neurai-rpc",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Helps you access your Neurai full node using RPC from JavaScript",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -52,5 +52,8 @@
   },
   "overrides": {
     "esbuild": "^0.28.1"
+  },
+  "dependencies": {
+    "lossless-json": "^4.3.0"
   }
 }
