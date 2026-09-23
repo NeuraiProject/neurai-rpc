@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2026-09-22
+
+### Documentation — neurai-key 5 address types
+
+Documentation only; the runtime client (`rpc(method, params)`) is unchanged.
+`docs.json` entries refreshed from the node's `help` output and `docs.ts` /
+`neurai_methods.md` regenerated with `npm run create-docs`:
+
+- `getnewaddress ( "account" "address_type" )`: new `address_type` argument,
+  `"legacy"` (Base58), `"pq"` (strict post-quantum, witness v2,
+  `pq1…`/`tpq1…`) or `"ecdsa"` (strict ECDSA, witness v3,
+  `nq1r…`/`tnq1r…`). Without it the wallet's default family is used.
+- `getrawchangeaddress ( "address_type" )`: same optional argument.
+- `listpqaddresses`: returns generic AuthScript v1 addresses with a PQ key
+  (`nc1p…`/`tnc1p…`), no longer `nq1…`.
+- `validateaddress`: documents the fields returned for AuthScript witness
+  addresses (`isauthscript`, `witness_version`, `family`, `commitment`) and
+  uses a Neurai example address instead of a Bitcoin one.
+
 ## [0.6.0] - 2026-08-22
 
 ### Breaking — Neurai DePIN protocol 2

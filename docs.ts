@@ -3038,7 +3038,7 @@ getnetworkinfo:'getnetworkinfo',
 
 
 
-/** getnewaddress ( "account" )
+/** getnewaddress ( "account" "address_type" )
 
 Returns a new Neurai address for receiving payments.
 If 'account' is specified (DEPRECATED), it is added to the address book 
@@ -3046,13 +3046,15 @@ so payments received with the address will be credited to 'account'.
 
 Arguments:
 1. "account"        (string, optional) DEPRECATED. The account name for the address to be linked to. If not provided, the default account "" is used. It can also be set to the empty string "" to represent the default account. The account does not need to exist, it will be created if there is no account by the given name.
+2. "address_type"   (string, optional) The address family: "legacy" (Base58, secp256k1), "pq" (strict post-quantum, witness v2, pq1.../tpq1...) or "ecdsa" (strict ECDSA, witness v3, nq1r.../tnq1r...). If omitted, the wallet's default family is used (legacy for classic wallets, generic AuthScript v1 for PQ wallets).
 
 Result:
 "address"    (string) The new neurai address
 
 Examples:
 > neurai-cli getnewaddress 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli getnewaddress "" "ecdsa"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": ["", "pq"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getnewaddress:'getnewaddress',
 
@@ -3143,10 +3145,13 @@ getpubkey:'getpubkey',
 
 
 
-/** getrawchangeaddress
+/** getrawchangeaddress ( "address_type" )
 
 Returns a new Neurai address, for receiving change.
 This is for use with raw transactions, NOT normal use.
+
+Arguments:
+1. "address_type"   (string, optional) "legacy", "pq" (strict witness v2) or "ecdsa" (strict witness v3). Default: the wallet's default family.
 
 Result:
 "address"    (string) The address
@@ -4456,7 +4461,7 @@ Returns the list of post-quantum (ML-DSA-44) Bech32m addresses in the wallet.
 
 Result:
 [                        (json array of strings)
-  "address"             (string) A post-quantum Bech32m address (nq1...)
+  "address"             (string) A generic AuthScript v1 address with a PQ key (nc1p.../tnc1p...)
   ...
 ]
 
@@ -6009,6 +6014,10 @@ Result:
   "ismine" : true|false,        (boolean) If the address is yours or not
   "iswatchonly" : true|false,   (boolean) If the address is watchonly
   "isscript" : true|false,      (boolean) If the key is a script
+  "isauthscript" : true,        (boolean, optional) Only for AuthScript witness addresses (witness v1, v2 or v3)
+  "witness_version" : n,        (numeric, optional) AuthScript witness version: 1 (generic AuthScript, nc1p.../tnc1p...), 2 (strict post-quantum, pq1z.../tpq1z...) or 3 (strict ECDSA, nq1r.../tnq1r...)
+  "family" : "family",          (string, optional) AuthScript family: "authscript" (v1; the commitment does not reveal the authentication type), "pq" (v2) or "ecdsa" (v3)
+  "commitment" : "hex",         (string, optional) Strict addresses (v2/v3) only: the 32-byte AuthScript commitment as a uint256 hex string (byte-reversed with respect to the scriptPubKey)
   "script" : "type"             (string, optional) The output script type. Possible types: nonstandard, pubkey, pubkeyhash, scripthash, multisig, nulldata, witness_v0_keyhash, witness_v0_scripthash
   "hex" : "hex",                (string, optional) The redeemscript for the p2sh address
   "addresses"                   (string, optional) Array of addresses associated with the known redeemscript
@@ -6026,8 +6035,8 @@ Result:
 }
 
 Examples:
-> neurai-cli validateaddress "1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "validateaddress", "params": ["1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli validateaddress "NLhdtwjgrcEkRqjJZkRY4sjhkJ93EytLeE"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "validateaddress", "params": ["NLhdtwjgrcEkRqjJZkRY4sjhkJ93EytLeE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 validateaddress:'validateaddress',
 
