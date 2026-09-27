@@ -19,6 +19,9 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // index.ts
 var index_exports = {};
 __export(index_exports, {
+  MAINNET_GENESIS_HASH: () => MAINNET_GENESIS_HASH,
+  TESTNET_GENESIS_HASH: () => TESTNET_GENESIS_HASH,
+  assertRpcGenesis: () => assertRpcGenesis,
   getRPC: () => getRPC,
   methods: () => methods,
   parseRpcJson: () => parseRpcJson,
@@ -5054,6 +5057,14 @@ var methods = {
 };
 
 // index.ts
+var MAINNET_GENESIS_HASH = "00000044d33c0c0ba019be5c0249730424a69cb4c222153322f68c6104484806";
+var TESTNET_GENESIS_HASH = "0000008b384aeffecdab182575dc4e86c9f07f90318c65088532660ed9a8a021";
+async function assertRpcGenesis(rpc, expectedGenesisHash) {
+  const actual = await rpc("getblockhash", [0]);
+  if (typeof actual !== "string" || actual.toLowerCase() !== expectedGenesisHash.toLowerCase()) {
+    throw new Error(`Unexpected genesis block: expected ${expectedGenesisHash}, received ${String(actual)}`);
+  }
+}
 function rpcNumber(value) {
   return new import_lossless_json.LosslessNumber(value);
 }
@@ -5169,6 +5180,9 @@ async function postData(url = "", data = {}, username, password) {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  MAINNET_GENESIS_HASH,
+  TESTNET_GENESIS_HASH,
+  assertRpcGenesis,
   getRPC,
   methods,
   parseRpcJson,

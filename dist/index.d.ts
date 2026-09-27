@@ -201,6 +201,10 @@ interface IMethods {
 }
 declare const methods: IMethods;
 
+declare const MAINNET_GENESIS_HASH = "00000044d33c0c0ba019be5c0249730424a69cb4c222153322f68c6104484806";
+declare const TESTNET_GENESIS_HASH = "0000008b384aeffecdab182575dc4e86c9f07f90318c65088532660ed9a8a021";
+/** Reject an RPC endpoint that serves a different chain with the same network label. */
+declare function assertRpcGenesis(rpc: (method: string, params: any[]) => Promise<unknown>, expectedGenesisHash: string): Promise<void>;
 /** Exact decimal parameter, emitted as a JSON number rather than a quoted string. */
 declare function rpcNumber(value: string): LosslessNumber;
 /** Preserve unsafe JSON numeric tokens as strings; retain safe number compatibility. */
@@ -208,4 +212,4 @@ declare function parseRpcJson(text: string): any;
 declare function stringifyRpcJson(value: unknown): string;
 declare function getRPC(username: string, password: string, URL: string): (method: string, params: any[]) => Promise<unknown>;
 
-export { getRPC, methods, parseRpcJson, rpcNumber, stringifyRpcJson };
+export { MAINNET_GENESIS_HASH, TESTNET_GENESIS_HASH, assertRpcGenesis, getRPC, methods, parseRpcJson, rpcNumber, stringifyRpcJson };

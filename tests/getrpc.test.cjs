@@ -3,7 +3,7 @@
  * test suite never touches the network. The remote smoke test lives in
  * integration.test.cjs, gated by NEURAI_RPC_URL.
  */
-const { getRPC, methods } = require("../dist/index.cjs");
+const { getRPC, methods, assertRpcGenesis, TESTNET_GENESIS_HASH } = require("../dist/index.cjs");
 
 afterEach(() => {
   delete global.fetch;
@@ -100,5 +100,17 @@ describe("getRPC", () => {
       expect(methods[m]).toBe(m);
     }
     expect(methods.depingetpoolcontent).toBeUndefined();
+  });
+});
+
+
+describe("assertRpcGenesis", () => {
+  test("accepts the reset testnet genesis and rejects a previous chain", async () => {
+    const rpc = jest.fn(async () => TESTNET_GENESIS_HASH);
+    await expect(assertRpcGenesis(rpc, TESTNET_GENESIS_HASH)).resolves.toBeUndefined();
+    expect(rpc).toHaveBeenCalledWith("getblockhash", [0]);
+
+    rpc.mockResolvedValue("0000009697907b2aa409d4b1f10da0fa14f5a52a2e31faf3886c0444b3c85e84");
+    await expect(assertRpcGenesis(rpc, TESTNET_GENESIS_HASH)).rejects.toThrow(/Unexpected genesis block/);
   });
 });

@@ -127,3 +127,11 @@ strings remain quoted strings: use the representation required by the RPC
 method. Unsafe integer numbers, NaN and Infinity are rejected. No global
 BigInt.prototype mutation is performed. `parseRpcJson` and `stringifyRpcJson`
 are exported for callers implementing their own transport.
+
+## Verify the chain before using a testnet RPC
+
+`TESTNET_GENESIS_HASH` identifies the reset testnet. Call
+`await assertRpcGenesis(rpc, TESTNET_GENESIS_HASH)` after constructing an RPC
+client and before reading balances or building transactions. The port and
+`getblockchaininfo.chain` label alone do not distinguish the previous testnet.
+`MAINNET_GENESIS_HASH` is also exported for mainnet clients.

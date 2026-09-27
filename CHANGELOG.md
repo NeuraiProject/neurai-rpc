@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-09-27
+
+### Reset testnet
+
+- Export the new testnet and mainnet genesis hashes and `assertRpcGenesis` so
+  clients can reject an endpoint from the previous testnet before reading
+  balances or sending transactions.
+- Preserve JSON-RPC errors returned with HTTP 200 as rejections.
+- Verify genesis, asset marker and RPC error propagation against a node built
+  from Neurai-DePIN commit `0fe5a74943210508ec3be34c78e0f9192b7fefec`.
+
 ## [0.6.2] - 2026-09-22
 
 ### Documentation — neurai-key 5 address types

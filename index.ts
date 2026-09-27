@@ -3,6 +3,20 @@ import { methods } from "./docs";
 
 export { methods };
 
+export const MAINNET_GENESIS_HASH = "00000044d33c0c0ba019be5c0249730424a69cb4c222153322f68c6104484806";
+export const TESTNET_GENESIS_HASH = "0000008b384aeffecdab182575dc4e86c9f07f90318c65088532660ed9a8a021";
+
+/** Reject an RPC endpoint that serves a different chain with the same network label. */
+export async function assertRpcGenesis(
+  rpc: (method: string, params: any[]) => Promise<unknown>,
+  expectedGenesisHash: string,
+): Promise<void> {
+  const actual = await rpc("getblockhash", [0]);
+  if (typeof actual !== "string" || actual.toLowerCase() !== expectedGenesisHash.toLowerCase()) {
+    throw new Error(`Unexpected genesis block: expected ${expectedGenesisHash}, received ${String(actual)}`);
+  }
+}
+
 /** Exact decimal parameter, emitted as a JSON number rather than a quoted string. */
 export function rpcNumber(value: string): LosslessNumber {
   return new LosslessNumber(value);

@@ -8,11 +8,13 @@
  * dumpextkeypq is deliberately NOT exercised here: it returns the wallet's
  * master PQ secret and must never be printed or persisted by a test.
  */
-const { getRPC, methods } = require("../dist/index.cjs");
+const { getRPC, methods, assertRpcGenesis } = require("../dist/index.cjs");
 
 const RPC_URL = process.env.NEURAI_RPC_URL;
 const RPC_USER = process.env.NEURAI_RPC_USER || "anonymous";
 const RPC_PASS = process.env.NEURAI_RPC_PASS || "anonymous";
+const EXPECTED_GENESIS = process.env.NEURAI_EXPECTED_GENESIS;
+const EXPECTED_MARKER = process.env.NEURAI_EXPECTED_MARKER;
 
 const describeRpc = RPC_URL ? describe : describe.skip;
 const testPq = RPC_URL && process.env.NEURAI_TEST_PQ === "1" ? test : test.skip;
@@ -23,6 +25,19 @@ describeRpc("node RPC integration", () => {
   test("getblockcount returns a number", async () => {
     const count = await rpc(methods.getblockcount, []);
     expect(typeof count).toBe("number");
+  });
+
+  test("getblockhash(0) and asset_marker identify the expected chain", async () => {
+    if (EXPECTED_GENESIS) await assertRpcGenesis(rpc, EXPECTED_GENESIS);
+    const info = await rpc(methods.getblockchaininfo, []);
+    expect(typeof info.asset_marker).toBe("string");
+    if (EXPECTED_MARKER) expect(info.asset_marker).toBe(EXPECTED_MARKER);
+  });
+
+  test("a rejected RPC call preserves the node error", async () => {
+    await expect(rpc(methods.getblockhash, [-1])).rejects.toMatchObject({
+      error: { code: expect.any(Number), message: expect.any(String) },
+    });
   });
 
   test("getibdstatus returns chain and header heights", async () => {
