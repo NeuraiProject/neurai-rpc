@@ -34,9 +34,9 @@ interface IMethods {
     depinpoolpkey: string;
     depinpoolstats: string;
     depinreceivemsg: string;
+    depinreceiveseq: string;
     depinsendmsg: string;
-    depinsignchallenge: string;
-    depinsignrequest: string;
+    depinsignrpc: string;
     depinsubmitmsg: string;
     disconnectnode: string;
     distributereward: string;
@@ -201,6 +201,70 @@ interface IMethods {
 }
 declare const methods: IMethods;
 
+/** Transport types only. Build and verify signatures with neurai-depin-msg. */
+declare const DEPIN_RPC_PROTOCOL: 5;
+declare const DEPIN_REMOTE_METHODS: readonly ["depingetmsginfo", "depinpoolstats", "depinmcpstatus", "depinchallenge", "depinreceivemsg", "depinreceiveseq", "depinlistsections", "depinclearmsg", "depinsubmitmsg", "depingetancestorrecipients"];
+type DepinRemoteMethod = (typeof DEPIN_REMOTE_METHODS)[number];
+interface DepinBootstrapRequest {
+    protocol: 5;
+    request_id: string;
+    timestamp_ms: number | bigint;
+}
+interface DepinSequenceCursor {
+    version: 1;
+    stream_id: string;
+    after_seq: number | bigint;
+    scope: string;
+    address: string;
+    from_timestamp: number | bigint;
+}
+interface DepinRpcRequest extends DepinBootstrapRequest {
+    network: string;
+    pool_pubkey: string;
+    pool_root: string;
+    instance_id: string;
+    membership_revision: string;
+    token: string;
+    address: string;
+    challenge: string;
+    args: Record<string, unknown>;
+    signature: string;
+}
+type DepinRpcParams = [DepinBootstrapRequest | DepinRpcRequest] | {
+    request: DepinBootstrapRequest | DepinRpcRequest;
+};
+interface DepinRpcResponse {
+    protocol: 5;
+    network: string;
+    pool_pubkey: string;
+    pool_root: string;
+    instance_id: string;
+    membership_revision: string;
+    membership_height: number;
+    membership_blockhash: string;
+    request_hash: string;
+    body_kind: 0 | 1;
+    body?: string;
+    encrypted?: string;
+    poolsig: string;
+}
+declare function isDepinRemoteMethod(method: string): method is DepinRemoteMethod;
+/** Keep every signed byte intact. The node performs canonical validation. */
+declare function getDepinRequest(params: unknown): DepinBootstrapRequest | DepinRpcRequest;
+type RpcNode = {
+    rpc: (method: string, params: any) => Promise<any>;
+};
+/** Route signed requests to their exact pool/instance, with no request rewriting.
+ * Discovery is advisory routing metadata; the client verifies the final reply.
+ * No private request is broadcast and no write is retried by this router.
+ */
+declare function createDepinNodeRouter<T extends RpcNode>(healthyNodes: () => T[], randomId: () => string): (method: string, params: unknown) => Promise<T>;
+
+/** Detect duplicate JSON property names, including equal values and escaped names.
+ * Syntax and numeric decoding are delegated to the JSON parser afterwards.
+ */
+declare function assertNoDuplicateJsonKeys(text: string): void;
+
 declare const MAINNET_GENESIS_HASH = "00000044d33c0c0ba019be5c0249730424a69cb4c222153322f68c6104484806";
 declare const TESTNET_GENESIS_HASH = "0000008b384aeffecdab182575dc4e86c9f07f90318c65088532660ed9a8a021";
 /** Reject an RPC endpoint that serves a different chain with the same network label. */
@@ -210,6 +274,6 @@ declare function rpcNumber(value: string): LosslessNumber;
 /** Preserve unsafe JSON numeric tokens as strings; retain safe number compatibility. */
 declare function parseRpcJson(text: string): any;
 declare function stringifyRpcJson(value: unknown): string;
-declare function getRPC(username: string, password: string, URL: string): (method: string, params: any[]) => Promise<unknown>;
+declare function getRPC(username: string, password: string, URL: string): (method: string, params: any[] | Record<string, unknown>) => Promise<unknown>;
 
-export { MAINNET_GENESIS_HASH, TESTNET_GENESIS_HASH, assertRpcGenesis, getRPC, methods, parseRpcJson, rpcNumber, stringifyRpcJson };
+export { DEPIN_REMOTE_METHODS, DEPIN_RPC_PROTOCOL, type DepinBootstrapRequest, type DepinRemoteMethod, type DepinRpcParams, type DepinRpcRequest, type DepinRpcResponse, type DepinSequenceCursor, MAINNET_GENESIS_HASH, TESTNET_GENESIS_HASH, assertNoDuplicateJsonKeys, assertRpcGenesis, createDepinNodeRouter, getDepinRequest, getRPC, isDepinRemoteMethod, methods, parseRpcJson, rpcNumber, stringifyRpcJson };

@@ -33,9 +33,9 @@ depinmcpstatus: string;
 depinpoolpkey: string;
 depinpoolstats: string;
 depinreceivemsg: string;
+depinreceiveseq: string;
 depinsendmsg: string;
-depinsignchallenge: string;
-depinsignrequest: string;
+depinsignrpc: string;
 depinsubmitmsg: string;
 disconnectnode: string;
 distributereward: string;
@@ -239,7 +239,7 @@ Import a private key
 > neurai-cli importprivkey "mykey"
 
 Abort the running wallet rescan
-> neurai-cli abortrescan 
+> neurai-cli abortrescan
 
 As a JSON-RPC call
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "abortrescan", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
@@ -502,7 +502,7 @@ checkglobalrestriction:'checkglobalrestriction',
 Clear all banned IPs.
 
 Examples:
-> neurai-cli clearbanned 
+> neurai-cli clearbanned
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 clearbanned:'clearbanned',
@@ -516,7 +516,7 @@ clearbanned:'clearbanned',
 Removes all transaction from the mempool
 
 Examples:
-> neurai-cli clearmempool 
+> neurai-cli clearmempool
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 clearmempool:'clearmempool',
@@ -525,7 +525,7 @@ clearmempool:'clearmempool',
 
 
 
-/** clearmessages 
+/** clearmessages
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
@@ -537,7 +537,7 @@ Result:[
 ]
 
 Examples:
-> neurai-cli clearmessages 
+> neurai-cli clearmessages
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 clearmessages:'clearmessages',
@@ -549,7 +549,7 @@ clearmessages:'clearmessages',
 /** combinerawtransaction ["hexstring",...]
 
 Combine multiple partially signed transactions into one transaction.
-The combined transaction may be another partially signed transaction or a 
+The combined transaction may be another partially signed transaction or a
 fully signed transaction.
 Arguments:
 1. "txs"         (string) A json array of hex strings of partially signed transactions
@@ -665,7 +665,7 @@ Arguments:
          "txid":"id",                      (string, required) The transaction id
          "vout":n,                         (number, required) The output number
          "sequence":n                      (number, optional) The sequence number
-       } 
+       }
        ,...
      ]
 2. "outputs"                               (object or array, required) outputs in object or ordered-array form
@@ -709,10 +709,10 @@ Arguments:
          {                                 (object) A json object describing new unique assets to issue
            "issue_unique":
              {
-               "root_name":"root-name",         (string, required) name of the asset the unique asset(s) 
+               "root_name":"root-name",         (string, required) name of the asset the unique asset(s)
                                                       are being issued under
                "asset_tags":["asset_tag", ...], (array, required) the unique tag for each asset which is to be issued
-               "ipfs_hashes":["hash", ...],     (array, optional) ipfs hashes corresponding to each supplied tag 
+               "ipfs_hashes":["hash", ...],     (array, optional) ipfs hashes corresponding to each supplied tag
                                                       (should be same size as "asset_tags")
              }
          }
@@ -723,9 +723,9 @@ Arguments:
                "asset_name":"asset-name", (string, required) name of asset to be reissued
                "asset_quantity":n,          (number, required) the number of raw units to issue
                "reissuable":[0-1],          (number, optional) default is 1, 1=reissuable asset
-               "ipfs_hash":"hash",        (string, optional) An ipfs hash for discovering asset metadata, 
+               "ipfs_hash":"hash",        (string, optional) An ipfs hash for discovering asset metadata,
                                                 Overrides the current ipfs hash if given
-               "owner_change_address"       (string, optional) the address where the owner token will be sent to. 
+               "owner_change_address"       (string, optional) the address where the owner token will be sent to.
                                                 If not given, it will be sent to the output address
              }
          }
@@ -735,13 +735,13 @@ Arguments:
              {
                "asset_name":"asset-name",(string, required) new asset name
                "asset_quantity":n,         (number, required) the number of raw units to issue
-               "verifier_string":"text", (string, required) the verifier string to be used for a restricted 
+               "verifier_string":"text", (string, required) the verifier string to be used for a restricted
                                                asset transfer verification
                "units":[0-8],              (number, required) display units, between 0 (integral) and 8 (max precision)
                "reissuable":[0-1],         (number, required) 1=reissuable asset
                "has_ipfs":[0-1],           (number, required) 1=passing ipfs_hash
                "ipfs_hash":"hash",       (string, optional) an ipfs hash for discovering asset metadata
-               "owner_change_address"      (string, optional) the address where the owner token will be sent to. 
+               "owner_change_address"      (string, optional) the address where the owner token will be sent to.
                                                If not given, it will be sent to the output address
              }
          }
@@ -752,11 +752,11 @@ Arguments:
                "asset_name":"asset-name", (string, required) name of asset to be reissued
                "asset_quantity":n,          (number, required) the number of raw units to issue
                "reissuable":[0-1],          (number, optional) default is 1, 1=reissuable asset
-               "verifier_string":"text",  (string, optional) the verifier string to be used for a restricted asset 
+               "verifier_string":"text",  (string, optional) the verifier string to be used for a restricted asset
                                                 transfer verification
-               "ipfs_hash":"hash",        (string, optional) An ipfs hash for discovering asset metadata, 
+               "ipfs_hash":"hash",        (string, optional) An ipfs hash for discovering asset metadata,
                                                 Overrides the current ipfs hash if given
-               "owner_change_address"       (string, optional) the address where the owner token will be sent to. 
+               "owner_change_address"       (string, optional) the address where the owner token will be sent to.
                                                 If not given, it will be sent to the output address
              }
          }
@@ -766,9 +766,9 @@ Arguments:
              {
                "asset_name":"asset_name", (string, required) a qualifier name (starts with '#')
                "asset_quantity":n,          (numeric, optional, default=1) the number of units to be issued (1 to 10)
-               "has_ipfs":[0-1],            (boolean, optional, default=false), whether ifps hash is going 
+               "has_ipfs":[0-1],            (boolean, optional, default=false), whether ifps hash is going
                                                 to be added to the asset
-               "ipfs_hash":"hash",        (string, optional but required if has_ipfs = 1), an ipfs hash or a 
+               "ipfs_hash":"hash",        (string, optional but required if has_ipfs = 1), an ipfs hash or a
                                                 txid hash once RIP5 is activated
                "root_change_address"        (string, optional) Only applies when issuing subqualifiers.
                                                 The address where the root qualifier will be sent.
@@ -1008,290 +1008,128 @@ Examples:
 **/
 decodescript:'decodescript',
 
-
-
-
-
-/** depinchallenge "token" "address" timestamp "signature" ( "type" )
-
-Issues a single-use challenge for authenticated DePIN RPCs. The request must be signed over:
-"DEPIN-REQ|<type>|<token>|<address>|<timestamp>", where timestamp is Unix time in milliseconds and type is "receive" (default) or "admin".
-
-The encrypted result contains challenge, expires_in and type. Decrypt it with depindecrypt, then sign the challenge with depinsignchallenge or signmessage.
-
-Examples:
-> neurai-cli depinchallenge "&TOKEN/SECTION" "NXholder..." 1730000000000 "<signature>"
-**/
+/**
+ * depinchallenge request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depinchallenge:'depinchallenge',
 
-
-
-
-
-/** depinclearmsg "scope" "address" "challenge" "signature" ( "all" | hours )
-
-Removes messages from a DePIN pool. This owner-level operation requires an admin challenge issued for the exact scope. Use an empty scope for the pool root. Omit mode to remove expired messages, use "all" to remove every message in scope, or pass an age in hours.
-
-Result:
-{
-  "removed": n,
-  "remaining": n
-}
-**/
+/**
+ * depinclearmsg request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depinclearmsg:'depinclearmsg',
 
-
-
-
-
-/** depindecrypt "address" "encrypted"
-
-Decrypts an encrypted DePIN reply with a wallet key. Verify the reply's poolsig before using this method; depindecrypt does not verify it.
-
-Result:
-The decrypted JSON value, or a string when the plaintext is not JSON.
-**/
+/**
+ * depindecrypt "address" "encrypted"
+ *
+ * Decrypts an encrypted DePIN reply with a wallet key. Verify the reply's poolsig before using this method; depindecrypt does not verify it.
+ *
+ * Result:
+ * The decrypted JSON value, or a string when the plaintext is not JSON.
+ */
 depindecrypt:'depindecrypt',
 
-
-
-
-
-/** depingetancestorrecipients "token" ( max_results ) ( "stop_at" )
-
-List the active holders of a DEPIN branch: the deduplicated union of the
-holders of the given token and of every one of its '/'-separated ancestors,
-each with the public key it has revealed on chain.
-
-Active means: positive balance, public key revealed, and not blocked by an
-owner freeze or by self-revocation. Restriction is per (asset, address), so an
-address that is active in at least one ancestor is returned even if it revoked
-itself in another -- holding the root already grants visibility over the branch.
-
-The query is exact: '&TEST' returns holders of '&TEST' only, never of
-'&TEST/APPLE', '&TESTING' or '&TEST.FOO'. Every derived ancestor must exist; a
-missing intermediate level is an error rather than something skipped.
-
-This command is informational. It does not know about -depinmsgmaxusers, does
-not decide whether a message fits in a pool, and a truncated result must not be
-treated as a complete recipient set.
-
-Requires -assetindex and -pubkeyindex.
-
-Arguments:
-1. "token"        (string, required) DEPIN token, e.g. "&TEST/APPLE/GOLDEN"
-2. max_results   (numeric, optional, default=1000) Maximum recipients to return
-                 (1..10000)
-3. "stop_at"      (string, optional) Stop deriving ancestors at this token,
-                 inclusive. Must be the token itself or one of its ancestors.
-                 Omitted: derive up to the absolute root.
-
-Result:
-{
-  "token": "name",                    (string) Token queried
-  "stop_at": "name",                  (string) Where derivation stopped ("" = root)
-  "ancestors": ["name", ...],         (array) Token first, then each ancestor
-  "recipients": [                     (array) Active holders, ordered by address
-    {
-      "address": "address",           (string) Holder address
-      "pubkey": "hex"                 (string) Public key revealed on chain
-    }, ...
-  ],
-  "returned": n,                      (numeric) Number of recipients returned
-  "max_results": n,                   (numeric) Limit applied
-  "truncated": true|false,            (boolean) True if more eligible recipients exist
-  "skipped_no_pubkey": n,             (numeric) Addresses dropped for lacking a usable
-                                       revealed public key
-  "skipped_no_pubkey_complete": bool, (boolean) False when truncated: the count then
-                                       covers only the addresses examined
-  "skipped_restricted": n,            (numeric) Addresses dropped as frozen or
-                                       self-revoked in every ancestor they hold
-  "skipped_restricted_complete": bool (boolean) Same rule as above
-}
-
-Examples:
-> neurai-cli depingetancestorrecipients "&TEST/APPLE/GOLDEN"
-> neurai-cli depingetancestorrecipients "&TEST/APPLE/GOLDEN" 50 "&TEST/APPLE"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depingetancestorrecipients", "params": ["&TEST/APPLE/GOLDEN", 50, "&TEST/APPLE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-**/
+/**
+ * depingetancestorrecipients request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depingetancestorrecipients:'depingetancestorrecipients',
 
-
-
-
-
-/** depingetmsg "token" ( "fromaddress" )
-
-Uses the local node wallet to decrypt messages from the local DePIN pool. The optional address must belong to the wallet and hold the requested token or a related branch token.
-**/
+/**
+ * depingetmsg "token" ( "fromaddress" )
+ *
+ * Uses the local node wallet to decrypt messages from the local DePIN pool. The optional address must belong to the wallet and hold the requested token or a related branch token.
+ */
 depingetmsg:'depingetmsg',
 
-
-
-
-
-/** depingetmsginfo
-
-Returns DePIN protocol and pool configuration. Protocol 2 publishes depinpoolpkey in this response; clients should pin it on first use. Responses are signed with the pool key.
-**/
+/**
+ * depingetmsginfo request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Bootstrap fields: protocol=5, request_id (32 random bytes in lowercase hex), timestamp_ms (integer milliseconds). Verify the response with the local request hash, expected genesis and pinned pool key before using its context.
+ */
 depingetmsginfo:'depingetmsginfo',
 
-
-
-
-
-/** depinlistsections ( "address" "scope" "challenge" "signature" )
-
-With no arguments, lists public section names. Address mode requires all four arguments, authenticates with a receive challenge for scope, limits results to that subtree, and returns encrypted personal access and message counters.
-**/
+/**
+ * depinlistsections request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depinlistsections:'depinlistsections',
 
-
-
-
-
-/** depinmcpstatus
-
-Get status information about the DePIN MCP (AI) worker
-
-Result:
-{
-  "enabled": true|false,         (boolean) Whether MCP worker is enabled
-  "running": true|false,         (boolean) Whether MCP worker is running
-  "mcp_url": "url",              (string) MCP server URL
-  "model_name": "name",          (string) Name of the loaded AI model
-  "command_key": "key",          (string) Command prefix (e.g. /ai)
-  "depin_token": "token",        (string) DePIN token being monitored
-  "poll_interval": n,            (numeric) Polling interval in seconds
-  "commands_processed": n,       (numeric) Total commands processed
-  "total_errors": n,             (numeric) Total errors encountered
-  "rate_limited": n,             (numeric) Commands rejected by rate limiting
-  "concurrency": n,              (numeric) Number of parallel task threads
-  "tasks_in_flight": n,          (numeric) AI requests currently being processed
-  "processed_cache": n,          (numeric) Size of the processed-message dedup cache
-  "context_sessions": n,         (numeric) Active conversation contexts
-  "last_poll_time": n            (numeric) Unix timestamp of last poll
-}
-
-Examples:
-> neurai-cli depinmcpstatus 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinmcpstatus", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-**/
+/**
+ * depinmcpstatus request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depinmcpstatus:'depinmcpstatus',
 
-
-
-
-
-/** depinpoolpkey
-
-Wallet-only operator helper that derives the dedicated DePIN pool public key from the loaded service wallet.
-
-Result:
-{
-  "pubkey": "hex",
-  "address": "address",
-  "path": "derivation_path"
-}
-**/
+/**
+ * depinpoolpkey
+ *
+ * Wallet-only operator helper that derives the dedicated DePIN pool public key from the loaded service wallet.
+ *
+ * Result:
+ * {
+ *   "pubkey": "hex",
+ *   "address": "address",
+ *   "path": "derivation_path"
+ * }
+ */
 depinpoolpkey:'depinpoolpkey',
 
-
-
-
-
-/** depinpoolstats
-
-Get statistical analysis of the DePIN message pool.
-
-Result:
-{
-  "enabled": true|false,
-  "token": "string",
-  "total_messages": n,
-  "total_size_bytes": n,
-  "memory_usage_bytes": n,
-  "oldest_message": "YYYY-MM-DD HH:MM:SS",
-  "newest_message": "YYYY-MM-DD HH:MM:SS",
-  "messages_by_age": {
-    "last_hour": n,
-    "last_day": n,
-    "last_week": n
-  },
-  "unique_senders": n,
-  "unique_recipients": n,
-  "avg_recipients_per_message": n.nn,
-  "avg_message_size": n,
-  "expiring_in_24h": n
-}
-
-Examples:
-> neurai-cli depinpoolstats 
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "depinpoolstats", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-**/
+/**
+ * depinpoolstats request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depinpoolstats:'depinpoolstats',
 
-
-
-
-
-/** depinreceivemsg "token" "address" "challenge" "signature" ( timestamp "after_hash" limit )
-
-Returns messages accessible to an address, encrypted for its revealed public key and signed by the pool key. Requires a receive challenge. Pagination uses timestamp, after_hash and limit. The decrypted reply includes next_challenge for subsequent calls.
-**/
+/**
+ * depinreceivemsg request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depinreceivemsg:'depinreceivemsg',
 
+/**
+ * depinreceiveseq request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
+depinreceiveseq:'depinreceiveseq',
 
-
-
-
-/** depinsendmsg "token" "message" "fromaddress"
-
-Uses the local node wallet to sign and encrypt a message for eligible recipients, then adds it to the local DePIN pool. Remote host and port parameters were removed in protocol 2.
-**/
+/**
+ * depinsendmsg "token" "message" "fromaddress"
+ *
+ * Uses the local node wallet to sign and encrypt a message for eligible recipients, then adds it to the local DePIN pool. Remote host and port parameters were removed in protocol 2.
+ */
 depinsendmsg:'depinsendmsg',
 
+/**
+ * depinsignrpc "method" request
+ * Local unlocked-wallet helper: sign a complete RPC 5 request. Returns request, preimage and request_hash. Never expose this wallet helper through a public HTTP/WSS proxy.
+ */
+depinsignrpc:'depinsignrpc',
 
-
-
-
-/** depinsignchallenge "address" "token" "challenge" ( "type" )
-
-Wallet helper that signs "DEPIN-GET|<token>|<address>|<challenge>" for receive access or "DEPIN-CLEAR|..." for admin access.
-
-Result:
-{
-  "signature": "base64",
-  "preimage": "text"
-}
-**/
-depinsignchallenge:'depinsignchallenge',
-
-
-
-
-
-/** depinsignrequest "address" "token" ( "type" )
-
-Wallet helper that signs a depinchallenge request over the current Unix time in milliseconds.
-
-Result:
-{
-  "timestamp": n,
-  "signature": "base64",
-  "preimage": "DEPIN-REQ|..."
-}
-**/
-depinsignrequest:'depinsignrequest',
-
-
-
-
-
-/** depinsubmitmsg {"sender":"...","encrypted":"..."}
-
-Submits a client-prepared, signed DePIN message wrapped in an ECIES envelope for the pool key published by depingetmsginfo. Bare serialized hex is no longer accepted.
-**/
+/**
+ * depinsubmitmsg request
+ *
+ * DePIN RPC protocol 5. Exactly one request object, passed as [request] or {"request": request}. Legacy positional arguments and protocols 2/3/4 are rejected.
+ * Request fields: protocol, network (genesis), pool_pubkey, pool_root, instance_id, membership_revision, request_id, timestamp_ms, token, address, challenge, args, signature. Every private operation signs its method, target identity, revision and arguments. Public authentication fields are empty. Replies sign the exact request hash and served membership metadata. Verify before decoding/decrypting. See DEPIN_EXAMPLES.md for method-specific args and neurai-depin-msg integration.
+ */
 depinsubmitmsg:'depinsubmitmsg',
 
 
@@ -1373,7 +1211,7 @@ Result:
 "xpqpriv..."   (string) Base58Check-encoded master CExtKeyPQ
 
 Examples:
-> neurai-cli dumpextkeypq 
+> neurai-cli dumpextkeypq
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "dumpextkeypq", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 dumpextkeypq:'dumpextkeypq',
@@ -1429,7 +1267,7 @@ dumpwallet:'dumpwallet',
 /** encryptwallet "passphrase"
 
 Encrypts the wallet with 'passphrase'. This is for first time encryption.
-After this, any calls that interact with private keys such as sending or signing 
+After this, any calls that interact with private keys such as sending or signing
 will require the passphrase to be set prior the making these calls.
 Use the walletpassphrase call for this, and then walletlock call.
 If the wallet is already encrypted, use the walletpassphrasechange call.
@@ -1450,7 +1288,7 @@ Now we can do something like sign
 > neurai-cli signmessage "address" "test message"
 
 Now lock the wallet again by removing the passphrase
-> neurai-cli walletlock 
+> neurai-cli walletlock
 
 As a json rpc call
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "encryptwallet", "params": ["my pass phrase"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
@@ -1774,7 +1612,7 @@ Result:
 "address"          (string) The account neurai address
 
 Examples:
-> neurai-cli getaccountaddress 
+> neurai-cli getaccountaddress
 > neurai-cli getaccountaddress ""
 > neurai-cli getaccountaddress "myaccount"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccountaddress", "params": ["myaccount"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
@@ -2098,7 +1936,7 @@ amount              (numeric) The total amount in XNA received for this account.
 Examples:
 
 The total amount in the wallet with 1 or more confirmations
-> neurai-cli getbalance 
+> neurai-cli getbalance
 
 The total amount in the wallet at least 6 blocks confirmed
 > neurai-cli getbalance "*" 6
@@ -2120,7 +1958,7 @@ Result:
 "hex"      (string) the block hash hex encoded
 
 Examples:
-> neurai-cli getbestblockhash 
+> neurai-cli getbestblockhash
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbestblockhash", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getbestblockhash:'getbestblockhash',
@@ -2129,11 +1967,11 @@ getbestblockhash:'getbestblockhash',
 
 
 
-/** getblock "blockhash" ( verbosity ) 
+/** getblock "blockhash" ( verbosity )
 
 If verbosity is 0, returns a string that is serialized, hex-encoded data for block 'hash'.
 If verbosity is 1, returns an Object with information about block <hash>.
-If verbosity is 2, returns an Object with information about block <hash> and information about each transaction. 
+If verbosity is 2, returns an Object with information about block <hash> and information about each transaction.
 
 Arguments:
 1. "blockhash"          (string, required) The block hash
@@ -2221,11 +2059,11 @@ Result:
         "timeout": xx,         (numeric) the median time past of a block at which the deployment is considered failed if not yet locked in
         "since": xx,           (numeric) height of the first block to which the status applies
         "statistics": {        (object) numeric statistics about BIP9 signalling for a softfork (only for "started" status)
-           "period": xx,       (numeric) the length in blocks of the BIP9 signalling period 
-           "threshold": xx,    (numeric) the number of blocks with the version bit set required to activate the feature 
-           "elapsed": xx,      (numeric) the number of blocks elapsed since the beginning of the current period 
-           "count": xx,        (numeric) the number of blocks with the version bit set in the current period 
-           "possible": xx      (boolean) returns false if there are not enough blocks left in this period to pass activation threshold 
+           "period": xx,       (numeric) the length in blocks of the BIP9 signalling period
+           "threshold": xx,    (numeric) the number of blocks with the version bit set required to activate the feature
+           "elapsed": xx,      (numeric) the number of blocks elapsed since the beginning of the current period
+           "count": xx,        (numeric) the number of blocks with the version bit set in the current period
+           "possible": xx      (boolean) returns false if there are not enough blocks left in this period to pass activation threshold
         }
      }
   }
@@ -2233,7 +2071,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getblockchaininfo 
+> neurai-cli getblockchaininfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getblockchaininfo:'getblockchaininfo',
@@ -2250,7 +2088,7 @@ Result:
 n    (numeric) The current block count
 
 Examples:
-> neurai-cli getblockcount 
+> neurai-cli getblockcount
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockcount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getblockcount:'getblockcount',
@@ -2394,7 +2232,7 @@ Result:
          "data" : "xxxx",             (string) transaction data encoded in hexadecimal (byte-for-byte)
          "txid" : "xxxx",             (string) transaction id encoded in little-endian hexadecimal
          "hash" : "xxxx",             (string) hash encoded in little-endian hexadecimal (including witness data)
-         "depends" : [                (array) array of numbers 
+         "depends" : [                (array) array of numbers
              n                          (numeric) transactions before this one (by 1-based index in 'transactions' list) that must be present in the final block if this one is
              ,...
          ],
@@ -2412,7 +2250,7 @@ Result:
   "coinbasetxn" : { ... },          (json object) information for coinbase transaction
   "target" : "xxxx",                (string) The hash target
   "mintime" : xxx,                  (numeric) The minimum timestamp appropriate for next block time in seconds since epoch (Jan 1 1970 GMT)
-  "mutable" : [                     (array of string) list of ways the block template may be changed 
+  "mutable" : [                     (array of string) list of ways the block template may be changed
      "value"                          (string) A way the block template may be changed, e.g. 'time', 'transactions', 'prevblock'
      ,...
   ],
@@ -2426,7 +2264,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getblocktemplate 
+> neurai-cli getblocktemplate
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblocktemplate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getblocktemplate:'getblocktemplate',
@@ -2435,7 +2273,7 @@ getblocktemplate:'getblocktemplate',
 
 
 
-/** getcacheinfo 
+/** getcacheinfo
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
@@ -2455,7 +2293,7 @@ Result:
 
 Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getcacheinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> neurai-cli getcacheinfo 
+> neurai-cli getcacheinfo
 **/
 getcacheinfo:'getcacheinfo',
 
@@ -2489,7 +2327,7 @@ Possible values for status:
 5.  "active"                This is the tip of the active main chain, which is certainly valid
 
 Examples:
-> neurai-cli getchaintips 
+> neurai-cli getchaintips
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintips", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getchaintips:'getchaintips',
@@ -2517,7 +2355,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getchaintxstats 
+> neurai-cli getchaintxstats
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintxstats", "params": [2016] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getchaintxstats:'getchaintxstats',
@@ -2534,7 +2372,7 @@ Result:
 n          (numeric) The connection count
 
 Examples:
-> neurai-cli getconnectioncount 
+> neurai-cli getconnectioncount
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getconnectioncount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getconnectioncount:'getconnectioncount',
@@ -2551,7 +2389,7 @@ Result:
 n.nnn       (numeric) the proof-of-work difficulty as a multiple of the minimum difficulty.
 
 Examples:
-> neurai-cli getdifficulty 
+> neurai-cli getdifficulty
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdifficulty", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getdifficulty:'getdifficulty',
@@ -2593,7 +2431,7 @@ Result
 true|false      (boolean) If the server is set to generate coins or not
 
 Examples:
-> neurai-cli getgenerate 
+> neurai-cli getgenerate
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getgenerate", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getgenerate:'getgenerate',
@@ -2654,7 +2492,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getinfo 
+> neurai-cli getinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getinfo:'getinfo',
@@ -2702,7 +2540,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getmasterkeyinfo 
+> neurai-cli getmasterkeyinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmasterkeyinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getmasterkeyinfo:'getmasterkeyinfo',
@@ -2734,7 +2572,7 @@ Result (mode "mallocinfo"):
 "<malloc version="1">..."
 
 Examples:
-> neurai-cli getmemoryinfo 
+> neurai-cli getmemoryinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmemoryinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getmemoryinfo:'getmemoryinfo',
@@ -2883,7 +2721,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getmempoolinfo 
+> neurai-cli getmempoolinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmempoolinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getmempoolinfo:'getmempoolinfo',
@@ -2910,7 +2748,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getmininginfo 
+> neurai-cli getmininginfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmininginfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getmininginfo:'getmininginfo',
@@ -2929,7 +2767,7 @@ Result:
 "passphrase:"    (optional) Only show if passphrase was used when creating the wallet
 
 Examples:
-> neurai-cli getmywords 
+> neurai-cli getmywords
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getmywords", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getmywords:'getmywords',
@@ -2960,7 +2798,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getnettotals 
+> neurai-cli getnettotals
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnettotals", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getnettotals:'getnettotals',
@@ -2983,7 +2821,7 @@ Result:
 x             (numeric) Hashes per second estimated
 
 Examples:
-> neurai-cli getnetworkhashps 
+> neurai-cli getnetworkhashps
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkhashps", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getnetworkhashps:'getnetworkhashps',
@@ -3029,7 +2867,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getnetworkinfo 
+> neurai-cli getnetworkinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnetworkinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getnetworkinfo:'getnetworkinfo',
@@ -3041,7 +2879,7 @@ getnetworkinfo:'getnetworkinfo',
 /** getnewaddress ( "account" "address_type" )
 
 Returns a new Neurai address for receiving payments.
-If 'account' is specified (DEPRECATED), it is added to the address book 
+If 'account' is specified (DEPRECATED), it is added to the address book
 so payments received with the address will be credited to 'account'.
 
 Arguments:
@@ -3052,7 +2890,7 @@ Result:
 "address"    (string) The new neurai address
 
 Examples:
-> neurai-cli getnewaddress 
+> neurai-cli getnewaddress
 > neurai-cli getnewaddress "" "ecdsa"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": ["", "pq"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
@@ -3110,7 +2948,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli getpeerinfo 
+> neurai-cli getpeerinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpeerinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getpeerinfo:'getpeerinfo',
@@ -3157,7 +2995,7 @@ Result:
 "address"    (string) The address
 
 Examples:
-> neurai-cli getrawchangeaddress 
+> neurai-cli getrawchangeaddress
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawchangeaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getrawchangeaddress:'getrawchangeaddress',
@@ -3242,7 +3080,7 @@ Result (if verbose is set to true):
   "vin" : [               (array of json objects)
      {
        "txid": "id",    (string) The transaction id
-       "vout": n,         (numeric) 
+       "vout": n,         (numeric)
        "scriptSig": {     (json object) The script
          "asm": "asm",  (string) asm
          "hex": "hex"   (string) hex
@@ -3356,12 +3194,12 @@ Result:
  "active_commands" (array) All active commands
   [
    {               (object) Information about an active command
-    "method"       (string)  The name of the RPC command 
+    "method"       (string)  The name of the RPC command
     "duration"     (numeric)  The running time in microseconds
    },...
   ],
 }
-> neurai-cli getrpcinfo 
+> neurai-cli getrpcinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrpcinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getrpcinfo:'getrpcinfo',
@@ -3463,7 +3301,7 @@ Arguments:
 Result:
 {
   "amount" : x.xxx,        (numeric) The transaction amount in XNA
-  "fee": x.xxx,            (numeric) The amount of the fee in XNA. This is negative and only available for the 
+  "fee": x.xxx,            (numeric) The amount of the fee in XNA. This is negative and only available for the
                               'send' category of transactions.
   "confirmations" : n,     (numeric) The number of confirmations
   "blockhash" : "hash",  (string) The block hash
@@ -3482,9 +3320,9 @@ Result:
       "amount" : x.xxx,                 (numeric) The amount in XNA
       "label" : "label",              (string) A comment for the address/transaction, if any
       "vout" : n,                       (numeric) the vout value
-      "fee": x.xxx,                     (numeric) The amount of the fee in XNA. This is negative and only available for the 
+      "fee": x.xxx,                     (numeric) The amount of the fee in XNA. This is negative and only available for the
                                            'send' category of transactions.
-      "abandoned": xxx                  (bool) 'true' if the transaction has been abandoned (inputs are respendable). Only available for the 
+      "abandoned": xxx                  (bool) 'true' if the transaction has been abandoned (inputs are respendable). Only available for the
                                            'send' category of transactions.
     }
     ,...
@@ -3529,8 +3367,8 @@ Result:
   "confirmations" : n,       (numeric) The number of confirmations
   "value" : x.xxx,           (numeric) The transaction value in XNA
   "scriptPubKey" : {         (json object)
-     "asm" : "code",       (string) 
-     "hex" : "hex",        (string) 
+     "asm" : "code",       (string)
+     "hex" : "hex",        (string)
      "reqSigs" : n,          (numeric) Number of required signatures
      "type" : "pubkeyhash", (string) The type, eg pubkeyhash
      "addresses" : [          (array of string) array of neurai addresses
@@ -3544,7 +3382,7 @@ Result:
 Examples:
 
 Get unspent transactions
-> neurai-cli listunspent 
+> neurai-cli listunspent
 
 View the details
 > neurai-cli gettxout "txid" 1
@@ -3602,7 +3440,7 @@ Result:
 }
 
 Examples:
-> neurai-cli gettxoutsetinfo 
+> neurai-cli gettxoutsetinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettxoutsetinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 gettxoutsetinfo:'gettxoutsetinfo',
@@ -3664,7 +3502,7 @@ Result:
 }
 
 Examples:
-> neurai-cli getwalletinfo 
+> neurai-cli getwalletinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 getwalletinfo:'getwalletinfo',
@@ -4040,7 +3878,7 @@ Arguments
 1. newsize     (numeric, optional, default=100) The new keypool size
 
 Examples:
-> neurai-cli keypoolrefill 
+> neurai-cli keypoolrefill
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "keypoolrefill", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 keypoolrefill:'keypoolrefill',
@@ -4066,7 +3904,7 @@ Result:
 Examples:
 
 List account balances where there at least 1 confirmation
-> neurai-cli listaccounts 
+> neurai-cli listaccounts
 
 List account balances including zero confirmation transactions
 > neurai-cli listaccounts 0
@@ -4157,7 +3995,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli listaddressgroupings 
+> neurai-cli listaddressgroupings
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressgroupings", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 listaddressgroupings:'listaddressgroupings',
@@ -4272,7 +4110,7 @@ listassets:'listassets',
 List all banned IPs/Subnets.
 
 Examples:
-> neurai-cli listbanned 
+> neurai-cli listbanned
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listbanned", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 listbanned:'listbanned',
@@ -4359,7 +4197,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli listglobalrestrictions 
+> neurai-cli listglobalrestrictions
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listglobalrestrictions", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 listglobalrestrictions:'listglobalrestrictions',
@@ -4385,13 +4223,13 @@ Result:
 Examples:
 
 List the unspent transactions
-> neurai-cli listunspent 
+> neurai-cli listunspent
 
 Lock an unspent transaction
 > neurai-cli lockunspent false "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
 
 List the locked transactions
-> neurai-cli listlockunspent 
+> neurai-cli listlockunspent
 
 Unlock the transaction again
 > neurai-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
@@ -4405,7 +4243,7 @@ listlockunspent:'listlockunspent',
 
 
 
-/** listmyassets "( asset )" ( verbose ) ( count ) ( start ) (confs) 
+/** listmyassets "( asset )" ( verbose ) ( count ) ( start ) (confs)
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
@@ -4466,7 +4304,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli listpqaddresses 
+> neurai-cli listpqaddresses
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listpqaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 listpqaddresses:'listpqaddresses',
@@ -4497,7 +4335,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli listreceivedbyaccount 
+> neurai-cli listreceivedbyaccount
 > neurai-cli listreceivedbyaccount 6 true
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaccount", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
@@ -4526,7 +4364,7 @@ Result:
     "confirmations" : n,               (numeric) The number of confirmations of the most recent transaction included
     "label" : "label",               (string) A comment for the address/transaction, if any
     "txids": [
-       n,                                (numeric) The ids of transactions received with the address 
+       n,                                (numeric) The ids of transactions received with the address
        ...
     ]
   }
@@ -4534,7 +4372,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli listreceivedbyaddress 
+> neurai-cli listreceivedbyaddress
 > neurai-cli listreceivedbyaddress 6 true
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaddress", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
@@ -4563,7 +4401,7 @@ Result:
     "account":"accountname",       (string) DEPRECATED. The account name associated with the transaction. Will be "" for the default account.
     "address":"address",    (string) The neurai address of the transaction. Not present for move transactions (category = move).
     "category":"send|receive",     (string) The transaction category. 'send' has negative amounts, 'receive' has positive amounts.
-    "amount": x.xxx,          (numeric) The amount in XNA. This is negative for the 'send' category, and for the 'move' category for moves 
+    "amount": x.xxx,          (numeric) The amount in XNA. This is negative for the 'send' category, and for the 'move' category for moves
                                           outbound. It is positive for the 'receive' category, and for the 'move' category for inbound funds.
     "vout" : n,               (numeric) the vout value
     "fee": x.xxx,             (numeric) The amount of the fee in XNA. This is negative and only available for the 'send' category of transactions.
@@ -4590,7 +4428,7 @@ Result:
 }
 
 Examples:
-> neurai-cli listsinceblock 
+> neurai-cli listsinceblock
 > neurai-cli listsinceblock "000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad" 6
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsinceblock", "params": ["000000000000000bacf66f7497b7dc45ef753ee9a7d38571037cdb1a57f663ad", 6] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
@@ -4617,7 +4455,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli listsnapshotrequests 
+> neurai-cli listsnapshotrequests
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listsnapshotrequests", "params": ["TRONCO" 345333] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 listsnapshotrequests:'listsnapshotrequests',
@@ -4664,22 +4502,22 @@ Arguments:
 Result:
 [
   {
-    "account":"accountname",       (string) DEPRECATED. The account name associated with the transaction. 
+    "account":"accountname",       (string) DEPRECATED. The account name associated with the transaction.
                                                 It will be "" for the default account.
-    "address":"address",    (string) The neurai address of the transaction. Not present for 
+    "address":"address",    (string) The neurai address of the transaction. Not present for
                                                 move transactions (category = move).
     "category":"send|receive|move", (string) The transaction category. 'move' is a local (off blockchain)
                                                 transaction between accounts, and not associated with an address,
-                                                transaction id or block. 'send' and 'receive' transactions are 
+                                                transaction id or block. 'send' and 'receive' transactions are
                                                 associated with an address, transaction id and block details
     "amount": x.xxx,          (numeric) The amount in XNA. This is negative for the 'send' category, and for the
                                          'move' category for moves outbound. It is positive for the 'receive' category,
                                          and for the 'move' category for inbound funds.
     "label": "label",       (string) A comment for the address/transaction, if any
     "vout": n,                (numeric) the vout value
-    "fee": x.xxx,             (numeric) The amount of the fee in XNA. This is negative and only available for the 
+    "fee": x.xxx,             (numeric) The amount of the fee in XNA. This is negative and only available for the
                                          'send' category of transactions.
-    "confirmations": n,       (numeric) The number of confirmations for the transaction. Available for 'send' and 
+    "confirmations": n,       (numeric) The number of confirmations for the transaction. Available for 'send' and
                                          'receive' category of transactions. Negative confirmations indicate the
                                          transaction conflicts with the block chain
     "trusted": xxx,           (bool) Whether we consider the outputs of this unconfirmed transaction safe to spend.
@@ -4690,15 +4528,15 @@ Result:
     "blocktime": xxx,         (numeric) The block time in seconds since epoch (1 Jan 1970 GMT).
     "txid": "transactionid", (string) The transaction id. Available for 'send' and 'receive' category of transactions.
     "time": xxx,              (numeric) The transaction time in seconds since epoch (midnight Jan 1 1970 GMT).
-    "timereceived": xxx,      (numeric) The time received in seconds since epoch (midnight Jan 1 1970 GMT). Available 
+    "timereceived": xxx,      (numeric) The time received in seconds since epoch (midnight Jan 1 1970 GMT). Available
                                           for 'send' and 'receive' category of transactions.
     "comment": "...",       (string) If a comment is associated with the transaction.
-    "otheraccount": "accountname",  (string) DEPRECATED. For the 'move' category of transactions, the account the funds came 
+    "otheraccount": "accountname",  (string) DEPRECATED. For the 'move' category of transactions, the account the funds came
                                           from (for receiving funds, positive amounts), or went to (for sending funds,
                                           negative amounts).
     "bip125-replaceable": "yes|no|unknown",  (string) Whether this transaction could be replaced due to BIP125 (replace-by-fee);
                                                      may be unknown for unconfirmed transactions not in the mempool
-    "abandoned": xxx          (bool) 'true' if the transaction has been abandoned (inputs are respendable). Only available for the 
+    "abandoned": xxx          (bool) 'true' if the transaction has been abandoned (inputs are respendable). Only available for the
                                          'send' category of transactions.
   }
 ]
@@ -4706,7 +4544,7 @@ Result:
 Examples:
 
 List the most recent 10 transactions in the systems
-> neurai-cli listtransactions 
+> neurai-cli listtransactions
 
 List transactions 100 to 120
 > neurai-cli listtransactions "*" 20 100
@@ -4747,7 +4585,7 @@ Arguments:
 Result
 [                   (array of json object)
   {
-    "txid" : "txid",          (string) the transaction id 
+    "txid" : "txid",          (string) the transaction id
     "vout" : n,               (numeric) the vout value
     "address" : "address",    (string) the neurai address
     "account" : "account",    (string) DEPRECATED. The associated account, or "" for the default account
@@ -4765,7 +4603,7 @@ Result
 ]
 
 Examples
-> neurai-cli listunspent 
+> neurai-cli listunspent
 > neurai-cli listunspent 6 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listunspent", "params": [6, 9999999 "[\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\",\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 > neurai-cli listunspent 6 9999999 '[]' true '{ "minimumAmount": 0.005 }'
@@ -4788,7 +4626,7 @@ Result:
 ]
 
 Examples:
-> neurai-cli listwallets 
+> neurai-cli listwallets
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listwallets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 listwallets:'listwallets',
@@ -4824,13 +4662,13 @@ true|false    (boolean) Whether the command was successful or not
 Examples:
 
 List the unspent transactions
-> neurai-cli listunspent 
+> neurai-cli listunspent
 
 Lock an unspent transaction
 > neurai-cli lockunspent false "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
 
 List the locked transactions
-> neurai-cli listlockunspent 
+> neurai-cli listlockunspent
 
 Unlock the transaction again
 > neurai-cli lockunspent true "[{\"txid\":\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\",\"vout\":1}]"
@@ -4882,7 +4720,7 @@ Results provided in getpeerinfo, pingtime and pingwait fields are decimal second
 Ping command is handled in queue with all other commands, so it measures processing backlog, not just network ping.
 
 Examples:
-> neurai-cli ping 
+> neurai-cli ping
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "ping", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 ping:'ping',
@@ -5005,7 +4843,7 @@ purgesnapshot:'purgesnapshot',
 
 
 
-/** reissue "asset_name" qty "to_address" "change_address" ( reissuable ) ( new_units) "( new_ipfs )" 
+/** reissue "asset_name" qty "to_address" "change_address" ( reissuable ) ( new_units) "( new_ipfs )"
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
@@ -5059,7 +4897,7 @@ Result:
 
 Examples:
 > neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML"
-> neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" 
+> neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML"
 > neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" "changeaddress"
 > neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" true "KYC & !AML" "changeaddress" -1 true
 > neurai-cli reissuerestrictedasset "$ASSET_NAME" 1000  "myaddress" false "" "changeaddress" -1 false QmTqu3Lk3gmTsQVtjU7rYYM37EAW4xNmbuEAp2Mjr4AV7E
@@ -5169,7 +5007,7 @@ rescanblockchain:'rescanblockchain',
 Dumps the mempool to disk.
 
 Examples:
-> neurai-cli savemempool 
+> neurai-cli savemempool
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "savemempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 savemempool:'savemempool',
@@ -5229,10 +5067,10 @@ Arguments:
 2. "toaddress"         (string, required) The neurai address to send funds to.
 3. amount                (numeric or string, required) The amount in XNA (transaction fee is added on top).
 4. minconf               (numeric, optional, default=1) Only use funds with at least this many confirmations.
-5. "comment"           (string, optional) A comment used to store what the transaction is for. 
+5. "comment"           (string, optional) A comment used to store what the transaction is for.
                                      This is not part of the transaction, just kept in your wallet.
-6. "comment_to"        (string, optional) An optional comment to store the name of the person or organization 
-                                     to which you're sending the transaction. This is not part of the transaction, 
+6. "comment_to"        (string, optional) An optional comment to store the name of the person or organization
+                                     to which you're sending the transaction. This is not part of the transaction,
                                      it is just kept in your wallet.
 
 Result:
@@ -5263,10 +5101,10 @@ Arguments:
 1. "from_address"       (string, required) The neurai address to send from.
 2. "to_address"            (string, required) The neurai address to send to.
 3. "amount"             (numeric or string, required) The amount in XNA to send. eg 0.1
-4. "comment"            (string, optional) A comment used to store what the transaction is for. 
+4. "comment"            (string, optional) A comment used to store what the transaction is for.
                              This is not part of the transaction, just kept in your wallet.
-5. "comment_to"         (string, optional) A comment to store the name of the person or organization 
-                             to which you're sending the transaction. This is not part of the 
+5. "comment_to"         (string, optional) A comment to store the name of the person or organization
+                             to which you're sending the transaction. This is not part of the
                              transaction, just kept in your wallet.
 6. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.
                              The recipient will receive less neurais than you enter in the amount field.
@@ -5319,7 +5157,7 @@ Arguments:
        "CONSERVATIVE"
 
 Result:
-"txid"                   (string) The transaction id for the send. Only 1 transaction is created regardless of 
+"txid"                   (string) The transaction id for the send. Only 1 transaction is created regardless of
                                     the number of addresses.
 
 Examples:
@@ -5406,10 +5244,10 @@ Send an amount to a given address.
 Arguments:
 1. "address"            (string, required) The neurai address to send to.
 2. "amount"             (numeric or string, required) The amount in XNA to send. eg 0.1
-3. "comment"            (string, optional) A comment used to store what the transaction is for. 
+3. "comment"            (string, optional) A comment used to store what the transaction is for.
                              This is not part of the transaction, just kept in your wallet.
-4. "comment_to"         (string, optional) A comment to store the name of the person or organization 
-                             to which you're sending the transaction. This is not part of the 
+4. "comment_to"         (string, optional) A comment to store the name of the person or organization
+                             to which you're sending the transaction. This is not part of the
                              transaction, just kept in your wallet.
 5. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.
                              The recipient will receive less neurais than you enter in the amount field.
@@ -5489,7 +5327,7 @@ Set the generation on with a limit of one processor
 > neurai-cli setgenerate true 1
 
 Check the setting
-> neurai-cli getgenerate 
+> neurai-cli getgenerate
 
 Turn off generation
 > neurai-cli setgenerate false
@@ -5687,7 +5525,7 @@ submitblock:'submitblock',
 
 
 
-/** subscribetochannel 
+/** subscribetochannel
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
@@ -5769,7 +5607,7 @@ Arguments:
 7. "asset_change_address"     (string, optional, default = "") the transactions Asset change will be sent to this address
 
 Result:
-txid[ 
+txid[
 txid
 ]
 
@@ -5800,7 +5638,7 @@ Arguments:
 8. "asset_change_address"     (string, optional, default = "") the transaction Asset change will be sent to this address
 
 Result:
-txid[ 
+txid[
 txid
 ]
 
@@ -5831,7 +5669,7 @@ Arguments:
 8. "asset_change_address"     (string, optional, default = "") the transactions Asset change will be sent to this address
 
 Result:
-txid[ 
+txid[
 txid
 ]
 
@@ -5845,7 +5683,7 @@ transferfromaddresses:'transferfromaddresses',
 
 
 
-/** transferqualifier "qualifier_name" qty "to_address" ("change_address") ("message") (expire_time) 
+/** transferqualifier "qualifier_name" qty "to_address" ("change_address") ("message") (expire_time)
 
 THIS COMMAND IS NOT YET ACTIVE! Restricted assets must be active
 
@@ -5860,7 +5698,7 @@ Arguments:
 6. "expire_time"              (numeric, optional) UTC timestamp of when the message expires
 
 Result:
-txid[ 
+txid[
 txid
 ]
 
@@ -5958,7 +5796,7 @@ unfreezerestrictedasset:'unfreezerestrictedasset',
 
 
 
-/** unsubscribefromchannel 
+/** unsubscribefromchannel
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
@@ -5990,7 +5828,7 @@ Result:
 ttt        (numeric) The number of seconds that the server has been running
 
 Examples:
-> neurai-cli uptime 
+> neurai-cli uptime
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "uptime", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 uptime:'uptime',
@@ -6056,7 +5894,7 @@ Result:
 true|false       (boolean) Verified or not
 
 Examples:
-> neurai-cli verifychain 
+> neurai-cli verifychain
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifychain", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 verifychain:'verifychain',
@@ -6114,7 +5952,7 @@ verifytxoutproof:'verifytxoutproof',
 
 
 
-/** viewallmessagechannels 
+/** viewallmessagechannels
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
@@ -6127,7 +5965,7 @@ Result:[
 ]
 
 Examples:
-> neurai-cli viewallmessagechannels 
+> neurai-cli viewallmessagechannels
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessagechannels", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 viewallmessagechannels:'viewallmessagechannels',
@@ -6136,7 +5974,7 @@ viewallmessagechannels:'viewallmessagechannels',
 
 
 
-/** viewallmessages 
+/** viewallmessages
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
@@ -6153,7 +5991,7 @@ Result:
 "Expire UTC Time:"                (Date, optional) If the message contains an expire date that is too large, the UTC number will be displayed
 
 Examples:
-> neurai-cli viewallmessages 
+> neurai-cli viewallmessages
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewallmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 viewallmessages:'viewallmessages',
@@ -6162,7 +6000,7 @@ viewallmessages:'viewallmessages',
 
 
 
-/** viewmyrestrictedaddresses 
+/** viewmyrestrictedaddresses
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
@@ -6178,7 +6016,7 @@ Result:
 }...
 
 Examples:
-> neurai-cli viewmyrestrictedaddresses 
+> neurai-cli viewmyrestrictedaddresses
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmyrestrictedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 viewmyrestrictedaddresses:'viewmyrestrictedaddresses',
@@ -6187,7 +6025,7 @@ viewmyrestrictedaddresses:'viewmyrestrictedaddresses',
 
 
 
-/** viewmytaggedaddresses 
+/** viewmytaggedaddresses
 
 THIS COMMAND IS NOT YET ACTIVE!
 https://github.com/NeuraiProject/rips/blob/master/rip-0005.mediawiki
@@ -6203,7 +6041,7 @@ Result:
 }...
 
 Examples:
-> neurai-cli viewmytaggedaddresses 
+> neurai-cli viewmytaggedaddresses
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "viewmytaggedaddresses", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 **/
 viewmytaggedaddresses:'viewmytaggedaddresses',

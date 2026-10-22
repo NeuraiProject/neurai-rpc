@@ -1,3 +1,9 @@
+# 0.8.0
+
+- Add RPC 5 messaging requests, sequence cursors, response types and exact pool/instance routing.
+- Replace removed local signers with depinsignrpc in the catalog; keep wallet helpers out of relay whitelists.
+- Update messaging examples and migration guidance for Legacy/ECDSA and ECIES 2.
+
 # Changelog
 
 All notable changes to this project will be documented in this file.

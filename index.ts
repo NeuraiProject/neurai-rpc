@@ -1,18 +1,22 @@
 import { parse, stringify, isSafeNumber, LosslessNumber } from 'lossless-json';
-import { methods } from "./docs";
+import { methods } from './docs';
 
 export { methods };
+export * from './depin';
+export { assertNoDuplicateJsonKeys } from './json';
+import { assertNoDuplicateJsonKeys } from './json';
+import { isDepinRemoteMethod } from './depin';
 
-export const MAINNET_GENESIS_HASH = "00000044d33c0c0ba019be5c0249730424a69cb4c222153322f68c6104484806";
-export const TESTNET_GENESIS_HASH = "0000008b384aeffecdab182575dc4e86c9f07f90318c65088532660ed9a8a021";
+export const MAINNET_GENESIS_HASH = '00000044d33c0c0ba019be5c0249730424a69cb4c222153322f68c6104484806';
+export const TESTNET_GENESIS_HASH = '0000008b384aeffecdab182575dc4e86c9f07f90318c65088532660ed9a8a021';
 
 /** Reject an RPC endpoint that serves a different chain with the same network label. */
 export async function assertRpcGenesis(
   rpc: (method: string, params: any[]) => Promise<unknown>,
   expectedGenesisHash: string,
 ): Promise<void> {
-  const actual = await rpc("getblockhash", [0]);
-  if (typeof actual !== "string" || actual.toLowerCase() !== expectedGenesisHash.toLowerCase()) {
+  const actual = await rpc('getblockhash', [0]);
+  if (typeof actual !== 'string' || actual.toLowerCase() !== expectedGenesisHash.toLowerCase()) {
     throw new Error(`Unexpected genesis block: expected ${expectedGenesisHash}, received ${String(actual)}`);
   }
 }
@@ -26,17 +30,22 @@ export function rpcNumber(value: string): LosslessNumber {
 export function parseRpcJson(text: string): any {
   return parse(text, undefined, (token: string) => {
     const value = Number(token);
-    return isSafeNumber(token) && Math.abs(value) <= Number.MAX_SAFE_INTEGER
-      && (Number.isInteger(value) || Math.abs(value) <= Number.MAX_SAFE_INTEGER / 1e8)
-      ? value : token;
+    return isSafeNumber(token) &&
+      Math.abs(value) <= Number.MAX_SAFE_INTEGER &&
+      (Number.isInteger(value) || Math.abs(value) <= Number.MAX_SAFE_INTEGER / 1e8)
+      ? value
+      : token;
   });
 }
 
 export function stringifyRpcJson(value: unknown): string {
   const result = stringify(value, (_key, item) => {
-    if (typeof item === 'number' && (!Number.isFinite(item) ||
+    if (
+      typeof item === 'number' &&
+      (!Number.isFinite(item) ||
         (Number.isInteger(item) && !Number.isSafeInteger(item)) ||
-        (!Number.isInteger(item) && Math.abs(item) > Number.MAX_SAFE_INTEGER / 1e8))) {
+        (!Number.isInteger(item) && Math.abs(item) > Number.MAX_SAFE_INTEGER / 1e8))
+    ) {
       throw new Error('Unsafe RPC numeric parameter: use bigint or rpcNumber(decimalText)');
     }
     return item;
@@ -45,11 +54,11 @@ export function stringifyRpcJson(value: unknown): string {
   return result;
 }
 
-// DePIN protocol 2 uses this same authenticated HTTP JSON-RPC transport. The
+// DePIN protocol 5 uses this same authenticated HTTP JSON-RPC transport. The
 // former raw-TCP gateway and its dedicated port were removed from the node.
 
 function throwSyntaxError() {
-  throw new Error("Syntax error, call getRPC with (username, password, URL)");
+  throw new Error('Syntax error, call getRPC with (username, password, URL)');
 }
 
 export function getRPC(username: string, password: string, URL: string) {
@@ -63,10 +72,10 @@ export function getRPC(username: string, password: string, URL: string) {
     throwSyntaxError();
   }
 
-  return async function rpc(method: string, params: any[]) {
+  return async function rpc(method: string, params: any[] | Record<string, unknown>) {
     const promise = new Promise((resolutionFunc, rejectionFunc) => {
       const data = {
-        jsonrpc: "2.0",
+        jsonrpc: '2.0',
         id: Math.random(),
         method,
         params,
@@ -84,13 +93,15 @@ export function getRPC(username: string, password: string, URL: string) {
             */
 
             if (response.ok) {
-              const obj = parseRpcJson(await response.text()); //Convert to JSON
+              const responseText = await response.text();
+              if (isDepinRemoteMethod(method)) assertNoDuplicateJsonKeys(responseText);
+              const obj = parseRpcJson(responseText);
               // A JSON-RPC error can arrive with HTTP 200 — it must reject,
               // not resolve undefined.
               if (obj && obj.error) {
                 rejectionFunc({
                   error: obj.error,
-                  description: obj.error.message || "Unknown RPC error",
+                  description: obj.error.message || 'Unknown RPC error',
                 });
               } else {
                 resolutionFunc(obj.result);
@@ -102,7 +113,9 @@ export function getRPC(username: string, password: string, URL: string) {
                 description: null,
               };
               try {
-                obj = parseRpcJson(await response.text());
+                const responseText = await response.text();
+                if (isDepinRemoteMethod(method)) assertNoDuplicateJsonKeys(responseText);
+                obj = parseRpcJson(responseText);
               } catch (e) {}
               const myError = {
                 statusText: response.statusText,
@@ -117,10 +130,10 @@ export function getRPC(username: string, password: string, URL: string) {
           .catch((e) => {
             rejectionFunc({
               originalError: e,
-              type: "ServerUnreachable",
-              error: "Could not communicate with Neurai core node",
+              type: 'ServerUnreachable',
+              error: 'Could not communicate with Neurai core node',
               description:
-                "Are you sure that the URL is correct? The URL is usually mainnet = http://127.0.0.1:19001 and testnet =  http://127.0.0.1:19101",
+                'Are you sure that the URL is correct? The URL is usually mainnet = http://127.0.0.1:19001 and testnet =  http://127.0.0.1:19101',
             });
           });
       } catch (e) {
@@ -132,38 +145,31 @@ export function getRPC(username: string, password: string, URL: string) {
 }
 function getValidMethods() {
   const keys = Object.keys(methods).sort();
-  return keys.join(" ");
+  return keys.join(' ');
 }
 // Example POST method implementation:
-async function postData(
-  url = "",
-  data = {},
-  username: string,
-  password: string
-) {
-  let base64Credentials = "";
+async function postData(url = '', data = {}, username: string, password: string) {
+  let base64Credentials = '';
 
   //btoa or Buffer, depends if we are in Node.js or in the browser
-  if (typeof btoa === "function") {
+  if (typeof btoa === 'function') {
     base64Credentials = btoa(`${username}:${password}`);
   } else if (Buffer) {
-    base64Credentials = Buffer.from(`${username}:${password}`).toString(
-      "base64"
-    );
+    base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
   }
 
   // Default options are marked with *
   const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
     headers: {
-      Authorization: "Basic " + base64Credentials,
-      "Content-Type": "application/json",
+      Authorization: 'Basic ' + base64Credentials,
+      'Content-Type': 'application/json',
 
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     body: stringifyRpcJson(data), // body data type must match "Content-Type" header
   });
   return response;

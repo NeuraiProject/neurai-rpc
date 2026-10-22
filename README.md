@@ -1,137 +1,53 @@
 # neurai-rpc
 
-JavaScript/TypeScript client for the Neurai JSON-RPC API.
+HTTP JSON-RPC transport and method catalog for Neurai, including **DePIN RPC 5**.
 
-## Endpoints
+```js
+import {getRPC, methods, assertRpcGenesis, TESTNET_GENESIS_HASH} from '@neuraiproject/neurai-rpc';
+const rpc = getRPC(username, password, endpoint);
+await assertRpcGenesis(rpc, TESTNET_GENESIS_HASH);
+const height = await rpc(methods.getblockcount, []);
+```
 
-- Mainnet node: `http://127.0.0.1:19001`
-- Testnet node: `http://127.0.0.1:19101`
-- Hosted mainnet: `https://rpc-main.neurai.org/rpc`
-- Hosted testnet: `https://rpc-testnet.neurai.org/rpc`
+The transport supports Node 18+ and browser `fetch`. JSON-RPC errors reject even when the node returns HTTP 200. Error objects retain the node's numeric code, message and `data`; HTTP/network failures remain distinguishable. Never put wallet secrets in a public proxy request.
 
-DePIN protocol 2 uses the same authenticated HTTP JSON-RPC endpoint. The old
-raw-TCP DePIN gateway and its dedicated port no longer exist.
+## Exact numbers
 
-## Install
+`parseRpcJson` keeps unsafe response numeric tokens as decimal strings for compatibility with chain/amount APIs. `stringifyRpcJson` emits `bigint` and `rpcNumber(decimalText)` as exact JSON numbers, and rejects unsafe JavaScript numeric parameters.
+
+```js
+import {rpcNumber, stringifyRpcJson} from '@neuraiproject/neurai-rpc';
+await rpc('sendtoaddress', [address, rpcNumber('0.12345678')]); // Local wallet RPC only.
+console.log(stringifyRpcJson({after_seq: 9007199254740993n}));
+```
+
+## DePIN RPC 5
+
+Use `@neuraiproject/neurai-depin-msg` 4.x to build and authenticate requests/replies. This transport does not sign, decrypt or authenticate `poolsig` on the application's behalf.
+
+All ten remote messaging methods take exactly one request object (`[request]` or named `{request}`): bootstrap, stats, MCP status, challenge, directory, sections, sequence/timestamp reads, submission and clear. `depinreceiveseq` is the default read path in the messaging SDK. Each addressed operation signs all parameters, target chain/pool/instance, membership revision and a fresh request ID. No RPC 2/3/4 fallback is provided.
+
+Bootstrap is also request-bound:
+
+```js
+const response = await rpc(methods.depingetmsginfo, [{
+  protocol: 5,
+  request_id: random32ByteLowercaseHex,
+  timestamp_ms: Date.now(),
+}]);
+// Verify response identity and signature with the SDK before using its contents.
+```
+
+Local `depinsignrpc(method, request)` replaces the removed `depinsignrequest`, `depinsignchallenge` and `depinsignreadseq` helpers. It belongs only on an unlocked local signing wallet. `depindecrypt`, `depinsendmsg`, `depingetmsg` and `depinpoolpkey` also remain local helpers and must not be publicly exposed merely because they appear in the node catalog.
+
+Legacy and strict ECDSA v3 identities are supported by RPC 5. PQ messaging remains outside this contract. A signature over a directory is the pool's statement, not independent proof of asset ownership.
+
+See [examples](DEPIN_EXAMPLES.md) and [integration guide](DEPIN_IMPLEMENTATION_GUIDE_EN.md). The package exports request/response/cursor types, `DEPIN_REMOTE_METHODS`, `getDepinRequest` and `createDepinNodeRouter`. The router performs advisory pool/instance discovery, routes a private request only to its exact healthy destination and never broadcasts, rewrites or automatically replays a write. Clients still verify the final signed response.
 
 ```sh
-npm install @neuraiproject/neurai-rpc
+npm run create-docs
+npm run build
+npm test -- --runInBand
 ```
 
-## Usage
-
-```js
-import { getRPC, methods } from "@neuraiproject/neurai-rpc";
-
-const rpc = getRPC("username", "password", "http://127.0.0.1:19001");
-const height = await rpc(methods.getblockcount, []);
-console.log(height);
-```
-
-CommonJS uses `const { getRPC, methods } = require("@neuraiproject/neurai-rpc")`.
-`getRPC` resolves with the JSON-RPC `result` and rejects HTTP failures and
-JSON-RPC error objects, including errors returned with HTTP status 200.
-
-## DePIN protocol 2
-
-Use the normal `getRPC` client for every DePIN command:
-
-```js
-const info = await rpc(methods.depingetmsginfo, []);
-const stats = await rpc(methods.depinpoolstats, []);
-
-const sent = await rpc(methods.depinsendmsg, [
-  "&FRANCE/GENERAL",
-  "Hello team!",
-  "NXsender...",
-]);
-```
-
-Authenticated reads and administrative purges use signed, single-use
-challenges. A wallet-backed flow uses these commands in order:
-
-1. `depinsignrequest(address, token, type)`
-2. `depinchallenge(token, address, timestamp, signature, type)`
-3. `depindecrypt(address, encrypted)` to recover the challenge
-4. `depinsignchallenge(address, token, challenge, type)`
-5. `depinreceivemsg`, `depinlistsections`, or `depinclearmsg`
-6. Verify `poolsig`, then decrypt the encrypted response
-
-See [DEPIN_EXAMPLES.md](./DEPIN_EXAMPLES.md) for call sequences and
-[DEPIN_IMPLEMENTATION_GUIDE_EN.md](./DEPIN_IMPLEMENTATION_GUIDE_EN.md) for the
-protocol details.
-
-### Method changes
-
-Added:
-
-- `depinchallenge`
-- `depinsignrequest` (wallet helper)
-- `depinsignchallenge` (wallet helper)
-- `depindecrypt` (wallet helper)
-- `getibdstatus` (header synchronization diagnostics)
-
-Changed:
-
-- `depinsendmsg(token, message, fromaddress)` is local; host/port parameters
-  were removed.
-- `depinreceivemsg` now requires a receive challenge and signature.
-- `depinclearmsg` now requires an admin challenge and signature.
-- Address mode in `depinlistsections` now requires scope, challenge, and
-  signature.
-- `depinsubmitmsg` accepts only an encrypted envelope object.
-- `depingetmsg(token, fromaddress?)` is local-wallet only.
-
-Removed:
-
-- `depingetpoolcontent`
-- `@neuraiproject/neurai-rpc/depin` and `getDePinRPC`, which implemented the
-  retired TCP transport
-
-## Compatibility
-
-- DePIN protocol 2 methods require Neurai node 2.0.0 or later.
-- `getibdstatus` requires a node from August 2026 or later.
-- `createrawtransaction` with `refinputs` requires a node from April 2026 or
-  later.
-- `dumpextkeypq` and `exportxpqpub` require PQ wallet support.
-- Wallet-only commands are unavailable when the wallet is disabled.
-
-## Method catalog
-
-`methods` exposes the supported command names with TypeScript declarations:
-
-```js
-await rpc(methods.getibdstatus, []);
-await rpc(methods.checkdepinvalidity, ["&FRANCE", "NXaddress..."]);
-```
-
-Generated command documentation is in
-[neurai_methods.md](./neurai_methods.md).
-
-## Links
-
-- [GitHub repository](https://github.com/neuraiproject/neurai-rpc)
-- [NPM package](https://www.npmjs.com/package/@neuraiproject/neurai-rpc)
-
-### Exact numeric values
-
-RPC responses are parsed from their original JSON text. Safe numbers retain
-`number` compatibility; numeric tokens that would lose digits (large raw
-integers or high-precision decimals) are returned as strings. Normalize monetary
-fields to bigint/decimal text in your application, never with parseFloat.
-
-For request parameters use bigint for exact integer JSON tokens, or
-`rpcNumber('100000000.00000001')` for an exact decimal JSON token. Ordinary
-strings remain quoted strings: use the representation required by the RPC
-method. Unsafe integer numbers, NaN and Infinity are rejected. No global
-BigInt.prototype mutation is performed. `parseRpcJson` and `stringifyRpcJson`
-are exported for callers implementing their own transport.
-
-## Verify the chain before using a testnet RPC
-
-`TESTNET_GENESIS_HASH` identifies the reset testnet. Call
-`await assertRpcGenesis(rpc, TESTNET_GENESIS_HASH)` after constructing an RPC
-client and before reading balances or building transactions. The port and
-`getblockchaininfo.chain` label alone do not distinguish the previous testnet.
-`MAINNET_GENESIS_HASH` is also exported for mainnet clients.
+Integration tests requiring a live node are separate from the offline suite. The method catalog is generated from `docs.json`; it includes both public and local wallet/admin methods, so it is not a proxy whitelist.

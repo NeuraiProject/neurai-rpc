@@ -1,127 +1,45 @@
-# DePIN protocol 2 examples
+# DePIN RPC 5 examples
 
-All calls use the normal authenticated HTTP JSON-RPC endpoint.
-
-```js
-import { getRPC, methods } from "@neuraiproject/neurai-rpc";
-
-const rpc = getRPC("username", "password", "http://127.0.0.1:19001");
-const address = "NXholder...";
-const token = "&FRANCE/GENERAL";
-```
-
-## Pool information
+The messaging SDK implements the binary signing contract. A generic transport call alone does not authenticate a pool reply.
 
 ```js
-const info = await rpc(methods.depingetmsginfo, []);
-const stats = await rpc(methods.depinpoolstats, []);
+import {getRPC} from '@neuraiproject/neurai-rpc';
+import {getDepinPoolInfo, createSoftwareIdentity, buildDepinMessageForPool,
+  submitDepinMessage, requestDepinChallenge, receiveDepinMessages, callDepinRpc}
+  from '@neuraiproject/neurai-depin-msg';
+
+const rpc = {call: getRPC(user, password, endpoint)};
+const pool = await getDepinPoolInfo({rpc, serviceId: endpoint, network: 'test',
+  trust: storedPin ? {mode: 'pinned', pin: storedPin} : {mode: 'tofu'}});
+const identity = await createSoftwareIdentity({privateKey: wif, network: 'test', address});
+let context = pool.context;
+const built = await buildDepinMessageForPool({rpc, context, identity, network: 'test',
+  token: '&GROUP/CHAT', poolRoot: pool.info.token, maxRecipients: pool.info.maxrecipients,
+  maxMessageBytes: pool.info.maxmessagesize, messageType: 'group', message: 'Hello',
+  timestamp: Math.floor(Date.now()/1000)});
+context = built.context;
+await submitDepinMessage({rpc, context, identity, messageHex: built.hex});
+const issued = await requestDepinChallenge({rpc, context, identity, token: '&GROUP/CHAT'});
+const page = await receiveDepinMessages({rpc, context: issued.context, identity,
+  token: '&GROUP/CHAT', challenge: issued.challenge, network: 'test', cursor: null, limit: 100});
+context = page.context;
+// Display only entries with ok === true and a non-null plaintext.
+// Continue serially with page.cursor and page.nextChallenge.
+const stats = await callDepinRpc({rpc, context, method: 'depinpoolstats'});
 ```
 
-Pin `info.depinpoolpkey` on first use. Use it to verify pool signatures and to
-encrypt envelopes submitted through `depinsubmitmsg`.
+Common request fields are `protocol`, `network`, `pool_pubkey`, `pool_root`, `instance_id`, `membership_revision`, `request_id`, `timestamp_ms`, `token`, `address`, `challenge`, `args`, `signature`. Bootstrap uses only `protocol:5`, `request_id` and `timestamp_ms`.
 
-## Send with the local wallet
+| Method | `args` | Authentication |
+| --- | --- | --- |
+| `depingetmsginfo` | Bootstrap has no `args` | Public, locally bound bootstrap request |
+| `depinpoolstats`, `depinmcpstatus` | `{}` | Public, root token and blank auth fields |
+| `depingetancestorrecipients` | `{max_results?, stop_at?}` | Public, queried token |
+| `depinchallenge` | `{type:'receive'}` or `{type:'admin'}` | Timestamped signature, empty challenge |
+| `depinreceiveseq` | `{cursor:null, limit:100, from_timestamp:0}` | Receive challenge and full signature |
+| `depinreceivemsg` | `{timestamp?, after_hash?, limit?}` | Receive challenge and full signature |
+| `depinlistsections` | `{}` | Public/root or addressed receive challenge |
+| `depinsubmitmsg` | `{encrypted:outerEciesHex}` | Timestamped signature; token stays empty outside ECIES |
+| `depinclearmsg` | `{mode:'expired'}`, `{mode:'all'}` or `{mode:'hours',hours:n}` | Admin challenge and full signature |
 
-```js
-const result = await rpc(methods.depinsendmsg, [
-  token,
-  "Hello team!",
-  "NXsender...",
-]);
-```
-
-`fromaddress` must belong to the node wallet. For a non-custodial remote
-client, prepare and sign the message client-side, encrypt its serialized form
-for `depingetmsginfo.depinpoolpkey`, and call:
-
-```js
-await rpc(methods.depinsubmitmsg, [{
-  sender: "NXsender...",
-  encrypted: "<ECIES envelope hex>",
-}]);
-```
-
-## Obtain a receive challenge
-
-```js
-const requestProof = await rpc(methods.depinsignrequest, [
-  address,
-  token,
-  "receive",
-]);
-
-const challengeReply = await rpc(methods.depinchallenge, [
-  token,
-  address,
-  requestProof.timestamp,
-  requestProof.signature,
-  "receive",
-]);
-
-// Verify challengeReply.poolsig against the pinned pool key first.
-const challengeBody = await rpc(methods.depindecrypt, [
-  address,
-  challengeReply.encrypted,
-]);
-
-const challengeProof = await rpc(methods.depinsignchallenge, [
-  address,
-  token,
-  challengeBody.challenge,
-  "receive",
-]);
-```
-
-## Receive messages
-
-```js
-const encryptedPage = await rpc(methods.depinreceivemsg, [
-  token,
-  address,
-  challengeBody.challenge,
-  challengeProof.signature,
-  0,
-  "",
-  50,
-]);
-
-// Verify encryptedPage.poolsig first.
-const page = await rpc(methods.depindecrypt, [address, encryptedPage.encrypted]);
-console.log(page.messages);
-```
-
-The decrypted response can contain `next_challenge`. Sign it for the next page
-instead of requesting a new challenge.
-
-## List sections
-
-```js
-const publicSections = await rpc(methods.depinlistsections, []);
-
-const encryptedSections = await rpc(methods.depinlistsections, [
-  address,
-  token,
-  challengeBody.challenge,
-  challengeProof.signature,
-]);
-```
-
-Challenges are single-use. Obtain a fresh one if a previous call consumed it.
-
-## Clear messages as an owner
-
-Repeat the challenge flow with type `admin`, then call:
-
-```js
-await rpc(methods.depinclearmsg, [
-  token,
-  "NXowner...",
-  adminChallenge,
-  adminSignature,
-  "all",
-]);
-```
-
-Use an empty scope for the configured pool root. Omit the final mode to remove
-expired messages, use `"all"` for every message, or pass an age in hours. The
-challenge must have been issued for exactly the same scope.
+There is no positional messaging fallback. Clock correction comes only from a verified bootstrap. A changed membership revision invalidates cached nonces; refresh recipients and renew before continuing. Keep cursors exact (`number` or `bigint`, never rounded) and preserve them across membership changes while the stream is unchanged.

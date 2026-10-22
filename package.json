@@ -1,6 +1,6 @@
 {
   "name": "@neuraiproject/neurai-rpc",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Helps you access your Neurai full node using RPC from JavaScript",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -26,7 +26,9 @@
     "neurai_methods.md",
     "DEPIN_EXAMPLES.md",
     "DEPIN_IMPLEMENTATION_GUIDE_EN.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "depin.ts",
+    "json.ts"
   ],
   "scripts": {
     "build": "tsup",

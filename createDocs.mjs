@@ -46,7 +46,16 @@ export const methods:IMethods ={
     }
     const doc = docs[key];
 
-    result.push(`\r\n\r\n\r\n\r\n\r\n\r\n/** ${doc}**/`);
+    if (key.startsWith("depin")) {
+      // Keep the rewritten DePIN contract readable and generated without
+      // CR-only blank lines or trailing spaces in emitted bundle comments.
+      const lines = doc.replace(/\r\n/g, "\n").trimEnd().split("\n");
+      result.push("\n\n/**\n" + lines.map(line => " *" + (line ? " " + line : "")).join("\n") + "\n */");
+    } else {
+      const previous = keys[keys.indexOf(key) - 1];
+      const newline = previous?.startsWith("depin") ? "\n" : "\r\n";
+      result.push(newline.repeat(6) + `/** ${doc}**/`);
+    }
     result.push(`\n${key}:'${key}',`);
   }
 
@@ -65,9 +74,16 @@ export const methods:IMethods ={
       continue;
     }
     const doc = docs[key];
-    result.push("\r\n&nbsp;<br> &nbsp;<br/>");
-    result.push("\r\n## " + key);
-    result.push(`\r\n&nbsp;<br/>  ${doc} `);
+    result.push("\n&nbsp;<br> &nbsp;<br/>");
+    result.push("\n## " + key);
+    result.push(`\n&nbsp;<br/>  ${doc}`);
   }
   fs.writeFileSync("./neurai_methods.md", result.join(""));
+}
+
+// Normalize generated text once so regeneration is reproducible across help
+// strings containing either LF or CRLF, without trailing spaces in added rows.
+for (const file of ["./docs.ts", "./neurai_methods.md"]) {
+  const clean = fs.readFileSync(file,"utf8").replace(/\r\n/g,"\n").split("\n").map(line=>line.trimEnd()).join("\n");
+  fs.writeFileSync(file,clean);
 }

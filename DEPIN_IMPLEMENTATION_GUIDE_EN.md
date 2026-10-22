@@ -1,104 +1,30 @@
-# Neurai DePIN protocol 2 integration guide
+# Integrating DePIN RPC 5
 
-## Architecture
+Use neurai-depin-msg 4.x for authentication, encryption and message validation; neurai-rpc 0.8.x provides HTTP transport, exact numeric JSON and the updated catalog. [Runnable composition examples](DEPIN_EXAMPLES.md) describe the request arguments.
 
-DePIN protocol 2 is served through Neurai's standard authenticated HTTP
-JSON-RPC interface: port `19001` on mainnet and `19101` on testnet. There is no
-separate TCP gateway. Applications use `getRPC` for every DePIN operation.
+1. Bootstrap with a fresh request ID. Bind the reply to the local request hash and expected genesis, then verify the pool key/root under explicit pinning or TOFU policy. Never silently re-pin.
+2. Keep the verified instance and membership revision. Sign the full method, arguments and context for every addressed operation, including submit and challenge issuance.
+3. Verify each response's request hash, service identity, confidentiality kind, membership metadata and signature before parsing or decrypting it.
+4. Resolve recipient addresses and keys from a verified directory. Preserve exact destination identities: Legacy and ECDSA addresses sharing one key are different permissions. Use typed recipients for ECIES 2. A directory signature does not independently prove asset ownership.
+5. Use admission-sequence cursors, retaining all six fields and exact integer values. Persisting a cursor also requires retaining its corresponding local history. A membership change does not itself reset the stream.
+6. On a verified `membership_stale`, refresh the directory and renew every cached receive/admin challenge for the old pool revision. Re-encrypt and re-sign an affected send. Bound retries; never automatically replay an ambiguous submit or clear result.
+7. A restart changes the instance. Bootstrap again under the existing pin. A new stream requires restarting pagination with hash deduplication.
+8. Handle transport errors separately from signed operation errors. Keep node `error.data` intact; do not manufacture a signed wrapper in a proxy.
 
-## Roles
+## Relay requirements
 
-- The service node owns a dedicated wallet key used as the pool key. Its
-  public key is published by `depingetmsginfo`.
-- A holder address must have its public key revealed on chain before the node
-  can encrypt responses for it.
-- Clients pin the pool public key on first use, verify `poolsig` on replies,
-  and encrypt `depinsubmitmsg` envelopes for that key.
-- `depinsignrequest`, `depinsignchallenge`, and `depindecrypt` are convenience
-  RPCs for keys held by the local node wallet. External wallets implement the
-  same signing and ECIES operations client-side.
+Forward one complete request object unchanged. Expose `depinreceiveseq` and the other nine public messaging RPCs. Never expose `depinsignrpc` or local wallet decryption/sending helpers. Do not cache any request-bound response, including public bootstrap/directory/sections: the response contains a unique request hash and the live pool signature/context.
 
-## Challenge authentication
+When several node backends are configured, route private requests to the matching genesis, pool key, root and instance. An unrelated healthy node cannot replace that destination. Discovery metadata is advisory; the client still verifies the final response. Do not broadcast private requests or retry writes during failover.
 
-Authenticated reads use type `receive`; destructive cleanup uses type
-`admin`.
+Use a lossless parser/serializer for sequence numbers. Reject duplicate JSON keys and numeric-object impersonation. Preserve invalid lexical numeric tokens so the node can reject them rather than normalizing a signed request silently.
 
-1. Sign `DEPIN-REQ|<type>|<token>|<address>|<unix_time_ms>`.
-2. Call `depinchallenge(token, address, timestamp, signature, type)`.
-3. Verify the response's `poolsig` and decrypt its `encrypted` field.
-4. Sign `DEPIN-GET|<token>|<address>|<nonce>` for reads or
-   `DEPIN-CLEAR|<token>|<address>|<nonce>` for cleanup.
-5. Pass the nonce and signature to the protected RPC.
+HTTP and WSS need the same checks. The wallet service exposes `depin.receive_seq` as the WSS alias of `depinreceiveseq`; WSS node errors carry `node_code` and `data` inside the transport error. A valid node RPC response remains opaque to the relay.
 
-Request signatures are time-bounded and replay-protected. Challenges are
-bound to type, token/scope, and address; they expire and are consumed by their
-first successful use. Read responses can include `next_challenge` to avoid
-another challenge-request round trip.
+## Scope and migration
 
-## Messaging RPCs
+The protocol accepts canonical Legacy and strict ECDSA v3 addresses. PQ encryption/key publication is deferred. ESP32 authentication firmware and its separate library require a later migration; do not reuse old DEPIN-REQ/GET/CLEAR authentication strings.
 
-Public and diagnostic:
+Canonical Legacy ECIES 1 history is retained. RPC 2/3/4 authentication is rejected. Noncanonical recipient ordering emitted by some older SDK versions is also rejected by the current strict parser. ECIES 2 adds typed identities for mixed/ECDSA recipients; state format 2 and cursor format 1 do not change with RPC 5.
 
-- `depingetmsginfo()` publishes protocol configuration and the pool key.
-- `depinpoolstats()` returns pool statistics.
-- `depinmcpstatus()` returns MCP worker state.
-- `depinlistsections()` returns public section names.
-- `depingetancestorrecipients(token, max_results?, stop_at?)` resolves active
-  holders with revealed public keys.
-
-Wallet-backed local operations:
-
-- `depinsendmsg(token, message, fromaddress)` signs, encrypts, and stores a
-  message in the local pool.
-- `depingetmsg(token, fromaddress?)` decrypts local-pool messages.
-- `depinpoolpkey()` derives the pool key from the service wallet.
-- `depinsignrequest`, `depinsignchallenge`, and `depindecrypt` assist scripts.
-
-Remote and non-custodial operations:
-
-- `depinsubmitmsg({sender, encrypted})` accepts a signed message wrapped in an
-  ECIES envelope for the pool key. Bare serialized hex is invalid.
-- `depinreceivemsg(token, address, challenge, signature, timestamp?,
-  after_hash?, limit?)` returns an encrypted, pool-signed page.
-- `depinlistsections(address, scope, challenge, signature)` returns encrypted
-  personal access and counters for the selected subtree.
-- `depinclearmsg(scope, address, challenge, signature, mode?)` performs an
-  owner-authorized purge. Omit mode for expired messages, use `"all"` for all
-  messages, or pass a numeric age in hours.
-
-`depingetpoolcontent` was removed because it exposed pool-wide metadata
-without an identity to authenticate.
-
-## DePIN asset RPCs
-
-- `checkdepinvalidity(asset_name, address)`
-- `listdepinholders(asset_name)`
-- `listdepinaddresses(asset_name, count?, start?)`
-- `freezedepin(asset_name, address, change_address?)`
-- `unfreezedepin(asset_name, address, change_address?)`
-- `selfrevokedepin(asset_name)`
-
-Wallet-changing methods require an enabled wallet. Chain-wide holder queries
-require the indexes specified by the node's RPC help.
-
-## JavaScript client
-
-```js
-import { getRPC, methods } from "@neuraiproject/neurai-rpc";
-
-const rpc = getRPC("rpcuser", "rpcpassword", "http://127.0.0.1:19001");
-const info = await rpc(methods.depingetmsginfo, []);
-```
-
-The library transports JSON-RPC and exposes current method names. It does not
-hold private keys or silently trust pool keys. See
-[DEPIN_EXAMPLES.md](./DEPIN_EXAMPLES.md) for the wallet-assisted sequence.
-
-## Migration from protocol 1
-
-- Replace imports from `@neuraiproject/neurai-rpc/depin` with the package root.
-- Replace `getDePinRPC({host, port}, ...)` with `getRPC(user, password, URL)`.
-- Remove DePIN host/port arguments and configuration fields.
-- Update protected calls to the signed challenge flow.
-- Replace bare `depinsubmitmsg` payloads with encrypted envelope objects.
-- Remove calls to `depingetpoolcontent`.
+The RPC method catalog includes local wallet/admin commands. Use an explicit whitelist for a public service rather than exporting the whole catalog. Publishing packages or deploying services is a separate operator action.
