@@ -128,9 +128,6 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "backupwallet", "params": ["backup.dat"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   backupwallet: "backupwallet",
-  /** bumpfee has been deprecated on the XNA Wallet.
-  **/
-  bumpfee: "bumpfee",
   /** cancelsnapshotrequest "asset_name" block_height
   
   Cancels the specified snapshot request.
@@ -371,7 +368,9 @@ var methods = {
          {
            "txid":"id",                      (string, required) The transaction id
            "vout":n,                         (number, required) The output number
-           "sequence":n                      (number, optional) The sequence number
+           "sequence":n                      (number, optional) The sequence number. Once the no-RBF sequence rule
+                                               applies to the next block it must be 4294967295, 4294967294 or, in a
+                                               version 2 or 3 transaction, a BIP 68 relative lock (bit 31 clear)
          }
          ,...
        ]
@@ -1112,7 +1111,6 @@ var methods = {
                                 Those recipients will receive less neurais than you enter in their corresponding amount field.
                                 If no outputs are specified here, the sender pays the fee.
                                     [vout_index,...]
-                                Allows this transaction to be replaced by a transaction with higher fees
        "conf_target"            (numeric, optional) Confirmation target (in blocks)
        "estimate_mode"          (string, optional, default=UNSET) The fee estimate mode, must be one of:
            "UNSET"
@@ -2647,8 +2645,6 @@ var methods = {
     "txid" : "transactionid",   (string) The transaction id.
     "time" : ttt,            (numeric) The transaction time in seconds since epoch (1 Jan 1970 GMT)
     "timereceived" : ttt,    (numeric) The time received in seconds since epoch (1 Jan 1970 GMT)
-    "bip125-replaceable": "yes|no|unknown",  (string) Whether this transaction could be replaced due to BIP125 (replace-by-fee);
-                                                     may be unknown for unconfirmed transactions not in the mempool
     "details" : [
       {
         "account" : "accountname",      (string) DEPRECATED. The account name involved in the transaction, can be "" for the default account.
@@ -3570,8 +3566,6 @@ var methods = {
       "txid": "transactionid",  (string) The transaction id. Available for 'send' and 'receive' category of transactions.
       "time": xxx,              (numeric) The transaction time in seconds since epoch (Jan 1 1970 GMT).
       "timereceived": xxx,      (numeric) The time received in seconds since epoch (Jan 1 1970 GMT). Available for 'send' and 'receive' category of transactions.
-      "bip125-replaceable": "yes|no|unknown",  (string) Whether this transaction could be replaced due to BIP125 (replace-by-fee);
-                                                     may be unknown for unconfirmed transactions not in the mempool
       "abandoned": xxx,         (bool) 'true' if the transaction has been abandoned (inputs are respendable). Only available for the 'send' category of transactions.
       "comment": "...",       (string) If a comment is associated with the transaction.
       "label" : "label"       (string) A comment for the address/transaction, if any
@@ -3676,8 +3670,6 @@ var methods = {
       "otheraccount": "accountname",  (string) DEPRECATED. For the 'move' category of transactions, the account the funds came
                                             from (for receiving funds, positive amounts), or went to (for sending funds,
                                             negative amounts).
-      "bip125-replaceable": "yes|no|unknown",  (string) Whether this transaction could be replaced due to BIP125 (replace-by-fee);
-                                                       may be unknown for unconfirmed transactions not in the mempool
       "abandoned": xxx          (bool) 'true' if the transaction has been abandoned (inputs are respendable). Only available for the
                                            'send' category of transactions.
     }
@@ -4135,7 +4127,7 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfrom", "params": ["tabby", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.01, 6, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendfrom: "sendfrom",
-  /** sendfromaddress "from_address" "to_address" amount ( "comment" "comment_to" subtractfeefromamount replaceable conf_target "estimate_mode")
+  /** sendfromaddress "from_address" "to_address" amount ( "comment" "comment_to" subtractfeefromamount conf_target "estimate_mode")
   
   Send an amount from a specific address to a given address. All xna change will get sent back to the from_address
   
@@ -4166,7 +4158,7 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendfromaddress", "params": ["1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd" "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd", 0.1, "donation", "seans outpost"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendfromaddress: "sendfromaddress",
-  /** sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] replaceable conf_target "estimate_mode")
+  /** sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] conf_target "estimate_mode")
   
   Send multiple times. Amounts are double-precision floating point numbers.
   
@@ -4259,7 +4251,7 @@ var methods = {
   > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendrawtransaction", "params": ["signedhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
   **/
   sendrawtransaction: "sendrawtransaction",
-  /** sendtoaddress "address" amount ( "comment" "comment_to" subtractfeefromamount replaceable conf_target "estimate_mode")
+  /** sendtoaddress "address" amount ( "comment" "comment_to" subtractfeefromamount conf_target "estimate_mode")
   
   Send an amount to a given address.
   

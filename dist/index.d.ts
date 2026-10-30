@@ -8,7 +8,6 @@ interface IMethods {
     addtagtoaddress: string;
     addwitnessaddress: string;
     backupwallet: string;
-    bumpfee: string;
     cancelsnapshotrequest: string;
     checkaddressrestriction: string;
     checkaddresstag: string;

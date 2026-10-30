@@ -304,7 +304,6 @@ export const methods = {
   "addmultisigaddress": "addmultisigaddress",
   "addwitnessaddress": "addwitnessaddress",
   "backupwallet": "backupwallet",
-  "bumpfee": "bumpfee",
   "dumpprivkey": "dumpprivkey",
   "dumpwallet": "dumpwallet",
   "encryptwallet": "encryptwallet",

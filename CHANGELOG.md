@@ -1,3 +1,7 @@
+# Unreleased
+
+- Follow the node's RBF removal (no-RBF sequence rule): drop `bumpfee` from the method catalog, drop the `replaceable` argument from `sendtoaddress` / `sendfromaddress` / `sendmany` and the `bip125-replaceable` field from `gettransaction` / `listtransactions` / `listsinceblock`, and document the allowed `createrawtransaction` sequences.
+
 # 0.8.0
 
 - Add RPC 5 messaging requests, sequence cursors, response types and exact pool/instance routing.
