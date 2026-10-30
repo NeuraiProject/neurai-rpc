@@ -1,6 +1,7 @@
 # Unreleased
 
 - Follow the node's RBF removal (no-RBF sequence rule): drop `bumpfee` from the method catalog, drop the `replaceable` argument from `sendtoaddress` / `sendfromaddress` / `sendmany` and the `bip125-replaceable` field from `gettransaction` / `listtransactions` / `listsinceblock`, and document the allowed `createrawtransaction` sequences.
+- Sync `docs.json` with the `help` output of a node built from Neurai `c665ba3`. New methods in the catalog: NIP-048 reward plans (`getdistributionplan`, `getdistributionproof`, `getdistributionbatches`, `verifydistribution`, `createdistributionbatch`, `getsnapshotannouncement`, `replaysnapshot`, `getsnapshotrecipients`), `getchannelmessages`, the DEPIN transfer state (`opendepin`, `closedepin`, `sealdepin`), the privacy pool reads (`getprivacypoolinfo`, `getprivacypoolupdates`) and NIP-047 silent payments (`getsilentpaymenttweaks`, `getsilentpaymenttweaksrange`, `getsilentpaymentindexinfo` and the wallet calls). 24 existing entries refreshed. The rewritten `depin*` contracts and the `validateaddress` AuthScript fields are kept.
 
 # 0.8.0
 

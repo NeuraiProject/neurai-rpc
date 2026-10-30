@@ -273,6 +273,29 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "clearmessages", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## closedepin
+&nbsp;<br/>  closedepin "asset_name" ("change_address")
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Close transfers of a DEPIN asset (owner only): the asset becomes soulbound
+again and only the owner can move it. Valid from the open state; takes effect
+from the block after the one that confirms it. Pending holder transfers are
+dropped from the mempool when the close confirms.
+
+Arguments:
+1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
+2. "change_address"   (string, optional) The change address for the owner token
+
+Result:
+"txid"                (string) The transaction id
+
+Examples:
+> neurai-cli closedepin "&FRANCE"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "closedepin", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
 ## combinerawtransaction
 &nbsp;<br/>  combinerawtransaction ["hexstring",...]
 
@@ -291,6 +314,58 @@ Result:
 
 Examples:
 > neurai-cli combinerawtransaction ["myhex1", "myhex2", "myhex3"]
+
+&nbsp;<br> &nbsp;<br/>
+## createdistributionbatch
+&nbsp;<br/>  createdistributionbatch "plan_hash" {plan} batch_index ( {options} )
+
+Builds, funds and signs one batch of a distribution plan from this wallet (NIP-048), and locks the inputs it
+spends. It does NOT broadcast: store the result in your batch records first, then send it with
+sendrawtransaction. The plan must still hash to plan_hash, so a payment is always bound to the plan the
+operator approved.
+To replace a version that left the mempool, build a new one with the same anchor: every version of a batch
+spends the anchor, so at most one of them can confirm.
+
+Arguments:
+1. "plan_hash"                  (string, required) The approved plan hash, from getdistributionplan
+2. plan                         (object, required) The plan parameters
+   {
+     "asset_name": "name",              (string, required) as in getdistributionplan
+     "snapshot_height": n,              (number, required)
+     "distribution_asset_name": "name", (string, required)
+     "amount": x.xxx,                   (numeric, required) gross_distribution_amount
+     "exception_addresses": "a,b",      (string, optional)
+     "remainder": "payer"|"largest",    (string, optional, default "payer")
+     "allow_legacy_snapshot": bool,     (boolean, optional, default false)
+     "announcement": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "qualifier": "#TAG",           (string, optional) as in getdistributionplan
+     "weights": {"address": n, ...}, (object, optional) as in getdistributionplan
+     "report": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "allocation": "holdings"|"equal", (string, optional, default "holdings") as in getdistributionplan
+     "min_held": x.xxx,               (numeric, optional) as in getdistributionplan
+   }
+3. batch_index                  (number, required) The batch to build, from getdistributionbatches
+4. options                      (object, optional)
+   {
+     "max_outputs": n,            (number, default 500) batch size, as in getdistributionbatches
+     "anchor": {"txid": "hex", "vout": n}, (object, optional) the anchor of earlier versions of this batch
+     "max_fee": x.xxx             (numeric, optional) refuse a fee above this amount of XNA
+   }
+
+Result:
+{
+  "plan_hash": "hex",
+  "batch_index": n,
+  "batch_id": "hex",
+  "txid": "hex",
+  "hex": "hex",                     (string) the signed transaction, not broadcast
+  "fee": x.xxx,
+  "anchor": {"txid": "hex", "vout": n}, (object) the XNA input every later version must spend
+  "inputs": [ {"txid": "hex", "vout": n}, ... ] (array) inputs, now locked in this wallet
+}
+
+Examples:
+> neurai-cli createdistributionbatch "planhash" '{"asset_name":"TRONCO","snapshot_height":12345,"distribution_asset_name":"XNA","amount":1000}' 0
 
 &nbsp;<br> &nbsp;<br/>
 ## createmultisig
@@ -353,6 +428,9 @@ Paying for Asset Operations:
     unfreeze_addresses       0
     freeze_asset             0
     unfreeze_asset           0
+    open_depin               0
+    close_depin              0
+    seal_depin               0
 
 Assets For Authorization:
   These operations require a specific asset input for authorization:
@@ -365,6 +443,10 @@ Assets For Authorization:
       unfreeze_addresses
       freeze_asset
       unfreeze_asset
+    DEPIN Owner Token (&NAME!):
+      open_depin
+      close_depin
+      seal_depin
     Root Qualifier Token:
       issue_qualifier (when issuing subqualifier)
     Qualifier Token:
@@ -400,7 +482,7 @@ Arguments:
            "transfer":
              {
                "asset-name":               (string, required) asset name
-               asset-quantity              (number, required) the number of raw units to transfer
+               asset-quantity              (number or string, required) the number of raw units to transfer
                ,...
              }
          }
@@ -410,7 +492,7 @@ Arguments:
            "transferwithmessage":
              {
                "asset-name":              (string, required) asset name
-               asset-quantity,            (number, required) the number of raw units to transfer
+               asset-quantity,            (number or string, required) the number of raw units to transfer
                "message":"hash",          (string, required) ipfs hash or a txid hash
                "expire_time": n           (number, required) utc time in seconds to expire the message
              }
@@ -420,7 +502,7 @@ Arguments:
            "issue":
              {
                "asset_name":"asset-name",  (string, required) new asset name
-               "asset_quantity":n,         (number, required) the number of raw units to issue
+               "asset_quantity":n,         (number or string, required) the number of raw units to issue
                "units":[1-8],              (number, required) display units, between 1 (integral) to 8 (max precision)
                "reissuable":[0-1],         (number, required) 1=reissuable asset
                "has_ipfs":[0-1],           (number, required) 1=passing ipfs_hash
@@ -443,8 +525,9 @@ Arguments:
            "reissue":
              {
                "asset_name":"asset-name", (string, required) name of asset to be reissued
-               "asset_quantity":n,          (number, required) the number of raw units to issue
+               "asset_quantity":n,          (number or string, required) the number of raw units to issue
                "reissuable":[0-1],          (number, optional) default is 1, 1=reissuable asset
+               "units":[-1-8],             (number, optional) default is -1: keep the current units; 0-8 sets new units (never fewer than now)
                "ipfs_hash":"hash",        (string, optional) An ipfs hash for discovering asset metadata,
                                                 Overrides the current ipfs hash if given
                "owner_change_address"       (string, optional) the address where the owner token will be sent to.
@@ -456,7 +539,7 @@ Arguments:
            "issue_restricted":
              {
                "asset_name":"asset-name",(string, required) new asset name
-               "asset_quantity":n,         (number, required) the number of raw units to issue
+               "asset_quantity":n,         (number or string, required) the number of raw units to issue
                "verifier_string":"text", (string, required) the verifier string to be used for a restricted
                                                asset transfer verification
                "units":[0-8],              (number, required) display units, between 0 (integral) and 8 (max precision)
@@ -472,8 +555,9 @@ Arguments:
            "reissue_restricted":
              {
                "asset_name":"asset-name", (string, required) name of asset to be reissued
-               "asset_quantity":n,          (number, required) the number of raw units to issue
+               "asset_quantity":n,          (number or string, required) the number of raw units to issue
                "reissuable":[0-1],          (number, optional) default is 1, 1=reissuable asset
+               "units":[-1-8],             (number, optional) default is -1: keep the current units; 0-8 sets new units (never fewer than now)
                "verifier_string":"text",  (string, optional) the verifier string to be used for a restricted asset
                                                 transfer verification
                "ipfs_hash":"hash",        (string, optional) An ipfs hash for discovering asset metadata,
@@ -487,7 +571,7 @@ Arguments:
            "issue_qualifier":
              {
                "asset_name":"asset_name", (string, required) a qualifier name (starts with '#')
-               "asset_quantity":n,          (numeric, optional, default=1) the number of units to be issued (1 to 10)
+               "asset_quantity":n,          (number or string, optional, default=1) the number of units to be issued (1 to 10)
                "has_ipfs":[0-1],            (boolean, optional, default=false), whether ifps hash is going
                                                 to be added to the asset
                "ipfs_hash":"hash",        (string, optional but required if has_ipfs = 1), an ipfs hash or a
@@ -495,7 +579,7 @@ Arguments:
                "root_change_address"        (string, optional) Only applies when issuing subqualifiers.
                                                 The address where the root qualifier will be sent.
                                                 If not specified, it will be sent to the output address.
-               "change_quantity":"qty"    (numeric, optional) the asset change amount (defaults to 1)
+               "change_quantity":"qty"    (number or string, optional) the asset change amount (defaults to 1)
              }
          }
            or
@@ -505,7 +589,7 @@ Arguments:
              {
                "qualifier":"qualifier",          (string, required) a qualifier name (starts with '#')
                "addresses":["addr", ...],        (array, required) the addresses to be tagged (up to 10)
-               "change_quantity":"qty",          (numeric, optional) the asset change amount (defaults to 1)
+               "change_quantity":"qty",          (number or string, optional) the asset change amount (defaults to 1)
              }
          }
            or
@@ -515,7 +599,7 @@ Arguments:
              {
                "qualifier":"qualifier",          (string, required) a qualifier name (starts with '#')
                "addresses":["addr", ...],        (array, required) the addresses to be untagged (up to 10)
-               "change_quantity":"qty",          (numeric, optional) the asset change amount (defaults to 1)
+               "change_quantity":"qty",          (number or string, optional) the asset change amount (defaults to 1)
              }
          }
            or
@@ -550,6 +634,14 @@ Arguments:
            "unfreeze_asset":
              {
                "asset_name":"asset_name",        (string, required) a restricted asset name (starts with '$')
+             }
+         }
+           or
+         {                                 (object) A json object describing a DEPIN transfer state operation.
+                                             The address in the key will be used as the owner token change address.
+           "open_depin" | "close_depin" | "seal_depin":
+             {
+               "asset_name":"asset_name",        (string, required) a DEPIN asset name (starts with '&')
              }
          }
            or
@@ -717,6 +809,25 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "decodescript", "params": ["hexstring"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## decodesilentpaymentcode
+&nbsp;<br/>  decodesilentpaymentcode "code"
+
+Validates a silent payment code for this network and returns its keys.
+
+Arguments:
+1. "code"       (string, required) payment code
+
+Result:
+{
+  "isvalid": true|false,  (boolean)
+  "error": "str",         (string) reason when invalid
+  "network", "scan_pubkey", "spend_pubkey" when valid
+}
+
+Examples:
+> neurai-cli decodesilentpaymentcode "tnsp1q..."
+
+&nbsp;<br> &nbsp;<br/>
 ## depinchallenge
 &nbsp;<br/>  depinchallenge request
 
@@ -836,41 +947,10 @@ Examples:
 
 &nbsp;<br> &nbsp;<br/>
 ## distributereward
-&nbsp;<br/>  distributereward "asset_name" snapshot_height "distribution_asset_name" gross_distribution_amount ( "exception_addresses" ) ("change_address") ("dry_run")
+&nbsp;<br/>  distributereward "asset_name" snapshot_height "distribution_asset_name" gross_distribution_amount ( "exception_addresses" ) ( "change_address" )
 
-Splits the specified amount of the distribution asset to all owners of asset_name that are not in the optional exclusion_addresses
-
-Arguments:
-1. "asset_name"                 (string, required) The reward will be distributed all owners of this asset
-2. "snapshot_height"            (number, required) The block height of the ownership snapshot
-3. "distribution_asset_name"    (string, required) The name of the asset that will be distributed, or XNA
-4. "gross_distribution_amount"  (number, required) The amount of the distribution asset that will be split amongst all owners
-5. "exception_addresses"        (string, optional) Ownership addresses that should be excluded
-6. "change_address"             (string, optional) If the rewards can't be fully distributed. The change will be sent to this address
-
-Result:
-{
-  error_txn_gen_failed: (string),
-  error_nsf: (string),
-  error_rejects: (string),
-  error_db_update: (string),
-  batch_results: [
-    {
-      transaction_id: (string),
-      error_txn_rejected: (string),
-      total_amount: (number),
-      fee: (number),
-      expected_count: (number),
-      actual_count: (number),
-    }
-  ]
-}
-
-Examples:
-> neurai-cli distributereward "TRONCO" 12345 "XNA" 1000
-> neurai-cli distributereward "PHATSTACKS" 12345 "DIVIDENDS" 1000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["TRONCO" 34987 "DIVIDENDS" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "distributereward", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+Retired (NIP-048): the node no longer sends reward payments.
+Use getdistributionplan to compute the payments, then send them from your wallet.
 
 &nbsp;<br> &nbsp;<br/>
 ## dumpextkeypq
@@ -1011,6 +1091,26 @@ have been observed to make an estimate for any number of blocks.
 
 Example:
 > neurai-cli estimatesmartfee 6
+
+&nbsp;<br> &nbsp;<br/>
+## exportsilentpaymentviewkey
+&nbsp;<br/>  exportsilentpaymentviewkey "acknowledge"
+
+Returns the view key (b_scan and B_spend) of this wallet's silent payment code.
+Whoever holds it can find and link every payment to the code, but cannot spend them.
+Never combine it with an exported payment private key: together they reveal the spend key.
+The result is a secret: from a shell, prefer a terminal that is not recorded or logged.
+
+Arguments:
+1. "acknowledge"   (string, required) must be "reveal view key"
+
+Result:
+{
+  "scan_private_key": "hex", "spend_pubkey": "hex", "network": "str"
+}
+
+Examples:
+> neurai-cli exportsilentpaymentviewkey "reveal view key"
 
 &nbsp;<br> &nbsp;<br/>
 ## exportxpqpub
@@ -1478,6 +1578,7 @@ Result:
   ipfs_hash: (hash), (only if has_ipfs = 1 and that data is a ipfs hash)
   txid_hash: (hash), (only if has_ipfs = 1 and that data is a txid hash)
   verifier_string: (string)
+  transfer_state: (string) "closed" | "open" | "sealed" (only for DEPIN assets, names starting with &)
 }
 
 Examples:
@@ -1543,10 +1644,12 @@ Examples:
 If verbosity is 0, returns a string that is serialized, hex-encoded data for block 'hash'.
 If verbosity is 1, returns an Object with information about block <hash>.
 If verbosity is 2, returns an Object with information about block <hash> and information about each transaction.
+If verbosity is 3, returns the same as verbosity 2 plus a "prevout" object in each input with the spent output
+(generated, height, value, scriptPubKey), read from the block undo data. This works without -txindex.
 
 Arguments:
 1. "blockhash"          (string, required) The block hash
-2. verbosity              (numeric, optional, default=1) 0 for hex encoded data, 1 for a json object, and 2 for json object with transaction data
+2. verbosity              (numeric, optional, default=1) 0 for hex encoded data, 1 for a json object, 2 for json object with transaction data, and 3 for json object with transaction data and spent outputs
 
 Result (for verbosity = 0):
 "data"             (string) A string that is serialized, hex-encoded data for block 'hash'.
@@ -1598,6 +1701,7 @@ Result:
 {
   "chain": "xxxx",        (string) current network name as defined in BIP70 (main, test, regtest)
   "blocks": xxxxxx,         (numeric) the current number of blocks processed in the server
+  "asset_marker": "xxxx",  (string) marker required for new asset outputs in the next block ("rvn" or "xna")
   "headers": xxxxxx,        (numeric) the current number of headers we have validated
   "bestblockhash": "...", (string) the hash of the currently best block
   "difficulty": xxxxxx,     (numeric) the current difficulty
@@ -1606,6 +1710,11 @@ Result:
   "chainwork": "xxxx"     (string) total amount of work in active chain, in hexadecimal
   "size_on_disk": xxxxxx,   (numeric) the estimated size of the block and undo files on disk
   "pruned": xx,             (boolean) if the blocks are subject to pruning
+  "zk_public_tree": {       (object) profile-2 public-transition activation
+    "activation_height": n, (numeric or null) scheduled height, null when unscheduled
+    "active_at_tip": b,     (boolean) whether the current block uses profile 2
+    "active_for_next_block": b (boolean) whether a candidate block uses profile 2
+  },
   "pruneheight": xxxxxx,    (numeric) lowest-height complete block stored (only present if pruning is enabled)
   "automatic_pruning": xx,  (boolean) whether automatic pruning is enabled (only present if pruning is enabled)
   "prune_target_size": xxxxxx,  (numeric) the target size used by pruning (only present if automatic pruning is enabled)
@@ -1634,6 +1743,17 @@ Result:
         }
      }
   }
+  "asset_services": {          (object) legacy asset modules (NIP-048)
+     "messages": {
+        "active": xx,          (boolean) legacy asset messaging stores are open
+        "store_on_disk": xx    (boolean) the data directory has a messages store
+     },
+     "rewards": {
+        "active": xx,          (boolean) reward snapshot stores are open
+        "store_on_disk": xx,   (boolean) the data directory has a rewards store
+        "assetindex": xx       (boolean) -assetindex, which the reward RPCs require
+     }
+  },
   "warnings" : "...",         (string) any network and blockchain warnings.
 }
 
@@ -1894,6 +2014,59 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getchaintxstats", "params": [2016] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## getchannelmessages
+&nbsp;<br/>  getchannelmessages "channel" ( {options} )
+
+Returns the messages of an asset channel from the chain-wide index (-channelmessageindex, NIP-048): every
+message an owner token (NAME!) or message channel token (NAME~CHANNEL) carried back to the address it came
+from, whatever the wallet. Expiry is decided at query time against reference_time, so nodes with the same
+chain answer alike.
+
+Arguments:
+1. "channel"                    (string, required) The owner token or message channel
+2. options                      (object, optional)
+   {
+     "from_height": n,            (number, default 0)
+     "to_height": n,              (number, default the tip)
+     "include_expired": bool,     (boolean, default false)
+     "reference_time": n,         (number, default the median time past of the tip) expiry reference
+     "message": "hash",          (string, optional) only messages with this payload
+     "include_tx": bool,          (boolean, default false) add the raw transaction
+     "include_proof": bool,       (boolean, default false) add a gettxoutproof-style proof
+     "limit": n                   (number, default 1000, max 10000) messages per call;
+                                   a block is never split, so the last block may go past it
+   }
+
+Result:
+{
+  "channel": "name",
+  "synced_height": n,
+  "reference_time": n,
+  "messages": [                   (array) in chain order
+    {
+      "channel": "name",
+      "authority": "owner"|"channel",  (string) the token that carried the message
+      "txid": "hex", "vout": n,
+      "height": n, "block_hash": "hash", "block_time": n,
+      "expire_time": n,             (number) 0: never expires
+      "expired": true|false,
+      "message": "hash",            (string) IPFS hash or 64-hex hash
+      "address": "address",         (string) the address that sent it to itself
+      "op_return": "hex",           (string, optional) data of the transaction's OP_RETURN output
+      "op_return_matches": bool,     (boolean, with op_return) the message is the SHA-256 of that data, so
+                                   the data is content the token holder published in full (NIP-048 D1)
+      "tx": "hex",                  (string, optional)
+      "proof": "hex"                (string, optional) checked with verifytxoutproof
+    }, ...
+  ],
+  "next_from_height": n|null       (number) the limit stopped here: pass it as from_height for the next page
+}
+
+Examples:
+> neurai-cli getchannelmessages "ASSET!"
+> neurai-cli getchannelmessages "ASSET~NEWS" '{"from_height":1000,"include_expired":true}'
+
+&nbsp;<br> &nbsp;<br/>
 ## getconnectioncount
 &nbsp;<br/>  getconnectioncount
 
@@ -1939,6 +2112,182 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributestatus", "params": ["PHATSTACKS" 34987 "XNA" 100000 "mwN7xC3yomYdvJuVXkVC7ymY9wNBjWNduD,n4Rf18edydDaRBh7t6gHUbuByLbWEoWUTg"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## getdistributionbatches
+&nbsp;<br/>  getdistributionbatches {plan} ( {options} )
+
+Splits the payments of a distribution plan into batches of at most max_outputs recipients, in plan order
+(NIP-048). Each batch pays all its recipients in one transaction. Nothing is spent or locked.
+
+Arguments:
+1. plan                         (object, required) The plan parameters
+   {
+     "asset_name": "name",              (string, required) as in getdistributionplan
+     "snapshot_height": n,              (number, required)
+     "distribution_asset_name": "name", (string, required)
+     "amount": x.xxx,                   (numeric, required) gross_distribution_amount
+     "exception_addresses": "a,b",      (string, optional)
+     "remainder": "payer"|"largest",    (string, optional, default "payer")
+     "allow_legacy_snapshot": bool,     (boolean, optional, default false)
+     "announcement": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "qualifier": "#TAG",           (string, optional) as in getdistributionplan
+     "weights": {"address": n, ...}, (object, optional) as in getdistributionplan
+     "report": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "allocation": "holdings"|"equal", (string, optional, default "holdings") as in getdistributionplan
+     "min_held": x.xxx,               (numeric, optional) as in getdistributionplan
+   }
+2. options                      (object, optional)
+   {
+     "max_outputs": n             (number, default 500, max 1000) recipients per batch
+   }
+
+Result:
+{
+  "plan_hash": "hex",
+  "max_outputs": n,
+  "batches": [
+    {
+      "index": n,
+      "batch_id": "hex",          (string) SHA-256 of 0x04 || plan hash || max_outputs || index
+      "first_recipient": n,
+      "recipient_count": n,
+      "amount": x.xxx,            (numeric) total paid by the batch
+      "outputs": { ... }          (object) the payments in createrawtransaction format
+    }, ...
+  ]
+}
+
+Examples:
+> neurai-cli getdistributionbatches '{"asset_name":"TRONCO","snapshot_height":12345,"distribution_asset_name":"XNA","amount":1000}'
+
+&nbsp;<br> &nbsp;<br/>
+## getdistributionplan
+&nbsp;<br/>  getdistributionplan "asset_name" snapshot_height "distribution_asset_name" gross_distribution_amount ( "exception_addresses" {options} )
+
+Computes, without spending anything, how gross_distribution_amount of the distribution asset is split among the
+holders of asset_name in its snapshot at snapshot_height (NIP-048). Each holder gets floor(amount * held / total)
+in whole units of the distribution asset, or floor(amount / holders) with equal allocation. The plan hash commits
+to the snapshot, the parameters and every payment;
+pay the recipients from any wallet, for instance with getdistributionbatches and createdistributionbatch.
+
+Arguments:
+1. "asset_name"                 (string, required) The asset whose holders receive the distribution
+2. "snapshot_height"            (number, required) The height of a snapshot taken with requestsnapshot
+3. "distribution_asset_name"    (string, required) The asset to distribute, or XNA
+4. "gross_distribution_amount"  (number, required) The amount to split, a multiple of the distribution asset's smallest unit
+5. "exception_addresses"        (string, optional) Comma-separated holder addresses to exclude
+6. options                      (object, optional)
+   {
+     "remainder": "payer"|"largest", (string, default "payer") Where the undivided remainder goes: it stays with the
+                                       payer, or one unit each to the largest fractional parts (ties by script)
+     "allow_legacy_snapshot": bool,   (boolean, default false) Accept a snapshot captured before NIP-048, which has no block identity
+     "announcement": {                (object, optional) The transaction that announced snapshot_height in advance
+       "txid": "hex",                 (see getsnapshotannouncement); the plan then commits to it (format version 2)
+       "block_hash": "hex"            (optional) Its block, for nodes without -txindex
+     },
+     "qualifier": "#TAG",           (string, optional) Only holders tagged with this qualifier at the height
+     "weights": {"address": n, ...}, (object, optional) Weights of a work report, positive integers; they replace
+                                       the holdings, and holders without a weight are excluded
+     "report": {"txid": "hex", "block_hash": "hex"} (object, optional) The owner token transfer that anchored
+                                       the report hash (SHA-256 of 0x07 || weights)
+     "allocation": "holdings"|"equal", (string, default "holdings") Split in proportion to the holdings (or the
+                                       report weights), or in equal shares among the eligible holders, whatever
+                                       they hold; equal cannot be combined with weights
+     "min_held": x.xxx,               (numeric, optional) Only holders with at least this amount of asset_name
+   }
+
+A snapshot taken since NIP-048 D3 records, per holder, freezes, DEPIN self-revocations and qualifier tags; such
+holders are excluded. With a qualifier, report weights or both, the plan hash commits to them (format version 3);
+with equal allocation or a minimum holding, it commits to those too (format version 4).
+
+Result:
+{
+  "plan_hash": "hex",               (string) SHA-256 commitment to the header and the Merkle root
+  "merkle_root": "hex",             (string) RFC 6962 root over the recipients, in order
+  "version": n,                     (number) plan format version
+  "network": "name",                (string) network the plan belongs to
+  "snapshot": {
+    "asset_name": "name",
+    "height": n,
+    "block_hash": "hash",           (string) block the snapshot was captured on; empty for a legacy snapshot
+    "snapshot_hash": "hex",         (string) commitment to the snapshot content
+    "legacy": true|false,
+    "confirmations": n
+  },
+  "distribution_asset_name": "name",
+  "amount": x.xxx,                  (numeric) gross_distribution_amount
+  "remainder_policy": "payer"|"largest",
+  "allocation": "holdings"|"equal",
+  "min_held": x.xxx,                (numeric) minimum holding to be eligible, 0 if none
+  "exception_addresses": [ "address", ... ], (array) sorted, as committed in the plan hash
+  "total_held": x.xxx,              (numeric) holdings of the eligible holders
+  "distributed": x.xxx,             (numeric) sum of the payments: the funds the payer needs, before fees
+  "remainder": x.xxx,               (numeric) amount left undistributed
+  "recipients": [                  (array) payments, ordered by output script
+    { "address": "address", "script": "hex", "held": x.xxx, "amount": x.xxx }, ...
+  ],
+  "zero_amount": [ { "address": "address", "held": x.xxx }, ... ], (array) holders whose share rounds to zero
+  "excluded": [ { "address": "address", "held": x.xxx, "reason": "..." }, ... ], (array) reason: exception, burn,
+                                   globally_frozen, frozen, self_revoked, missing_qualifier, below_minimum or no_weight
+  "announcement": {                (object or null) The announcement, when given
+    "txid": "hex", "height": n, "notice": n, "minimum_notice": n   (notice: blocks between announcement and snapshot)
+  },
+  "verifiability": "announced"|"late_announcement"|"unannounced"  (string) Whether other nodes could capture the
+                                   same snapshot: without an announcement made with the minimum notice (-minsnapshotnotice),
+                                   recipients rely on the issuer's snapshot or on replaysnapshot
+  "qualifier": "#TAG"|null,
+  "report": {"hash": "hex", "txid": "hex", "height": n}|null  (recipients then also show their "weight")
+}
+
+Examples:
+> neurai-cli getdistributionplan "TRONCO" 12345 "XNA" 1000
+> neurai-cli getdistributionplan "PHATSTACKS" 12345 "DIVIDENDS" 1000 "" '{"remainder":"largest"}'
+> neurai-cli getdistributionplan "&GRID" 12345 "XNA" 1000 "" '{"allocation":"equal","min_held":1}'
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getdistributionplan", "params": ["TRONCO", 34987, "DIVIDENDS", 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## getdistributionproof
+&nbsp;<br/>  getdistributionproof {plan} "address"
+
+Returns the RFC 6962 inclusion proof of one recipient of a distribution plan (NIP-048). With the plan's
+merkle_root it shows that the payment is part of the plan; it does not show that the amount is right or that
+no recipient is missing (recompute the plan for that).
+
+Arguments:
+1. plan                         (object, required) The plan parameters
+   {
+     "asset_name": "name",              (string, required) as in getdistributionplan
+     "snapshot_height": n,              (number, required)
+     "distribution_asset_name": "name", (string, required)
+     "amount": x.xxx,                   (numeric, required) gross_distribution_amount
+     "exception_addresses": "a,b",      (string, optional)
+     "remainder": "payer"|"largest",    (string, optional, default "payer")
+     "allow_legacy_snapshot": bool,     (boolean, optional, default false)
+     "announcement": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "qualifier": "#TAG",           (string, optional) as in getdistributionplan
+     "weights": {"address": n, ...}, (object, optional) as in getdistributionplan
+     "report": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "allocation": "holdings"|"equal", (string, optional, default "holdings") as in getdistributionplan
+     "min_held": x.xxx,               (numeric, optional) as in getdistributionplan
+   }
+2. "address"                    (string, required) A recipient of the plan
+
+Result:
+{
+  "plan_hash": "hex",
+  "merkle_root": "hex",
+  "leaf_count": n,
+  "index": n,                       (number) position of the recipient in the plan
+  "address": "address",
+  "script": "hex",
+  "amount": x.xxx,
+  "leaf_hash": "hex",               (string) SHA-256 of 0x00 || script || amount
+  "path": [ "hex", ... ]            (array) sibling hashes, deepest first
+}
+
+Examples:
+> neurai-cli getdistributionproof '{"asset_name":"TRONCO","snapshot_height":12345,"distribution_asset_name":"XNA","amount":1000}' "address"
+
+&nbsp;<br> &nbsp;<br/>
 ## getgenerate
 &nbsp;<br/>  getgenerate
 
@@ -1956,24 +2305,23 @@ Examples:
 &nbsp;<br> &nbsp;<br/>
 ## getibdstatus
 &nbsp;<br/>  getibdstatus
-
 Returns header synchronization timing collected since process start.
+request_to_response_us includes peer response and local queueing time.
 
 Result:
 {
-  "blocks": n,
-  "headers": n,
-  "header_batches": n,
-  "headers_in_batches": n,
-  "unsolicited_header_responses": n,
-  "average_request_to_response_us": n,
-  "average_validation_us": n,
-  "peers": [...]
+  "blocks": n,                         (numeric) current active-chain height
+  "headers": n,                        (numeric) best validated header height
+  "header_batches": n,                 (numeric) requested header batches received
+  "headers_in_batches": n,             (numeric) headers in those batches
+  "average_request_to_response_us": n, (numeric) average request-to-response time
+  "average_validation_us": n,          (numeric) average local processing time
+  "peers": [ ... ]                      (array) per-peer timing counters
 }
 
 Examples:
 > neurai-cli getibdstatus
-> curl --user myusername --data-binary '{"jsonrpc":"2.0","id":1,"method":"getibdstatus","params":[]}' -H 'content-type: application/json' http://127.0.0.1:19001/
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getibdstatus", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
 ## getinfo
@@ -2013,11 +2361,11 @@ Examples:
 Get the kawpow hash for a block given its block data
 
 Arguments
-1. "header_hash"        (string, required) the prow_pow header hash that was given to the gpu miner from this rpc client
-2. "mix_hash"           (string, required) the mix hash that was mined by the gpu miner via rpc
-3. "nonce"              (string, required) the hex nonce of the block that hashed the valid block
+1. "header_hash"        (string, required) the header hash given to the GPU miner (exactly 64 hex digits)
+2. "mix_hash"           (string, required) the mix hash mined by the GPU miner (exactly 64 hex digits)
+3. "nonce"              (string, required) 1 to 16 hex digits, optionally prefixed with 0x
 4. "height"             (number, required) the height of the block data that is being hashed
-5. "target"             (string, optional) the target of the block that is hash is trying to meet
+5. "target"             (string, optional) the target to meet (exactly 64 hex digits)
 
 Result:
 
@@ -2035,6 +2383,8 @@ Result:
 {                           (json object)
   "bip32_root_private" : (string) extended master private key,
   "bip32_root_public" :  (string) extended master public key,
+  "address_type" : (string) the wallet address type (-addresstype): legacy, pq or ecdsa
+  "strict_ecdsa_derivation_path" : (string, ecdsa wallets) account path of its witness v3 keys
   "account_derivation_path" : (string) The derivation path to the account public/private keys
   "external_derivation_path" : (string) The derivation path prefix for receiving addresses
   "internal_derivation_path" : (string) The derivation path prefix for change addresses
@@ -2104,6 +2454,7 @@ Result (for verbose=true):
     "ancestorcount" : n,    (numeric) number of in-mempool ancestor transactions (including this one)
     "ancestorsize" : n,     (numeric) virtual transaction size of in-mempool ancestors (including this one)
     "ancestorfees" : n,     (numeric) modified fees (see above) of in-mempool ancestors (including this one)
+    "poseidonwork" : n,     (numeric) reserved Poseidon permutations for this transaction
     "wtxid" : hash,         (string) hash of serialized transaction, including witness data
     "depends" : [           (array) unconfirmed transactions used as inputs for this transaction
         "transactionid",    (string) parent transaction id
@@ -2145,6 +2496,7 @@ Result (for verbose=true):
     "ancestorcount" : n,    (numeric) number of in-mempool ancestor transactions (including this one)
     "ancestorsize" : n,     (numeric) virtual transaction size of in-mempool ancestors (including this one)
     "ancestorfees" : n,     (numeric) modified fees (see above) of in-mempool ancestors (including this one)
+    "poseidonwork" : n,     (numeric) reserved Poseidon permutations for this transaction
     "wtxid" : hash,         (string) hash of serialized transaction, including witness data
     "depends" : [           (array) unconfirmed transactions used as inputs for this transaction
         "transactionid",    (string) parent transaction id
@@ -2178,6 +2530,7 @@ Result:
     "ancestorcount" : n,    (numeric) number of in-mempool ancestor transactions (including this one)
     "ancestorsize" : n,     (numeric) virtual transaction size of in-mempool ancestors (including this one)
     "ancestorfees" : n,     (numeric) modified fees (see above) of in-mempool ancestors (including this one)
+    "poseidonwork" : n,     (numeric) reserved Poseidon permutations for this transaction
     "wtxid" : hash,         (string) hash of serialized transaction, including witness data
     "depends" : [           (array) unconfirmed transactions used as inputs for this transaction
         "transactionid",    (string) parent transaction id
@@ -2343,7 +2696,7 @@ so payments received with the address will be credited to 'account'.
 
 Arguments:
 1. "account"        (string, optional) DEPRECATED. The account name for the address to be linked to. If not provided, the default account "" is used. It can also be set to the empty string "" to represent the default account. The account does not need to exist, it will be created if there is no account by the given name.
-2. "address_type"   (string, optional) The address family: "legacy" (Base58, secp256k1), "pq" (strict post-quantum, witness v2, pq1.../tpq1...) or "ecdsa" (strict ECDSA, witness v3, nq1r.../tnq1r...). If omitted, the wallet's default family is used (legacy for classic wallets, generic AuthScript v1 for PQ wallets).
+2. "address_type"   (string, optional) The address family: "legacy" (Base58, secp256k1), "pq" (strict post-quantum, witness v2, pq1.../tpq1...) or "ecdsa" (strict ECDSA, witness v3, nq1r.../tnq1r...). If omitted, the wallet's address type (-addresstype when it was created, see getwalletinfo) is used. "pq" needs a pq wallet; an ecdsa wallet refuses "legacy". Strict addresses are handed out before the network activates them, but payments to them are refused until then. Generic AuthScript v1 (nc1p.../tnc1p...) is a contract family and is never handed out by the wallet.
 
 Result:
 "address"    (string) The new neurai address
@@ -2407,10 +2760,33 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getpeerinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## getprivacypoolinfo
+&nbsp;<br/>  getprivacypoolinfo pool ( limit )
+
+Read public state-thread identity and confirmed state, without registering a pool.
+Requires -spentindex and -txindex and readable historical transactions.
+pool: {"txid": birth_txid, "vout": birth_output}
+limit: maximum transitions to follow (default 100, maximum 1000).
+history_complete=false means current_state is unknown; continue with next_cursor.
+The reported profile describes the transport, not an audited privacy circuit.
+
+&nbsp;<br> &nbsp;<br/>
+## getprivacypoolupdates
+&nbsp;<br/>  getprivacypoolupdates pool ( cursor limit )
+
+Return confirmed public pool transactions, including complete witnesses, in state-thread order.
+pool: {"txid": birth_txid, "vout": birth_output}; no registry or viewing key.
+cursor: null for birth, otherwise the unchanged next_cursor from a previous query.
+limit: maximum updates (default 100, maximum 1000); pages also have a 1 MiB raw-byte limit.
+Pages pin one chain snapshot; a completed cursor refreshes to the current tip.
+A reorganized snapshot or foreign/tampered cursor is rejected. Mempool spends are excluded.
+No matching successor ends this transport; it does not prove the contract is closed.
+
+&nbsp;<br> &nbsp;<br/>
 ## getpubkey
 &nbsp;<br/>  getpubkey "address"
 
-Returns the public key for an address that has revealed it by spending (requires pubkeyindex to be enabled).
+Returns the public key for a Legacy, AuthScript v1 or strict ECDSA address that has revealed it by spending (requires pubkeyindex to be enabled).
 
 Arguments:
 1. "address"      (string, required) The Neurai address
@@ -2436,7 +2812,7 @@ Returns a new Neurai address, for receiving change.
 This is for use with raw transactions, NOT normal use.
 
 Arguments:
-1. "address_type"   (string, optional) "legacy", "pq" (strict witness v2) or "ecdsa" (strict witness v3). Default: the wallet's default family.
+1. "address_type"   (string, optional) "legacy", "pq" (strict witness v2) or "ecdsa" (strict witness v3). Default: the wallet's address type (-addresstype when it was created).
 
 Result:
 "address"    (string) The address
@@ -2476,6 +2852,7 @@ Result: (for verbose = true):
     "ancestorcount" : n,    (numeric) number of in-mempool ancestor transactions (including this one)
     "ancestorsize" : n,     (numeric) virtual transaction size of in-mempool ancestors (including this one)
     "ancestorfees" : n,     (numeric) modified fees (see above) of in-mempool ancestors (including this one)
+    "poseidonwork" : n,     (numeric) reserved Poseidon permutations for this transaction
     "wtxid" : hash,         (string) hash of serialized transaction, including witness data
     "depends" : [           (array) unconfirmed transactions used as inputs for this transaction
         "transactionid",    (string) parent transaction id
@@ -2630,6 +3007,153 @@ Result:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrpcinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## getsilentpaymentcode
+&nbsp;<br/>  getsilentpaymentcode
+
+Returns the reusable silent payment code of this wallet (NIP-047).
+Every payment to the code lands on a new strict ECDSA (witness v3) output
+that only this wallet can link to the code.
+
+Result:
+{
+  "code": "str",          (string) payment code (nsp1... / tnsp1...)
+  "network": "str",       (string) main, test or regtest
+  "scan_pubkey": "hex",   (string) B_scan
+  "spend_pubkey": "hex",  (string) B_spend
+  "view_only": true|false (boolean) imported view key: payments are detected, not spendable
+  "verified": true        (boolean) checked against the wallet seed in this session. An encrypted
+                           wallet shows its code only after one unlock in the session
+}
+
+Examples:
+> neurai-cli getsilentpaymentcode
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsilentpaymentcode", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## getsilentpaymentindexinfo
+&nbsp;<br/>  getsilentpaymentindexinfo
+
+State of the NIP-047 silent payment index (-silentpaymentindex).
+
+Result:
+{
+  "enabled" : true|false,      (boolean) whether the node maintains the index
+  "state" : "str",             (string) disabled, ready or incomplete (records missing and their blocks pruned)
+  "schema" : n,                (numeric) storage schema of the records
+  "formats" : [n,...],         (array) public formats served
+  "context" : "hex",           (string) NIP-047 context N: network id, genesis, profile and family
+  "start_height" : n,          (numeric) first indexed height: max(1, strict AuthScript activation)
+  "synced_height" : n,         (numeric) every active block from start_height to this height has a record
+  "synced_hash" : "hash",      (string) hash of the block at synced_height
+  "complete" : true|false,     (boolean) ready and synced up to the tip
+  "missing" : [[n,n],...],     (array) height ranges without a record or block data to rebuild it
+  "pruned" : true|false        (boolean) whether the node has deleted block files
+}
+
+Examples:
+> neurai-cli getsilentpaymentindexinfo
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsilentpaymentindexinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## getsilentpaymentinfo
+&nbsp;<br/>  getsilentpaymentinfo
+
+Returns the silent payment scanning state of this wallet.
+
+Result:
+{
+  "enabled": true|false,     (boolean) the wallet has an identity (own or view key)
+  "view_only": true|false,
+  "code": "str",             (string) once checked against the seed in this session and while
+                                the identity is sound
+  "code_verified": true|false,(boolean) code checked against the seed in this session
+  "identity_error": "str",   (string) damaged identity: the code must not be used
+  "paused": true|false,      (boolean) locked wallet: scanning waits for walletpassphrase
+  "scanned_height": n,       (numeric) last block really scanned (-1: none)
+  "scanned_hash": "hex",
+  "tip_height": n,
+  "blocks_behind": n,
+  "error": "str",            (string) why scanning stopped (missing block or undo data)
+  "payments": n
+}
+
+Examples:
+> neurai-cli getsilentpaymentinfo
+
+&nbsp;<br> &nbsp;<br/>
+## getsilentpaymenttweaks
+&nbsp;<br/>  getsilentpaymenttweaks "blockhash" ( "encoding" )
+
+NIP-047 light client data of one block: every eligible transaction with a native v3 output,
+its public tweak T = h*A and all its native v3 outputs, plus every native v3 output the block spends.
+A receiver computes b_scan*T for each entry; the node learns nothing about it.
+Requires -silentpaymentindex.
+
+Arguments:
+1. "blockhash"     (string, required) the block hash
+2. "encoding"      (string, optional, default=json) json, or hex for the binary message of type 1
+
+Result (json):
+{
+  "format" : 1,
+  "context" : "hex",          (string) NIP-047 context N
+  "block" : {                  (object) immutable for this block hash
+    "height" : n,
+    "hash" : "hash",
+    "prev" : "hash",
+    "entries" : [
+      {
+        "txid" : "hex",
+        "tweak" : "hex",          (string) 33-byte compressed point T
+        "outputs" : [{ "vout" : n, "commitment" : "hex", "value_sat" : "n" },...]
+      },...
+    ],
+    "spent" : [{ "txid" : "hex", "vout" : n },...],
+    "digest" : "hex"            (string) tagged hash of the canonical block bytes
+  },
+  "in_active_chain" : true|false
+}
+
+Result (hex):
+"hex"                         (string) binary message of type 1
+
+Examples:
+> neurai-cli getsilentpaymenttweaks "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsilentpaymenttweaks", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## getsilentpaymenttweaksrange
+&nbsp;<br/>  getsilentpaymenttweaksrange start_height count ( "anchor_hash" "encoding" )
+
+NIP-047 light client data of consecutive blocks of the active chain, as getsilentpaymenttweaks.
+The blocks come from one snapshot of the active chain. Whole blocks only: at least one, up to
+1000 blocks and 4 MB. Requires -silentpaymentindex.
+
+Arguments:
+1. start_height      (numeric, required) first height, from start_height of getsilentpaymentindexinfo
+                     up to the tip + 1 (an empty answer with status "tip")
+2. count             (numeric, required) number of blocks wanted
+3. "anchor_hash"     (string, optional) hash the client has at start_height - 1. If it left the active
+                     chain the answer is {"reorg": true, "fork_height": n}: continue from fork_height + 1
+4. "encoding"        (string, optional, default=json) json, or hex for the binary message of type 2
+
+Result (json):
+{
+  "format" : 1,
+  "context" : "hex",
+  "snapshot" : { "height" : n, "hash" : "hash" },  (object) tip when the request was served
+  "synced_height" : n,
+  "blocks" : [ {...},... ],     (array) as "block" in getsilentpaymenttweaks
+  "next_height" : n,            (numeric) height after the last block returned
+  "status" : "str"             (string) more: ask again now; tip: wait for a new block;
+                                incomplete: the index lacks data from next_height
+}
+
+Examples:
+> neurai-cli getsilentpaymenttweaksrange 1000 100
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsilentpaymenttweaksrange", "params": [1000, 100, "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
 ## getsnapshot
 &nbsp;<br/>  getsnapshot "asset_name" block_height
 
@@ -2646,15 +3170,82 @@ Result:
 {
   name: (string),
   height: (number),
+  block_hash: (string) the block the snapshot was captured on; empty for a legacy snapshot
+  snapshot_hash: (string) commitment to the snapshot content (NIP-048); empty for a legacy snapshot
+  format: (number) 0 legacy, 1 bound to its block, 2 also with holder state (NIP-048 D3)
+  global_frozen: (bool, format 2) the asset was globally frozen
   owners: [
     {
       address: (string),
       amount_owned: (number),
+      frozen: (bool, format 2) frozen for the asset (restricted asset or DEPIN owner freeze)
+      self_revoked: (bool, format 2) a DEPIN holder that revoked itself
+      tags: [ (string), ... ] (format 2) qualifier tags of the address
     }
 }
 
 Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getsnapshot", "params": ["ASSET_NAME" 28546] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## getsnapshotannouncement
+&nbsp;<br/>  getsnapshotannouncement "asset_name" snapshot_height
+
+Returns the message that announces a snapshot height before the chain reaches it (NIP-048). The holder of the
+owner token sends it to itself with that message, for instance:
+  transfer "ASSET!" 1 "owner_token_address" "message"
+Other nodes that see the announcement request the same snapshot and can check the plan independently.
+A plan names the announcement with its "announcement" option.
+
+Arguments:
+1. "asset_name"                 (string, required) The asset whose holders will be snapshotted
+2. snapshot_height              (number, required) The future snapshot height
+
+Result:
+{
+  "asset_name": "name",
+  "snapshot_height": n,
+  "owner_token": "name",          (string) the token that must carry the message
+  "message": "hex",               (string) SHA-256 of 0x05 || network || asset || height
+  "minimum_notice": n,            (number) blocks the announcement must precede the height (-minsnapshotnotice)
+  "notice_if_mined_next": n       (number) the notice if the announcement is mined in the next block
+}
+
+Examples:
+> neurai-cli getsnapshotannouncement "TRONCO" 12345
+
+&nbsp;<br> &nbsp;<br/>
+## getsnapshotrecipients
+&nbsp;<br/>  getsnapshotrecipients "asset_name" snapshot_height
+
+The holders in a snapshot with what an encrypted bulletin to them needs (NIP-048 D5). Encryption follows DePIN
+messaging: a holder is ready when its address is P2PKH or strict ECDSA and its public key is in -pubkeyindex.
+The others are listed too, so no holder is skipped silently. Needs -pubkeyindex.
+
+Arguments:
+1. "asset_name"                 (string, required) The asset of the snapshot
+2. snapshot_height              (number, required) The snapshot height
+
+Result:
+{
+  "asset_name": "name",
+  "height": n,
+  "block_hash": "hash",
+  "snapshot_hash": "hex",
+  "ready": n, "key_not_revealed": n, "unsupported_type": n,
+  "holders": [
+    {
+      "address": "address",
+      "held": x.xxx,
+      "state": "ready"|"key_not_revealed"|"unsupported_type",
+      "pubkey": "hex",            (string, when ready)
+      "frozen": bool, "self_revoked": bool   (snapshots with holder state)
+    }, ...
+  ]
+}
+
+Examples:
+> neurai-cli getsnapshotrecipients "&TOKEN" 12345
 
 &nbsp;<br> &nbsp;<br/>
 ## getsnapshotrequest
@@ -2873,6 +3464,7 @@ Result:
 {
   "walletname": xxxxx,             (string) the wallet name
   "walletversion": xxxxx,          (numeric) the wallet version
+  "addresstype": "type",           (string) the address type fixed when the wallet was created (-addresstype): legacy, pq or ecdsa
   "balance": xxxxxxx,              (numeric) the total confirmed balance of the wallet in XNA
   "unconfirmed_balance": xxx,      (numeric) the total unconfirmed balance of the wallet in XNA
   "immature_balance": xxxxxx,      (numeric) the total immature balance of the wallet in XNA
@@ -2913,6 +3505,7 @@ Arguments:
 2. "label"            (string, optional, default="") An optional label
 3. rescan               (boolean, optional, default=true) Rescan the wallet for transactions
 4. p2sh                 (boolean, optional, default=false) Add the P2SH version of the script as well
+   If the wallet already has the keys, registering the redeem script can make its P2SH output spendable.
 
 Note: This call can take minutes to complete if rescan is true.
 If you have the full public key, you should call importpubkey instead of this.
@@ -3032,6 +3625,29 @@ Import using a label without rescan
 
 As a JSON-RPC call
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "importpubkey", "params": ["mypubkey", "testing", false] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## importsilentpaymentviewkey
+&nbsp;<br/>  importsilentpaymentviewkey "scan_private_key" "spend_pubkey" ( start_height )
+
+Turns this wallet into a watch wallet of a silent payment code: payments are
+detected and shown as watch-only, never spendable. Only for an unencrypted wallet
+without its own silent payment identity (or whose stored view key is damaged); the wallet
+can no longer be encrypted. Pass the secret with "neurai-cli -stdin importsilentpaymentviewkey"
+(one argument per line) so it stays out of the shell history and the process list.
+
+Arguments:
+1. "scan_private_key" (string, required) hex b_scan
+2. "spend_pubkey"     (string, required) hex B_spend
+3. start_height        (numeric, optional, default=0) first block to scan
+
+Result:
+{
+  "code": "str", "scanned_height": n, "found": n
+}
+
+Examples:
+> neurai-cli importsilentpaymentviewkey "<hex>" "<hex>" 0
 
 &nbsp;<br> &nbsp;<br/>
 ## importwallet
@@ -3434,6 +4050,7 @@ Result:
   {
     "address": "address",     (string) The Neurai address
     "pubkey": "pubkey_hex"    (string) The public key in hex format
+    "valid": 1|0                (numeric) 1 = active/valid, 0 = blocked/revoked (only meaningful for DEPIN assets; always 1 for regular assets)
   },
   ...
 ]
@@ -3576,7 +4193,7 @@ Returns the list of post-quantum (ML-DSA-44) Bech32m addresses in the wallet.
 
 Result:
 [                        (json array of strings)
-  "address"             (string) A generic AuthScript v1 address with a PQ key (nc1p.../tnc1p...)
+  "address"             (string) A strict post-quantum (witness v2) address of a PQ key (pq1.../tpq1...)
   ...
 ]
 
@@ -3644,6 +4261,25 @@ Examples:
 > neurai-cli listreceivedbyaddress
 > neurai-cli listreceivedbyaddress 6 true
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listreceivedbyaddress", "params": [6, true, true] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## listsilentpayments
+&nbsp;<br/>  listsilentpayments ( include_spent )
+
+Lists the silent payments received by this wallet.
+
+Arguments:
+1. include_spent   (boolean, optional, default=true)
+
+Result:
+[{
+  "txid": "hex", "vout": n, "k": n, "amount": x.xxx, "address": "str",
+  "status": "pending|unconfirmed|confirmed|spent|conflicted|abandoned|other_chain|unknown",
+  "confirmations": n, "blockhash": "hex", "height": n, "view_only": true|false
+}, ...]
+
+Examples:
+> neurai-cli listsilentpayments
 
 &nbsp;<br> &nbsp;<br/>
 ## listsinceblock
@@ -3941,6 +4577,29 @@ As a json rpc call
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "move", "params": ["timotei", "akiko", 0.01, 6, "happy birthday!"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## opendepin
+&nbsp;<br/>  opendepin "asset_name" ("change_address")
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Open transfers of a DEPIN asset (owner only): while open, holders can move
+the asset like a regular asset without the owner token. Transfers from addresses
+frozen by the owner or self-revoked stay rejected. Valid from the closed state;
+takes effect from the block after the one that confirms it.
+
+Arguments:
+1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
+2. "change_address"   (string, optional) The change address for the owner token
+
+Result:
+"txid"                (string) The transaction id
+
+Examples:
+> neurai-cli opendepin "&FRANCE"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "opendepin", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
 ## ping
 &nbsp;<br/>  ping
 
@@ -3959,15 +4618,15 @@ Examples:
 Attempts to submit new block to network mined by kawpow gpu miner via rpc.
 
 Arguments
-1. "header_hash"        (string, required) the prow_pow header hash that was given to the gpu miner from this rpc client
-2. "mix_hash"           (string, required) the mix hash that was mined by the gpu miner via rpc
-3. "nonce"              (string, required) the nonce of the block that hashed the valid block
+1. "header_hash"        (string, required) the header hash given to the GPU miner (exactly 64 hex digits)
+2. "mix_hash"           (string, required) the mix hash mined by the GPU miner (exactly 64 hex digits)
+3. "nonce"              (string, required) 1 to 16 hex digits, optionally prefixed with 0x
 
 Result:
 
 Examples:
-> neurai-cli pprpcsb "header_hash" "mix_hash" 100000
-> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pprpcsb", "params": ["header_hash" "mix_hash" 100000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+> neurai-cli pprpcsb "header_hash" "mix_hash" "0x100000"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "pprpcsb", "params": ["header_hash" "mix_hash" "0x100000"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
 ## preciousblock
@@ -4143,10 +4802,57 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "removetagfromaddress", "params": ["#TAG" "to_address" "change_address"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## repairsilentpaymentidentity
+&nbsp;<br/>  repairsilentpaymentidentity
+
+Rewrites the silent payment code of this wallet from its seed after an identity failure
+("stored silent payment code does not match the wallet seed"). Payments sent to the
+replaced code did not reach this wallet: check your backups before repairing.
+
+Result:
+{
+  "previous_code": "str",  (string) the code that was stored (do not use it)
+  "code": "str"            (string) the code derived from the seed
+}
+
+Examples:
+> neurai-cli repairsilentpaymentidentity
+
+&nbsp;<br> &nbsp;<br/>
+## replaysnapshot
+&nbsp;<br/>  replaysnapshot "asset_name" snapshot_height ( "expected_snapshot_hash" )
+
+Rebuilds the holders of an asset at a height from the blocks and their undo data, without using any snapshot,
+and returns the snapshot hash they give (NIP-048). A node that did not capture the snapshot can so check a
+plan's snapshot_hash. It reads every block from asset activation to the height: it is slow, and a pruned node
+cannot do it.
+
+Arguments:
+1. "asset_name"                 (string, required) The asset
+2. snapshot_height              (number, required) The height to rebuild
+3. "expected_snapshot_hash"     (string, optional) A snapshot_hash to compare with, for instance from a plan
+
+Result:
+{
+  "asset_name": "name",
+  "height": n,
+  "block_hash": "hash",
+  "snapshot_hash": "hex",         (string) as in getsnapshot and getdistributionplan
+  "holders": n,
+  "scanned_blocks": n,
+  "matches_stored": true|false|null,   (null: this node holds no snapshot at that height)
+  "matches_expected": true|false|null  (null: no expected hash given)
+}
+
+Examples:
+> neurai-cli replaysnapshot "TRONCO" 12345
+
+&nbsp;<br> &nbsp;<br/>
 ## requestsnapshot
 &nbsp;<br/>  requestsnapshot "asset_name" block_height
 
-Schedules a snapshot of the specified asset at the specified block height.
+Schedules a snapshot of the specified asset at the specified block height. The node captures it while it
+connects that block, so at most -maxsnapshotrequests different assets are accepted at one height.
 
 Arguments:
 1. "asset_name"              (string, required) The asset name for which the snapshot will be taken
@@ -4182,6 +4888,25 @@ Examples:
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "rescanblockchain", "params": [100000, 120000] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
+## rescansilentpayments
+&nbsp;<br/>  rescansilentpayments ( start_height )
+
+Scans the active chain again for silent payments, from start_height to the tip.
+Reads blocks and their undo data; -txindex is not needed. Scanning stops, without
+advancing past it, at the first block whose data is not available (pruned node).
+
+Arguments:
+1. start_height    (numeric, optional, default=0)
+
+Result:
+{
+  "start_height": n, "scanned_height": n, "found": n
+}
+
+Examples:
+> neurai-cli rescansilentpayments 100
+
+&nbsp;<br> &nbsp;<br/>
 ## savemempool
 &nbsp;<br/>  savemempool
 
@@ -4190,6 +4915,29 @@ Dumps the mempool to disk.
 Examples:
 > neurai-cli savemempool
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "savemempool", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## sealdepin
+&nbsp;<br/>  sealdepin "asset_name" ("change_address")
+
+THIS COMMAND IS NOT YET ACTIVE!
+https://github.com/NeuraiProject/rips/blob/master/rip-0002.mediawiki
+
+Seal a DEPIN asset (owner only). WARNING: THIS IS IRREVERSIBLE.
+A sealed asset is soulbound like a closed one, but no transfer state operation
+(open, close or seal) is ever accepted for it again. Only valid from the closed
+state: an open asset must be closed first.
+
+Arguments:
+1. "asset_name"       (string, required) The DEPIN asset name (must start with &)
+2. "change_address"   (string, optional) The change address for the owner token
+
+Result:
+"txid"                (string) The transaction id
+
+Examples:
+> neurai-cli sealdepin "&FRANCE"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sealdepin", "params": ["&FRANCE"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
 
 &nbsp;<br> &nbsp;<br/>
 ## selfrevokedepin
@@ -4387,6 +5135,29 @@ Send the transaction (signed hex)
 
 As a json rpc call
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "sendrawtransaction", "params": ["signedhex"] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## sendsilentpayments
+&nbsp;<br/>  sendsilentpayments [{"code":"str","amount":x},...] ( conf_target "estimate_mode" )
+
+Pays one or more silent payment codes from strict ECDSA (v3) coins only.
+Several payments to the same code are allowed (up to 16 per code); the change
+returns to a new internal v3 address.
+
+Arguments:
+1. payments        (array, required) [{"code": payment code, "amount": amount in XNA}, ...]
+2. conf_target     (numeric, optional) Confirmation target (in blocks)
+3. "estimate_mode" (string, optional, default=UNSET) UNSET, ECONOMICAL or CONSERVATIVE
+
+Result:
+{
+  "txid": "hex",
+  "fee": x.xxx,
+  "payments": [{"code": "str", "amount": x.xxx, "vout": n, "k": n}, ...]
+}
+
+Examples:
+> neurai-cli sendsilentpayments '[{"code":"tnsp1q...","amount":1.5}]'
 
 &nbsp;<br> &nbsp;<br/>
 ## sendtoaddress
@@ -4614,7 +5385,6 @@ Examples:
 &nbsp;<br/>  stop
 
 Stop Neurai server.
-
 &nbsp;<br> &nbsp;<br/>
 ## submitblock
 &nbsp;<br/>  submitblock "hexdata"  ( "dummy" )
@@ -4957,6 +5727,74 @@ true|false       (boolean) Verified or not
 Examples:
 > neurai-cli verifychain
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifychain", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:19001/
+
+&nbsp;<br> &nbsp;<br/>
+## verifydistribution
+&nbsp;<br/>  verifydistribution {plan} [batches] ( {options} )
+
+Classifies the batches of a distribution plan from the operator's batch records (NIP-048): every signed
+version of each batch. Nothing is broadcast, rebuilt or spent.
+  confirmed   a version that pays the batch has the required confirmations
+  confirming  a version is in the active chain with fewer confirmations; its recipients stay reserved
+  pending     a version is in the mempool, or is signed and all its inputs are unspent; rebroadcast it
+  conflicting every version has an input spent by another transaction (needs -txindex to tell apart
+              from a confirmed version whose outputs were all spent)
+  unknown     no recorded version, or the node cannot tell; review before building anything
+
+Arguments:
+1. plan                         (object, required) The plan parameters
+   {
+     "asset_name": "name",              (string, required) as in getdistributionplan
+     "snapshot_height": n,              (number, required)
+     "distribution_asset_name": "name", (string, required)
+     "amount": x.xxx,                   (numeric, required) gross_distribution_amount
+     "exception_addresses": "a,b",      (string, optional)
+     "remainder": "payer"|"largest",    (string, optional, default "payer")
+     "allow_legacy_snapshot": bool,     (boolean, optional, default false)
+     "announcement": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "qualifier": "#TAG",           (string, optional) as in getdistributionplan
+     "weights": {"address": n, ...}, (object, optional) as in getdistributionplan
+     "report": {"txid": "hex", "block_hash": "hex"} (object, optional) as in getdistributionplan
+     "allocation": "holdings"|"equal", (string, optional, default "holdings") as in getdistributionplan
+     "min_held": x.xxx,               (numeric, optional) as in getdistributionplan
+   }
+2. batches                      (array, required) The operator's batch records
+   [
+     {
+       "index": n,                (number, required) batch index
+       "versions": [              (array, required) every signed version, as hex or as
+         "hex" | { "hex": "hex", "block_hash": "hash" }, ...   an object with the block it was seen in
+       ]
+     }, ...
+   ]
+3. options                      (object, optional)
+   {
+     "max_outputs": n,            (number, default 500) batch size used to build the batches
+     "confirmations": n           (number, default 6) confirmations a batch needs to count as paid
+   }
+
+Result:
+{
+  "plan_hash": "hex",
+  "complete": true|false,         (boolean) every batch is confirmed
+  "paid": x.xxx,                  (numeric) amount in confirmed batches
+  "reserved": x.xxx,              (numeric) amount in confirming and pending batches
+  "unpaid": x.xxx,                (numeric) amount in conflicting and unknown batches
+  "batches": [
+    {
+      "index": n,
+      "batch_id": "hex",
+      "state": "confirmed"|"confirming"|"pending"|"conflicting"|"unknown",
+      "txid": "hex",              (string, optional) the version that decides the state
+      "confirmations": n,         (number, optional)
+      "amount": x.xxx,
+      "issues": [ "text", ... ]
+    }, ...
+  ]
+}
+
+Examples:
+> neurai-cli verifydistribution '{"asset_name":"TRONCO","snapshot_height":12345,"distribution_asset_name":"XNA","amount":1000}' '[{"index":0,"versions":["0200..."]}]'
 
 &nbsp;<br> &nbsp;<br/>
 ## verifymessage
